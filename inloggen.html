@@ -96,6 +96,7 @@
 
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/account.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
 (function () {
@@ -122,6 +123,11 @@
     if (!ok) return;
 
     var rol = document.querySelector('[name=rol]:checked').value;
+    window.VMAccount.aanmelden({
+      naam: mail.value.trim().split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }),
+      email: mail.value.trim(),
+      rol: rol
+    });
     A.toast('Welkom terug — je wordt doorgestuurd.');
     setTimeout(function () {
       location.href = rol === 'bedrijf' ? 'dashboard.html' : 'mijn-klussen.html';

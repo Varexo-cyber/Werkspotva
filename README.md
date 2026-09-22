@@ -24,8 +24,8 @@ npx http-server . -p 8080     # of: python3 -m http.server 8080
 |---|---|
 | `index.html` | Homepage: hero met zoekbalk, vakgebieden, hoe het werkt, reviews |
 | `klus-plaatsen.html` | Klus-wizard in 5 stappen, met validatie, foto-upload en samenvatting |
-| `vakmensen.html` | Bedrijven zoeken met filters op vak, beoordeling en kenmerken |
-| `vakman.html` | Bedrijfsprofiel: reviews, certificaten, werkgebied, offerteformulier |
+| `vakmensen.html` | Bedrijven zoeken met filters op vak, beoordeling en kenmerken — **achter een account** |
+| `vakman.html` | Bedrijfsprofiel: reviews, certificaten, werkgebied, offerteformulier — **achter een account** |
 | `mijn-klussen.html` | Klantomgeving: ontvangen offertes vergelijken en kiezen |
 | `voor-bedrijven.html` | Zakelijke landingspagina met regiocheck |
 | `prijzen.html` | Abonnementen, maand/jaar-schakelaar en terugverdienrekenaar |
@@ -40,8 +40,21 @@ npx http-server . -p 8080     # of: python3 -m http.server 8080
 assets/css/vakmaat.css   design system: tokens, componenten, responsive
 assets/js/icons.js       eigen SVG-iconenset, één lijnstijl
 assets/js/data.js        demodata: vakgebieden, bedrijven, reviews, leads, abonnementen
+assets/js/account.js     accountpoort voor vakmensen en profielen
 assets/js/app.js         header, footer, autocomplete, accordeon, toasts, tellers
 ```
+
+## Accounts
+
+Vakmensen zoeken en bedrijfsprofielen bekijken kan alleen met een account.
+Wie zonder account op die pagina's komt, ziet de inhoud vervaagd achter een
+aanmeldkaart. Zo is zichtbaar dát er bedrijven zijn, maar niet welke — dat
+houdt bedrijfsgegevens weg bij scrapers en concurrenten, en het is het punt
+waarop een bezoeker gebruiker wordt.
+
+Een account ontstaat op drie manieren: via de kaart op die pagina's, via
+inloggen, of automatisch bij het afronden van een klus. In deze preview staat
+de sessie in de browser; er is geen server.
 
 Vanille HTML, CSS en JavaScript. Bewust geen framework: een preview moet overal
 direct openen, ook vanaf een USB-stick of als los mapje in de mail.
@@ -68,6 +81,16 @@ mobiel menu, foto-upload met voorbeeldweergave.
 Nog niet: er is geen server, dus niets wordt opgeslagen of verstuurd. Een geplaatste klus
 wordt via de browseropslag doorgegeven aan `mijn-klussen.html`, zodat de demo doorloopt.
 Bedrijfsgegevens, reviews en cijfers zijn fictief maar realistisch gekozen.
+
+## Previewvideo
+
+In `preview-video/` staat een gescripte rondleiding van 1 min 25 s door alle
+pagina's, met zichtbare cursor en ingebrande ondertitels.
+
+- `vakmaat-preview.mp4` — zonder geluid
+- `vakmaat-preview-muziek.mp4` — met een rustige ambient-bedding
+- `VOICE-OVER.md` — inspreekscript met tijdcodes
+- `record-tour.js` — het draaiboek; opnieuw opnemen kost één commando
 
 ## Volgende stap
 
