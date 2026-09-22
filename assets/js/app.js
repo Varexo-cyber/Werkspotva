@@ -39,11 +39,20 @@
       return '<a href="' + n.href + '"' + (n.href === here ? ' class="is-active" aria-current="page"' : '') + '>' + n.label + '</a>';
     }).join('');
 
-    var actions = variant === 'app'
-      ? '<a class="btn btn--quiet small" href="index.html">' + I('bell', 18) + '</a>' +
-        '<a class="btn btn--ghost btn--sm" href="index.html">Uitloggen</a>'
-      : '<a class="btn btn--quiet hide-sm" href="inloggen.html">Inloggen</a>' +
-        '<a class="btn btn--primary btn--sm" href="klus-plaatsen.html">Klus plaatsen</a>';
+    var acc = root.VMAccount && root.VMAccount.huidig();
+    var actions;
+    if (variant === 'app') {
+      actions = '<a class="btn btn--quiet small" href="index.html">' + I('bell', 18) + '</a>' +
+                '<a class="btn btn--ghost btn--sm" href="index.html" data-uitloggen>Uitloggen</a>';
+    } else if (acc) {
+      actions = '<span class="acc-chip hide-sm"><span>' + root.VMAccount.initialen(acc.naam) + '</span>' +
+                  esc(acc.naam.split(' ')[0]) + '</span>' +
+                '<a class="btn btn--quiet hide-sm" href="index.html" data-uitloggen>Uitloggen</a>' +
+                '<a class="btn btn--primary btn--sm" href="klus-plaatsen.html">Klus plaatsen</a>';
+    } else {
+      actions = '<a class="btn btn--quiet hide-sm" href="inloggen.html">Inloggen</a>' +
+                '<a class="btn btn--primary btn--sm" href="klus-plaatsen.html">Klus plaatsen</a>';
+    }
 
     host.className = 'site-header';
     host.innerHTML =
@@ -57,7 +66,8 @@
       '<div class="mobile-nav" id="mobiel-menu" data-mobile>' +
         '<div class="wrap">' +
           NAV.map(function (n) { return '<a href="' + n.href + '">' + n.label + I('chevronRight', 18) + '</a>'; }).join('') +
-          '<a href="inloggen.html">Inloggen' + I('chevronRight', 18) + '</a>' +
+          (acc ? '' : '<a href="inloggen.html">Inloggen' + I('chevronRight', 18) + '</a>') +
+          '<a href="vakmensen.html">Vakmensen zoeken' + I('chevronRight', 18) + '</a>' +
           '<a class="btn btn--primary btn--block btn--lg" href="klus-plaatsen.html">Klus plaatsen — gratis</a>' +
           '<a class="btn btn--ghost btn--block" href="aanmelden.html" style="margin-top:12px">Ik ben vakman</a>' +
         '</div>' +
@@ -71,6 +81,13 @@
       burger.innerHTML = I(open ? 'close' : 'menu', 20);
       doc.body.style.overflow = open ? 'hidden' : '';
     });
+
+    var uit = host.querySelector('[data-uitloggen]');
+    if (uit) {
+      uit.addEventListener('click', function () {
+        if (root.VMAccount) root.VMAccount.afmelden();
+      });
+    }
 
     var onScroll = function () { host.classList.toggle('is-stuck', root.scrollY > 8); };
     onScroll();

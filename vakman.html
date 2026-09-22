@@ -59,6 +59,7 @@
 
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/account.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
 (function () {
@@ -278,6 +279,12 @@
 
   $('#meer-reviews').addEventListener('click', function () {
     A.toast('In de preview tonen we de drie recentste reviews.');
+  });
+
+  window.VMAccount.poort({
+    vervaag: 'main',
+    kop: 'Bekijk het profiel van ' + p.naam,
+    tekst: 'Reviews, certificaten en tarieven zijn zichtbaar voor ingeschreven particulieren. Een account is gratis en je kunt er meteen een offerte mee aanvragen.'
   });
 })();
 </script>

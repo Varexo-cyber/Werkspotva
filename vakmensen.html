@@ -113,6 +113,7 @@
 
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/account.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
 (function () {
@@ -229,6 +230,12 @@
     filter();
   });
 
+  /* Zonder account laten we zien dát er bedrijven zijn, maar niet welke. */
+  if (!window.VMAccount.ingelogd()) {
+    document.querySelector('#resultaten').style.filter = 'blur(7px)';
+    document.querySelector('.filters').style.filter = 'blur(5px)';
+  }
+
   /* Diepe link vanaf de homepage: vakmensen.html?vak=schilderwerk */
   var vak = new URLSearchParams(location.search).get('vak');
   if (vak) {
@@ -246,6 +253,12 @@
     }
   }
   filter();
+
+  window.VMAccount.poort({
+    vervaag: null,
+    kop: 'Maak een gratis account om vakmensen te bekijken',
+    tekst: 'We laten bedrijfsprofielen, reviews en tarieven alleen zien aan ingeschreven particulieren. Zo blijven de gegevens van onze vakmensen uit handen van scrapers en concullega\u2019s.'
+  });
 })();
 </script>
 </body>

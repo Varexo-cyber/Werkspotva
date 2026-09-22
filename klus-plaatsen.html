@@ -56,17 +56,16 @@
 
         <!-- STAP 1 -->
         <section class="wiz__step is-on" data-step="1" aria-labelledby="s1-kop">
-          <h1 id="s1-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Wat voor klus heb je?</h1>
-          <p class="lead" style="margin-top:10px;margin-bottom:28px">Kies het vakgebied dat er het dichtst bij komt. Twijfel je? Kies er eentje — je kunt straks alles toelichten.</p>
+          <h1 id="s1-kop" style="font-size:clamp(1.45rem,1.15rem+1vw,1.85rem)">Wat voor klus heb je?</h1>
+          <p class="muted" style="margin-top:8px;margin-bottom:22px;max-width:58ch">Zoek op wat er moet gebeuren, of kies hieronder een vakgebied. Twijfel je tussen twee? Kies er eentje — bedrijven uit aangrenzende vakken zien je klus ook.</p>
 
-          <div class="field">
-            <label class="label" for="f-vak">Vakgebied</label>
-            <input class="input" id="f-vak" name="vak" placeholder="Zoek op klus of vak, bijv. 'lekkage'" autocomplete="off">
+          <div class="field" style="margin-top:0">
+            <label class="label" for="f-vak">Zoek je klus</label>
+            <input class="input" id="f-vak" name="vak" placeholder="Bijv. lekkage, dakgoot, laadpaal, spouwmuur…" autocomplete="off">
             <p class="err">Kies of typ een vakgebied.</p>
-            <p class="hint">Typ en kies uit de lijst, of pak een van de vakgebieden hieronder.</p>
           </div>
 
-          <div class="grid grid-4" style="margin-top:20px;gap:12px" id="vak-tegels"></div>
+          <div id="vak-tegels" style="margin-top:26px"></div>
         </section>
 
         <!-- STAP 2 -->
@@ -212,9 +211,14 @@
             <dl class="sum" id="klaar-sum" style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px"></dl>
           </div>
 
+          <div class="notice notice--info" style="margin-top:20px">
+            <span id="acc-icon"></span>
+            <p><strong>Je account staat klaar.</strong> Daarmee kun je nu ook zelf vakmensen zoeken, profielen en reviews bekijken en bedrijven bewaren om later te vergelijken.</p>
+          </div>
+
           <div class="row" style="justify-content:center;margin-top:28px">
             <a class="btn btn--primary btn--lg" href="mijn-klussen.html">Naar mijn klussen</a>
-            <a class="btn btn--ghost btn--lg" href="index.html">Terug naar home</a>
+            <a class="btn btn--ghost btn--lg" href="vakmensen.html">Vakmensen bekijken</a>
           </div>
         </section>
 
@@ -239,12 +243,16 @@
         </div>
       </div>
 
-      <div class="card card--pad" style="margin-top:16px;background:var(--oker-50);border-color:var(--oker-200)">
-        <div class="row" style="gap:10px;margin-bottom:10px">
-          <span id="tip-icon" style="color:var(--oker-700)"></span>
-          <strong style="font-size:.93rem">Tip van de redactie</strong>
+      <div class="card" style="margin-top:16px" id="vak-feiten" hidden>
+        <div style="padding:14px 20px;border-bottom:1px solid var(--line)">
+          <strong style="font-size:.92rem" id="feit-kop">Vakgebied</strong>
         </div>
-        <p class="small" id="tip-tekst">Noem altijd de afmetingen. &bdquo;De woonkamer schilderen&rdquo; kan 600 of 2.400 euro zijn — met &bdquo;28 m², muren en plafond&rdquo; krijg je meteen een prijs die klopt.</p>
+        <div style="padding:16px 20px" id="feit-body"></div>
+      </div>
+
+      <div class="card card--pad" style="margin-top:16px;background:var(--paper-2)">
+        <strong style="font-size:.9rem">Waar bedrijven op letten</strong>
+        <p class="small muted" style="margin-top:8px" id="tip-tekst">Noem de afmetingen. &bdquo;De woonkamer schilderen&rdquo; kan 600 of 2.400 euro zijn — met &bdquo;28 m², muren en plafond&rdquo; krijg je een prijs die klopt.</p>
       </div>
 
       <div class="row small muted" style="margin-top:20px;gap:8px;align-items:flex-start">
@@ -260,6 +268,7 @@
 
 <script src="assets/js/icons.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/account.js"></script>
 <script src="assets/js/app.js"></script>
 <script>
 (function () {
@@ -274,8 +283,8 @@
   $('#drop-icon').innerHTML = I('camera', 30);
   $('#waar-icon').innerHTML = I('lock', 19);
   $('#klaar-icon').innerHTML = I('checkCircle', 34);
-  $('#tip-icon').innerHTML = I('sparkle', 18);
   $('#gratis-icon').innerHTML = I('shield', 16);
+  $('#acc-icon').innerHTML = I('user', 19);
   $('#drop-icon').firstChild.style.color = 'var(--brand-600)';
   $('#drop-icon').firstChild.style.margin = '0 auto';
 
@@ -294,11 +303,22 @@
     $('#pct').textContent = pct + '%';
   }
 
-  /* ---- Vakgebied-tegels ---- */
-  $('#vak-tegels').innerHTML = D.categories.slice(0, 8).map(function (c) {
-    return '<button type="button" class="cat" data-vak="' + c.naam + '" style="flex-direction:column;align-items:flex-start;gap:12px;text-align:left">' +
-      '<span class="cat__icon">' + I(c.icon, 22) + '</span>' +
-      '<span class="cat__name">' + c.naam + '</span></button>';
+  /* ---- Vakgebieden, gegroepeerd zoals een klant erover denkt ---- */
+  var VOLGORDE = ['Binnen', 'Verbouwen', 'Techniek', 'Buiten', 'Verduurzamen', 'Diensten'];
+  $('#vak-tegels').innerHTML = VOLGORDE.map(function (groep) {
+    var inGroep = D.categories.filter(function (c) { return c.groep === groep; });
+    if (!inGroep.length) return '';
+    return '<div class="vakgroep">' +
+      '<h2 class="vakgroep__kop">' + groep + '</h2>' +
+      '<div class="vakgroep__rij">' +
+        inGroep.map(function (c) {
+          return '<button type="button" class="vaktegel" data-vak="' + c.naam + '">' +
+            '<span class="vaktegel__ico">' + I(c.icon, 19) + '</span>' +
+            '<span class="vaktegel__naam">' + c.naam + '</span>' +
+            '<span class="vaktegel__meta">v.a. \u20ac ' + c.vanaf + ' p/u</span>' +
+          '</button>';
+        }).join('') +
+      '</div></div>';
   }).join('');
   $('#vak-tegels').addEventListener('click', function (e) {
     var b = e.target.closest('[data-vak]');
@@ -309,12 +329,39 @@
   });
   function markeerTegel() {
     var v = $('#f-vak').value.trim().toLowerCase();
+    var gekozen = null;
     $$('#vak-tegels [data-vak]').forEach(function (b) {
       var aan = b.getAttribute('data-vak').toLowerCase() === v;
-      b.style.borderColor = aan ? 'var(--brand-700)' : '';
-      b.style.boxShadow = aan ? '0 0 0 1px var(--brand-700)' : '';
-      b.style.background = aan ? 'var(--brand-50)' : '';
+      b.classList.toggle('is-aan', aan);
+      if (aan) gekozen = b.getAttribute('data-vak');
     });
+    toonFeiten(gekozen || $('#f-vak').value.trim());
+  }
+
+  /* Cijfers die meebewegen met het gekozen vak. Concreter dan een algemene tip:
+     je ziet meteen of er genoeg bedrijven in dit vak actief zijn. */
+  function toonFeiten(naam) {
+    var c = D.categories.filter(function (x) {
+      return x.naam.toLowerCase() === String(naam).toLowerCase();
+    })[0];
+
+    var paneel = $('#vak-feiten');
+    if (!c) { paneel.hidden = true; return; }
+
+    var bedrijven = Math.round(c.klussen / 6.4);
+    paneel.hidden = false;
+    $('#feit-kop').textContent = c.naam;
+    $('#feit-body').innerHTML = [
+      ['Gangbaar uurtarief', '\u20ac ' + c.vanaf + ' \u2013 \u20ac ' + Math.round(c.vanaf * 1.42)],
+      ['Klussen per jaar', c.klussen.toLocaleString('nl-NL')],
+      ['Actieve bedrijven', bedrijven.toLocaleString('nl-NL')],
+      ['Reacties per klus', '3,8 gemiddeld']
+    ].map(function (r, i) {
+      return '<div class="row row--between small"' + (i ? ' style="margin-top:10px"' : '') + '>' +
+        '<span class="muted">' + r[0] + '</span><strong>' + r[1] + '</strong></div>';
+    }).join('') +
+    '<p class="tiny muted" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">' +
+      'Landelijke cijfers over de afgelopen twaalf maanden.</p>';
   }
 
   A.autocomplete($('#f-vak'), function () { markeerTegel(); ververs(); });
@@ -496,6 +543,12 @@
     /* Aantal bedrijven schaalt met de gekozen straal — voelt logisch, niet willekeurig */
     var straal = parseInt(waarde('#f-straal') || '30', 10);
     $('#klaar-aantal').textContent = straal >= 999 ? 'ruim 1.200' : String(Math.round(straal * 1.6 + 11));
+
+    window.VMAccount.aanmelden({
+      naam: waarde('#f-voornaam') + ' ' + waarde('#f-achternaam'),
+      email: waarde('#f-email'),
+      rol: 'klant'
+    });
 
     A.store.set('laatsteKlus', {
       titel: waarde('#f-titel'), vak: waarde('#f-vak'),
