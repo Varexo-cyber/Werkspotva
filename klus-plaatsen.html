@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klus plaatsen — Vakmaat</title>
+<meta name="description" content="Plaats je klus in vijf korte stappen en ontvang gratis offertes van vakbedrijven uit je regio.">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .wiz { display:grid; grid-template-columns: 1fr 330px; gap: 40px; align-items:start; }
+  .wiz__step { display:none; }
+  .wiz__step.is-on { display:block; animation: fadeUp .32s var(--ease); }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:none; } }
+  .wiz__nav { display:flex; gap:12px; margin-top:32px; padding-top:24px; border-top:1px solid var(--line); }
+  .wiz__nav .btn--primary { margin-left:auto; }
+  .aside { position:sticky; top:96px; }
+  .dropzone {
+    border:1.5px dashed var(--line-strong); border-radius:var(--r-lg);
+    padding:32px 20px; text-align:center; background:var(--paper);
+    transition:border-color .16s var(--ease), background .16s var(--ease); cursor:pointer;
+  }
+  .dropzone:hover, .dropzone.is-over { border-color:var(--brand-600); background:var(--brand-50); }
+  .thumbs { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .thumb { position:relative; width:78px; height:78px; border-radius:var(--r); overflow:hidden; border:1px solid var(--line); }
+  .thumb img { width:100%; height:100%; object-fit:cover; }
+  .thumb button {
+    position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%;
+    background:rgba(15,31,27,.72); color:#fff; display:grid; place-items:center;
+  }
+  .sum dt { font-size:.78rem; color:var(--muted-2); font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+  .sum dd { margin:3px 0 14px; font-size:.93rem; font-weight:500; }
+  @media (max-width: 940px) { .wiz { grid-template-columns:1fr; } .aside { position:static; order:-1; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main" class="section" style="padding-top:36px">
+<div class="wrap">
+
+  <!-- Stappenbalk -->
+  <div class="card card--pad" style="margin-bottom:28px;padding:18px 24px">
+    <div class="wizbar" id="wizbar"></div>
+  </div>
+
+  <div class="wiz">
+    <!-- ======= FORMULIER ======= -->
+    <div>
+      <form id="wizform" novalidate>
+
+        <!-- STAP 1 -->
+        <section class="wiz__step is-on" data-step="1" aria-labelledby="s1-kop">
+          <h1 id="s1-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Wat voor klus heb je?</h1>
+          <p class="lead" style="margin-top:10px;margin-bottom:28px">Kies het vakgebied dat er het dichtst bij komt. Twijfel je? Kies er eentje — je kunt straks alles toelichten.</p>
+
+          <div class="field">
+            <label class="label" for="f-vak">Vakgebied</label>
+            <input class="input" id="f-vak" name="vak" placeholder="Zoek op klus of vak, bijv. 'lekkage'" autocomplete="off">
+            <p class="err">Kies of typ een vakgebied.</p>
+            <p class="hint">Typ en kies uit de lijst, of pak een van de vakgebieden hieronder.</p>
+          </div>
+
+          <div class="grid grid-4" style="margin-top:20px;gap:12px" id="vak-tegels"></div>
+        </section>
+
+        <!-- STAP 2 -->
+        <section class="wiz__step" data-step="2" aria-labelledby="s2-kop">
+          <h1 id="s2-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Vertel wat er moet gebeuren</h1>
+          <p class="lead" style="margin-top:10px;margin-bottom:28px">Hoe concreter je bent, hoe scherper de offertes. Noem de ruimte, de afmetingen en wat je al weet.</p>
+
+          <div class="field">
+            <label class="label" for="f-titel">Korte titel</label>
+            <input class="input" id="f-titel" name="titel" placeholder="Bijv. Woonkamer en hal schilderen">
+            <p class="err">Geef je klus een korte titel.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="f-omschrijving">Omschrijving</label>
+            <textarea class="textarea" id="f-omschrijving" name="omschrijving" placeholder="Bijv. Woonkamer van 28 m² en de hal met trapgat. Muren zijn eerder gesausd maar er zitten scheurtjes. Plafonds mogen ook mee."></textarea>
+            <div class="row row--between" style="margin-top:6px">
+              <p class="err" style="margin:0">Schrijf minstens 25 tekens, dat helpt vakmensen echt.</p>
+              <span class="tiny muted" id="teller" style="margin-left:auto">0 tekens</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">Foto's toevoegen <span class="muted" style="font-weight:400">(optioneel, maar sterk aangeraden)</span></span>
+            <div class="dropzone" id="drop" role="button" tabindex="0">
+              <span id="drop-icon"></span>
+              <p class="strong" style="margin-top:10px">Sleep foto's hierheen of klik om te kiezen</p>
+              <p class="tiny muted" style="margin-top:4px">JPG of PNG, maximaal 6 foto's</p>
+              <input type="file" id="files" accept="image/*" multiple hidden>
+            </div>
+            <div class="thumbs" id="thumbs"></div>
+            <p class="hint">Klussen met foto's krijgen gemiddeld <strong>2,3 keer</strong> zoveel reacties.</p>
+          </div>
+        </section>
+
+        <!-- STAP 3 -->
+        <section class="wiz__step" data-step="3" aria-labelledby="s3-kop">
+          <h1 id="s3-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Wanneer en voor hoeveel?</h1>
+          <p class="lead" style="margin-top:10px;margin-bottom:28px">Een richtbedrag is geen belofte. Het helpt bedrijven alleen inschatten of jullie op hetzelfde niveau zitten.</p>
+
+          <fieldset style="border:0;padding:0">
+            <legend class="label" style="margin-bottom:12px">Wanneer moet het klaar zijn?</legend>
+            <div class="grid grid-2" style="gap:12px" id="wanneer-opties"></div>
+            <p class="err">Kies een termijn.</p>
+          </fieldset>
+
+          <fieldset style="border:0;padding:0;margin-top:28px">
+            <legend class="label" style="margin-bottom:12px">Wat is je richtbudget?</legend>
+            <div class="grid grid-2" style="gap:12px" id="budget-opties"></div>
+            <p class="err">Kies een richtbudget.</p>
+          </fieldset>
+        </section>
+
+        <!-- STAP 4 -->
+        <section class="wiz__step" data-step="4" aria-labelledby="s4-kop">
+          <h1 id="s4-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Waar staat de klus?</h1>
+          <p class="lead" style="margin-top:10px;margin-bottom:28px">We tonen je klus aan bedrijven binnen jouw straal. Je exacte adres blijft verborgen tot jij iemand toelaat.</p>
+
+          <div class="grid grid-2" style="gap:20px">
+            <div class="field" style="margin-top:0">
+              <label class="label" for="f-pc">Postcode</label>
+              <input class="input" id="f-pc" name="postcode" placeholder="3511 AB" maxlength="7">
+              <p class="err">Vul een geldige postcode in, bijv. 3511 AB.</p>
+            </div>
+            <div class="field" style="margin-top:0">
+              <label class="label" for="f-huisnr">Huisnummer</label>
+              <input class="input" id="f-huisnr" name="huisnummer" placeholder="12 B">
+              <p class="err">Vul je huisnummer in.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="f-straal">Hoe ver mogen bedrijven vandaan komen?</label>
+            <select class="select" id="f-straal" name="straal">
+              <option value="15">Tot 15 km — het liefst uit de buurt</option>
+              <option value="30" selected>Tot 30 km — de meeste klussen</option>
+              <option value="50">Tot 50 km</option>
+              <option value="999">Maakt niet uit, heel Nederland</option>
+            </select>
+          </div>
+
+          <div class="notice notice--info" style="margin-top:24px">
+            <span id="waar-icon"></span>
+            <p><strong>Wat zien bedrijven?</strong> Alleen je wijk (bijvoorbeeld &bdquo;Utrecht Oost&rdquo;), je omschrijving en je foto's. Straat, huisnummer, e-mail en telefoonnummer deel je pas als jij iemand toelaat tot je klus.</p>
+          </div>
+        </section>
+
+        <!-- STAP 5 -->
+        <section class="wiz__step" data-step="5" aria-labelledby="s5-kop">
+          <h1 id="s5-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Waar sturen we de offertes heen?</h1>
+          <p class="lead" style="margin-top:10px;margin-bottom:28px">Laatste stap. We maken meteen een account voor je aan zodat je alle reacties op één plek hebt.</p>
+
+          <div class="grid grid-2" style="gap:20px">
+            <div class="field" style="margin-top:0">
+              <label class="label" for="f-voornaam">Voornaam</label>
+              <input class="input" id="f-voornaam" name="voornaam" autocomplete="given-name">
+              <p class="err">Vul je voornaam in.</p>
+            </div>
+            <div class="field" style="margin-top:0">
+              <label class="label" for="f-achternaam">Achternaam</label>
+              <input class="input" id="f-achternaam" name="achternaam" autocomplete="family-name">
+              <p class="err">Vul je achternaam in.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="f-email">E-mailadres</label>
+            <input class="input" id="f-email" name="email" type="email" autocomplete="email" placeholder="jij@voorbeeld.nl">
+            <p class="err">Vul een geldig e-mailadres in.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="f-tel">Telefoonnummer</label>
+            <input class="input" id="f-tel" name="telefoon" type="tel" autocomplete="tel" placeholder="06 12 34 56 78">
+            <p class="err">Vul een geldig telefoonnummer in (minimaal 10 cijfers).</p>
+            <p class="hint">Alleen zichtbaar voor de bedrijven die jij zelf toelaat.</p>
+          </div>
+
+          <label class="choice choice--check" style="margin-top:24px">
+            <input type="checkbox" id="f-akkoord">
+            <span class="choice__dot"></span>
+            <span class="choice__body">
+              <span class="choice__title">Ik ga akkoord met de voorwaarden</span>
+              <span class="choice__sub">Je klus wordt getoond aan vakbedrijven in je regio. Je zit nergens aan vast en kunt je klus altijd intrekken.</span>
+            </span>
+          </label>
+          <p class="err" id="err-akkoord" style="display:none">Je moet akkoord gaan om verder te kunnen.</p>
+        </section>
+
+        <!-- KLAAR -->
+        <section class="wiz__step" data-step="6" aria-labelledby="s6-kop">
+          <div style="text-align:center;padding:24px 0 8px">
+            <span id="klaar-icon" style="display:inline-grid;place-items:center;width:72px;height:72px;border-radius:50%;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100)"></span>
+            <h1 id="s6-kop" style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem);margin-top:20px">Je klus staat online</h1>
+            <p class="lead" style="max-width:46ch;margin:14px auto 0">We hebben hem doorgestuurd naar <strong id="klaar-aantal">47</strong> vakbedrijven in jouw regio. De eerste reacties komen meestal binnen een paar uur binnen.</p>
+          </div>
+
+          <div class="card card--pad" style="margin-top:28px;text-align:left">
+            <div class="row row--between" style="margin-bottom:14px">
+              <strong id="klaar-titel">Je klus</strong>
+              <span class="badge">Klusnummer A-8852</span>
+            </div>
+            <dl class="sum" id="klaar-sum" style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px"></dl>
+          </div>
+
+          <div class="row" style="justify-content:center;margin-top:28px">
+            <a class="btn btn--primary btn--lg" href="mijn-klussen.html">Naar mijn klussen</a>
+            <a class="btn btn--ghost btn--lg" href="index.html">Terug naar home</a>
+          </div>
+        </section>
+
+        <!-- Navigatie -->
+        <div class="wiz__nav" id="wiznav">
+          <button type="button" class="btn btn--ghost" id="btn-vorige">Vorige</button>
+          <button type="button" class="btn btn--primary" id="btn-volgende">Volgende stap</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ======= ZIJKOLOM ======= -->
+    <aside class="aside">
+      <div class="panel">
+        <div class="panel__head" style="padding:16px 20px">
+          <strong style="font-size:.95rem">Jouw klus</strong>
+          <span class="tiny muted" id="pct">20%</span>
+        </div>
+        <div class="panel__body" style="padding:20px">
+          <div class="progress" style="margin-bottom:20px"><div class="progress__bar" id="bar" style="width:20%"></div></div>
+          <dl class="sum" id="live-sum"><dd class="muted" style="font-size:.9rem">Nog niets ingevuld — begin bovenaan.</dd></dl>
+        </div>
+      </div>
+
+      <div class="card card--pad" style="margin-top:16px;background:var(--oker-50);border-color:var(--oker-200)">
+        <div class="row" style="gap:10px;margin-bottom:10px">
+          <span id="tip-icon" style="color:var(--oker-700)"></span>
+          <strong style="font-size:.93rem">Tip van de redactie</strong>
+        </div>
+        <p class="small" id="tip-tekst">Noem altijd de afmetingen. &bdquo;De woonkamer schilderen&rdquo; kan 600 of 2.400 euro zijn — met &bdquo;28 m², muren en plafond&rdquo; krijg je meteen een prijs die klopt.</p>
+      </div>
+
+      <div class="row small muted" style="margin-top:20px;gap:8px;align-items:flex-start">
+        <span id="gratis-icon"></span>
+        <span>Plaatsen is gratis en je zit nergens aan vast. Vakbedrijven betalen voor hun abonnement, jij niet.</span>
+      </div>
+    </aside>
+  </div>
+</div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  var STAPPEN = ['Vakgebied', 'Omschrijving', 'Planning', 'Locatie', 'Contact'];
+  var stap = 1, foto = [];
+
+  /* ---- Iconen plaatsen ---- */
+  $('#drop-icon').innerHTML = I('camera', 30);
+  $('#waar-icon').innerHTML = I('lock', 19);
+  $('#klaar-icon').innerHTML = I('checkCircle', 34);
+  $('#tip-icon').innerHTML = I('sparkle', 18);
+  $('#gratis-icon').innerHTML = I('shield', 16);
+  $('#drop-icon').firstChild.style.color = 'var(--brand-600)';
+  $('#drop-icon').firstChild.style.margin = '0 auto';
+
+  /* ---- Stappenbalk ---- */
+  function tekenBalk() {
+    $('#wizbar').innerHTML = STAPPEN.map(function (naam, i) {
+      var n = i + 1;
+      var klasse = n < stap ? 'is-done' : (n === stap ? 'is-active' : '');
+      return '<span class="wizbar__step ' + klasse + '">' +
+          '<span class="wizbar__dot">' + (n < stap ? I('check', 13) : n) + '</span>' +
+          '<span class="hide-sm">' + naam + '</span>' +
+        '</span>' + (n < STAPPEN.length ? '<span class="wizbar__line"></span>' : '');
+    }).join('');
+    var pct = Math.round(Math.min(stap, 5) / 5 * 100);
+    $('#bar').style.width = pct + '%';
+    $('#pct').textContent = pct + '%';
+  }
+
+  /* ---- Vakgebied-tegels ---- */
+  $('#vak-tegels').innerHTML = D.categories.slice(0, 8).map(function (c) {
+    return '<button type="button" class="cat" data-vak="' + c.naam + '" style="flex-direction:column;align-items:flex-start;gap:12px;text-align:left">' +
+      '<span class="cat__icon">' + I(c.icon, 22) + '</span>' +
+      '<span class="cat__name">' + c.naam + '</span></button>';
+  }).join('');
+  $('#vak-tegels').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-vak]');
+    if (!b) return;
+    $('#f-vak').value = b.getAttribute('data-vak');
+    markeerTegel();
+    ververs();
+  });
+  function markeerTegel() {
+    var v = $('#f-vak').value.trim().toLowerCase();
+    $$('#vak-tegels [data-vak]').forEach(function (b) {
+      var aan = b.getAttribute('data-vak').toLowerCase() === v;
+      b.style.borderColor = aan ? 'var(--brand-700)' : '';
+      b.style.boxShadow = aan ? '0 0 0 1px var(--brand-700)' : '';
+      b.style.background = aan ? 'var(--brand-50)' : '';
+    });
+  }
+
+  A.autocomplete($('#f-vak'), function () { markeerTegel(); ververs(); });
+  $('#f-vak').addEventListener('input', function () { markeerTegel(); ververs(); });
+
+  /* ---- Keuzeblokken ---- */
+  function keuzes(host, naam, opties) {
+    $(host).innerHTML = opties.map(function (o, i) {
+      return '<label class="choice">' +
+        '<input type="radio" name="' + naam + '" value="' + o.t + '"' + (o.sub ? '' : '') + '>' +
+        '<span class="choice__dot"></span>' +
+        '<span class="choice__body"><span class="choice__title">' + o.t + '</span>' +
+        (o.sub ? '<span class="choice__sub">' + o.sub + '</span>' : '') + '</span></label>';
+    }).join('');
+  }
+
+  keuzes('#wanneer-opties', 'wanneer', [
+    { t: 'Zo snel mogelijk', sub: 'Spoed — binnen een paar dagen' },
+    { t: 'Binnen 2 weken', sub: 'De meest gekozen termijn' },
+    { t: 'Binnen 3 maanden', sub: 'Er is geen haast bij' },
+    { t: 'Ik ben aan het oriënteren', sub: 'Eerst prijzen vergelijken' }
+  ]);
+
+  keuzes('#budget-opties', 'budget', [
+    { t: 'Tot € 500' }, { t: '€ 500 – € 1.500' }, { t: '€ 1.500 – € 3.000' },
+    { t: '€ 3.000 – € 7.500' }, { t: 'Meer dan € 7.500' }, { t: 'Geen idee, adviseer mij' }
+  ]);
+
+  document.addEventListener('change', function (e) {
+    if (e.target.type === 'radio' || e.target.type === 'checkbox') ververs();
+  });
+
+  /* ---- Tekstteller ---- */
+  $('#f-omschrijving').addEventListener('input', function () {
+    var n = this.value.length;
+    $('#teller').textContent = n + ' tekens';
+    $('#teller').style.color = n >= 25 ? 'var(--groen-ok)' : '';
+    ververs();
+  });
+  ['#f-titel', '#f-pc', '#f-huisnr', '#f-voornaam', '#f-achternaam', '#f-email', '#f-tel'].forEach(function (s) {
+    $(s).addEventListener('input', ververs);
+  });
+
+  /* ---- Foto's ---- */
+  var drop = $('#drop'), inp = $('#files');
+  drop.addEventListener('click', function () { inp.click(); });
+  drop.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); }
+  });
+  ['dragenter', 'dragover'].forEach(function (t) {
+    drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (t) {
+    drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) { voegToe(e.dataTransfer.files); });
+  inp.addEventListener('change', function () { voegToe(inp.files); inp.value = ''; });
+
+  function voegToe(lijst) {
+    Array.prototype.forEach.call(lijst, function (f) {
+      if (foto.length >= 6 || f.type.indexOf('image/') !== 0) return;
+      var url = URL.createObjectURL(f);
+      foto.push({ naam: f.name, url: url });
+    });
+    tekenFoto();
+    ververs();
+  }
+  function tekenFoto() {
+    $('#thumbs').innerHTML = foto.map(function (f, i) {
+      return '<div class="thumb"><img src="' + f.url + '" alt="' + A.esc(f.naam) + '">' +
+        '<button type="button" data-i="' + i + '" aria-label="Foto verwijderen">' + I('close', 12) + '</button></div>';
+    }).join('');
+  }
+  $('#thumbs').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    foto.splice(parseInt(b.getAttribute('data-i'), 10), 1);
+    tekenFoto(); ververs();
+  });
+
+  /* ---- Validatie ---- */
+  function fout(el, aan) {
+    var f = el.closest('.field') || el.closest('fieldset');
+    if (f) f.classList.toggle('field--error', aan);
+    return !aan;
+  }
+  var postcodeRe = /^[1-9][0-9]{3}\s?[A-Za-z]{2}$/;
+  var emailRe = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+  function geldig(n) {
+    var ok = true;
+    if (n === 1) {
+      ok = fout($('#f-vak'), !$('#f-vak').value.trim()) && ok;
+    }
+    if (n === 2) {
+      ok = fout($('#f-titel'), $('#f-titel').value.trim().length < 3) && ok;
+      ok = fout($('#f-omschrijving'), $('#f-omschrijving').value.trim().length < 25) && ok;
+    }
+    if (n === 3) {
+      ok = fout($('#wanneer-opties'), !document.querySelector('[name=wanneer]:checked')) && ok;
+      ok = fout($('#budget-opties'), !document.querySelector('[name=budget]:checked')) && ok;
+    }
+    if (n === 4) {
+      ok = fout($('#f-pc'), !postcodeRe.test($('#f-pc').value.trim())) && ok;
+      ok = fout($('#f-huisnr'), !$('#f-huisnr').value.trim()) && ok;
+    }
+    if (n === 5) {
+      ok = fout($('#f-voornaam'), !$('#f-voornaam').value.trim()) && ok;
+      ok = fout($('#f-achternaam'), !$('#f-achternaam').value.trim()) && ok;
+      ok = fout($('#f-email'), !emailRe.test($('#f-email').value.trim())) && ok;
+      ok = fout($('#f-tel'), $('#f-tel').value.replace(/\D/g, '').length < 10) && ok;
+      var akk = $('#f-akkoord').checked;
+      $('#err-akkoord').style.display = akk ? 'none' : 'block';
+      ok = akk && ok;
+    }
+    return ok;
+  }
+
+  /* ---- Samenvatting ---- */
+  function waarde(sel) { var el = document.querySelector(sel); return el ? el.value.trim() : ''; }
+  function gekozen(naam) { var r = document.querySelector('[name=' + naam + ']:checked'); return r ? r.value : ''; }
+
+  function ververs() {
+    var rijen = [];
+    if (waarde('#f-vak')) rijen.push(['Vakgebied', waarde('#f-vak')]);
+    if (waarde('#f-titel')) rijen.push(['Klus', waarde('#f-titel')]);
+    if (foto.length) rijen.push(["Foto's", foto.length + (foto.length === 1 ? ' foto' : ' foto’s')]);
+    if (gekozen('wanneer')) rijen.push(['Wanneer', gekozen('wanneer')]);
+    if (gekozen('budget')) rijen.push(['Richtbudget', gekozen('budget')]);
+    if (postcodeRe.test(waarde('#f-pc'))) rijen.push(['Locatie', waarde('#f-pc').toUpperCase() + (waarde('#f-huisnr') ? ' ' + waarde('#f-huisnr') : '')]);
+    if (waarde('#f-voornaam')) rijen.push(['Naam', waarde('#f-voornaam') + ' ' + waarde('#f-achternaam')]);
+
+    $('#live-sum').innerHTML = rijen.length
+      ? rijen.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + A.esc(r[1]) + '</dd>'; }).join('')
+      : '<dd class="muted" style="font-size:.9rem">Nog niets ingevuld — begin bovenaan.</dd>';
+    return rijen;
+  }
+
+  /* ---- Tips per stap ---- */
+  var TIPS = {
+    1: 'Weet je het vakgebied niet zeker? Kies wat er het dichtst bij komt. Bedrijven uit aangrenzende vakken zien je klus ook.',
+    2: 'Noem altijd de afmetingen. &bdquo;De woonkamer schilderen&rdquo; kan 600 of 2.400 euro zijn — met &bdquo;28 m², muren en plafond&rdquo; krijg je meteen een prijs die klopt.',
+    3: 'Kies gerust &bdquo;geen idee&rdquo; bij het budget. Vakmensen rekenen het dan zelf uit; dat levert vaak eerlijkere prijzen op dan een bedrag dat je uit de lucht grijpt.',
+    4: 'Een straal van 30 km is de zoete plek: genoeg bedrijven om uit te kiezen, zonder dat je voorrijkosten van ver betaalt.',
+    5: 'Vul je 06 in — de meeste vakmensen bellen liever even dan dat ze mailen. Je nummer blijft verborgen tot jij iemand toelaat.'
+  };
+
+  /* ---- Navigatie ---- */
+  function toon(n) {
+    stap = n;
+    $$('.wiz__step').forEach(function (s) {
+      s.classList.toggle('is-on', s.getAttribute('data-step') === String(n));
+    });
+    tekenBalk();
+    $('#btn-vorige').style.visibility = n === 1 ? 'hidden' : 'visible';
+    $('#btn-volgende').textContent = n === 5 ? 'Klus plaatsen' : 'Volgende stap';
+    $('#wiznav').style.display = n === 6 ? 'none' : 'flex';
+    if (TIPS[n]) $('#tip-tekst').innerHTML = TIPS[n];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  $('#btn-volgende').addEventListener('click', function () {
+    if (!geldig(stap)) {
+      var eerste = document.querySelector('.wiz__step.is-on .field--error input, .wiz__step.is-on .field--error textarea');
+      if (eerste) eerste.focus();
+      return;
+    }
+    if (stap === 5) { plaats(); return; }
+    toon(stap + 1);
+  });
+  $('#btn-vorige').addEventListener('click', function () { if (stap > 1) toon(stap - 1); });
+
+  function plaats() {
+    var rijen = ververs();
+    $('#klaar-titel').textContent = waarde('#f-titel') || 'Je klus';
+    $('#klaar-sum').innerHTML = rijen.map(function (r) {
+      return '<div><dt>' + r[0] + '</dt><dd>' + A.esc(r[1]) + '</dd></div>';
+    }).join('');
+    /* Aantal bedrijven schaalt met de gekozen straal — voelt logisch, niet willekeurig */
+    var straal = parseInt(waarde('#f-straal') || '30', 10);
+    $('#klaar-aantal').textContent = straal >= 999 ? 'ruim 1.200' : String(Math.round(straal * 1.6 + 11));
+
+    A.store.set('laatsteKlus', {
+      titel: waarde('#f-titel'), vak: waarde('#f-vak'),
+      postcode: waarde('#f-pc').toUpperCase(), budget: gekozen('budget'),
+      wanneer: gekozen('wanneer'), fotos: foto.length, datum: Date.now()
+    });
+    toon(6);
+    A.toast('Je klus is geplaatst — vakbedrijven zijn op de hoogte gebracht.');
+  }
+
+  /* ---- Beginwaarden uit de zoekbalk op de homepage ---- */
+  var p = new URLSearchParams(location.search);
+  if (p.get('vak')) $('#f-vak').value = p.get('vak');
+  if (p.get('pc')) $('#f-pc').value = p.get('pc');
+  markeerTegel();
+  tekenBalk();
+  ververs();
+})();
+</script>
+</body>
+</html>

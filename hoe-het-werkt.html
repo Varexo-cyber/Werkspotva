@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Hoe het werkt — Vakmaat</title>
+<meta name="description" content="Van klus plaatsen tot de laatste kwast: zo werkt Vakmaat voor particulieren, en wat het je kost (niets).">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .tijdlijn { position:relative; padding-left:0; }
+  .fase { display:grid; grid-template-columns:130px 1fr; gap:32px; padding-block:36px; border-top:1px solid var(--line); }
+  .fase__nr { font-family:var(--font-display); font-weight:700; font-size:3.2rem; letter-spacing:-.05em; color:var(--line-strong); line-height:1; }
+  .fase__nr small { display:block; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--brand-600); font-family:var(--font-body); margin-top:8px; }
+  @media (max-width:700px){ .fase{grid-template-columns:1fr;gap:12px} .fase__nr{font-size:2.2rem} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:40px">
+    <div class="wrap wrap--narrow" style="text-align:center">
+      <span class="eyebrow eyebrow--center">Voor particulieren</span>
+      <h1 style="margin-top:14px">Zo vind je in een dag de juiste vakman</h1>
+      <p class="lead" style="margin-top:16px">Geen tien bedrijven bellen die niet terugbellen. Je zet je klus één keer neer, en zij komen naar jou toe. Hieronder stap voor stap wat er gebeurt.</p>
+      <div class="row" style="justify-content:center;margin-top:28px">
+        <a class="btn btn--primary btn--lg" href="klus-plaatsen.html">Klus plaatsen — gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section--tight">
+    <div class="wrap wrap--narrow">
+      <div class="tijdlijn">
+
+        <div class="fase">
+          <div class="fase__nr">01<small>2 minuten</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">Je beschrijft je klus</h2>
+            <p class="muted" style="margin-top:12px">Kies je vakgebied, vertel wat er moet gebeuren en voeg een paar foto's toe. Je hoeft geen technische termen te kennen — schrijf het op zoals je het aan een buurman zou uitleggen.</p>
+            <div class="card card--pad" style="margin-top:20px;background:var(--paper)">
+              <strong class="small">Voorbeeld van een goede omschrijving</strong>
+              <p class="small muted" style="margin-top:10px;font-style:italic">&bdquo;Woonkamer van ongeveer 28 m² en de hal met trapgat. De muren zijn vier jaar geleden gesausd maar er zitten nu scheurtjes bij de hoeken. Plafonds mogen mee. Vier binnenkozijnen erbij. Huis is bewoond, dus graag in overleg plannen.&rdquo;</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fase">
+          <div class="fase__nr">02<small>Direct</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">Vakbedrijven zien je klus</h2>
+            <p class="muted" style="margin-top:12px">Je klus verschijnt meteen bij gecontroleerde bedrijven binnen de straal die jij hebt gekozen. Zij zien je omschrijving en je foto's — maar nog niet je adres, e-mail of telefoonnummer.</p>
+            <div class="notice notice--info" style="margin-top:20px">
+              <span id="ico-1"></span>
+              <p>Bedrijven zien in deze fase alleen je wijk, bijvoorbeeld &bdquo;Utrecht Oost&rdquo;. Zo voorkomen we dat je nummer bij tien callcenters belandt.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fase">
+          <div class="fase__nr">03<small>Meestal &lt; 24 uur</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">De offertes komen binnen</h2>
+            <p class="muted" style="margin-top:12px">Gemiddeld krijg je drie tot vijf reacties met een prijsindicatie, een startdatum en een kort bericht. Je krijgt bericht per mail en vindt alles terug bij <a href="mijn-klussen.html" style="color:var(--brand-700);font-weight:600">mijn klussen</a>.</p>
+            <div class="grid grid-3" style="margin-top:20px;gap:14px" id="snelheid"></div>
+          </div>
+        </div>
+
+        <div class="fase">
+          <div class="fase__nr">04<small>Jouw tempo</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">Je vergelijkt en stelt vragen</h2>
+            <p class="muted" style="margin-top:12px">Prijs is niet alles. Kijk ook naar de reviews, de garantie en of het bedrijf uitlegt wát het voor dat bedrag doet. Twijfel je? Stel je vraag via het berichtensysteem — dat kost je niets en verplicht je tot niets.</p>
+            <div class="card card--pad" style="margin-top:20px">
+              <strong class="small">Vragen die altijd de moeite waard zijn</strong>
+              <ul class="checklist small" style="margin-top:14px" id="vragen"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="fase">
+          <div class="fase__nr">05<small>Als jij wilt</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">Je kiest wie langskomt</h2>
+            <p class="muted" style="margin-top:12px">Pas op dit moment deel je je adres en telefoonnummer, en alleen met het bedrijf dat jij toelaat. De afspraken die jullie samen maken, maken jullie onderling — wij nemen geen commissie over je opdracht.</p>
+          </div>
+        </div>
+
+        <div class="fase" style="border-bottom:1px solid var(--line)">
+          <div class="fase__nr">06<small>Achteraf</small></div>
+          <div>
+            <h2 style="font-size:1.4rem">Je laat een review achter</h2>
+            <p class="muted" style="margin-top:12px">Na afloop vragen we hoe het ging. Die beoordeling helpt de volgende persoon met dezelfde klus — en houdt bedrijven scherp, want ze kunnen reviews niet verwijderen, alleen beantwoorden.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- VEILIG -->
+  <section class="section section--paper" id="veilig">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Veilig klussen</span>
+        <h2>Waar wij op letten, en waar jij op moet letten</h2>
+      </div>
+      <div class="grid grid-2" style="gap:24px">
+        <div class="card card--pad">
+          <h3 style="font-size:1.15rem">Wat wij doen</h3>
+          <ul class="checklist" style="margin-top:16px" id="wij"></ul>
+        </div>
+        <div class="card card--pad">
+          <h3 style="font-size:1.15rem">Wat jij zelf kunt doen</h3>
+          <ul class="checklist" style="margin-top:16px" id="jij"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KOSTEN -->
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <div class="card card--pad" style="text-align:center;padding:clamp(28px,4vw,52px)">
+        <span id="gratis-ico" style="display:inline-grid;place-items:center;width:62px;height:62px;border-radius:50%;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100);margin-bottom:18px"></span>
+        <h2>Wat kost het jou? Niets.</h2>
+        <p class="lead" style="margin:14px auto 0;max-width:50ch">Je klus plaatsen, offertes ontvangen, vragen stellen en vergelijken is gratis en blijft gratis. Vakbedrijven betalen een abonnement om op klussen te mogen reageren — jij betaalt alleen de vakman voor zijn werk.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--paper">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Vragen</span>
+        <h2>Veelgestelde vragen</h2>
+      </div>
+      <div id="faq-acc"></div>
+      <div style="text-align:center;margin-top:40px">
+        <a class="btn btn--primary btn--lg" href="klus-plaatsen.html">Begin met je klus</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+
+  $('#ico-1').innerHTML = I('lock', 19);
+  $('#gratis-ico').innerHTML = I('euro', 28);
+
+  $('#snelheid').innerHTML = [
+    ['3 uur', 'tot de eerste reactie, mediaan'],
+    ['19 uur', 'tot de eerste offerte, gemiddeld'],
+    ['3,8', 'offertes per klus gemiddeld']
+  ].map(function (r) {
+    return '<div class="card card--pad" style="text-align:center;padding:20px">' +
+      '<div style="font-family:var(--font-display);font-weight:700;font-size:1.7rem;letter-spacing:-.035em">' + r[0] + '</div>' +
+      '<div class="tiny muted" style="margin-top:6px">' + r[1] + '</div></div>';
+  }).join('');
+
+  function lijst(sel, items, ico) {
+    $(sel).innerHTML = items.map(function (t) {
+      return '<li>' + I(ico || 'checkCircle', 18) + '<span>' + t + '</span></li>';
+    }).join('');
+  }
+
+  lijst('#vragen', [
+    'Zit de btw bij het genoemde bedrag in?',
+    'Is materiaal inbegrepen, of komt dat er nog bij?',
+    'Hoeveel dagen heb je nodig, en wanneer kun je starten?',
+    'Wat voor garantie geef je, en waarop precies?',
+    'Wie ruimt op en voert het afval af?'
+  ], 'check');
+
+  lijst('#wij', [
+    'KvK-inschrijving en btw-nummer automatisch controleren',
+    'Certificaten als VCA en Sterkin handmatig nakijken',
+    'Dubbele en nep-aanvragen eruit filteren',
+    'Reviews alleen toelaten bij een afgeronde klus',
+    'Bemiddelen als je er met een bedrijf niet uitkomt'
+  ]);
+
+  lijst('#jij', [
+    'Laat altijd een offerte op papier of per mail sturen',
+    'Betaal nooit het volledige bedrag vooruit',
+    'Spreek meerwerk vooraf af, niet achteraf',
+    'Lees de reviews, niet alleen het gemiddelde cijfer',
+    'Vertrouw je het niet? Kies gewoon een ander bedrijf'
+  ]);
+
+  A.accordion($('#faq-acc'), D.faqKlant);
+})();
+</script>
+</body>
+</html>

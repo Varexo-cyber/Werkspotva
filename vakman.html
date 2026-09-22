@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Bedrijfsprofiel — Vakmaat</title>
+<meta name="description" content="Bekijk het profiel, de reviews en de certificaten van dit vakbedrijf op Vakmaat.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .prof-hero { background:var(--surface); border-bottom:1px solid var(--line); padding-block:36px 32px; }
+  .prof-top { display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; }
+  .prof-avatar {
+    width:96px; height:96px; border-radius:20px; flex:none; display:grid; place-items:center;
+    background:linear-gradient(140deg, var(--brand-600), var(--brand-800)); color:#fff;
+    font-family:var(--font-display); font-weight:700; font-size:2rem; letter-spacing:-.03em;
+    box-shadow:var(--sh-3);
+  }
+  .prof-body { display:grid; grid-template-columns:1fr 340px; gap:36px; align-items:start; }
+  .prof-side { position:sticky; top:96px; }
+  .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px; background:var(--line); border-radius:var(--r); overflow:hidden; border:1px solid var(--line); }
+  .fact { background:var(--surface); padding:16px 18px; }
+  .fact__l { font-size:.76rem; color:var(--muted-2); font-weight:600; letter-spacing:.05em; text-transform:uppercase; }
+  .fact__v { font-weight:600; margin-top:5px; font-size:.97rem; }
+  .bar-row { display:grid; grid-template-columns:52px 1fr 36px; gap:10px; align-items:center; font-size:.83rem; }
+  .bar { height:7px; background:var(--paper-2); border-radius:var(--r-pill); overflow:hidden; }
+  .bar span { display:block; height:100%; background:var(--oker-500); border-radius:var(--r-pill); }
+  .werkfoto { aspect-ratio:4/3; border-radius:var(--r); border:1px solid var(--line); display:grid; place-items:center; color:var(--brand-700); background:repeating-linear-gradient(45deg, var(--paper-2), var(--paper-2) 12px, var(--paper) 12px, var(--paper) 24px); }
+  @media (max-width:900px){ .prof-body{grid-template-columns:1fr} .prof-side{position:static;order:-1} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+  <section class="prof-hero">
+    <div class="wrap">
+      <nav class="tiny muted" aria-label="Kruimelpad" style="margin-bottom:18px">
+        <a href="index.html">Home</a> / <a href="vakmensen.html">Vakmensen</a> / <span id="kruimel">Profiel</span>
+      </nav>
+      <div class="prof-top" id="prof-top"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:36px">
+    <div class="wrap prof-body">
+      <div id="prof-main" class="stack"></div>
+      <aside class="prof-side" id="prof-side"></aside>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+
+  var id = new URLSearchParams(location.search).get('id');
+  var p = D.pros.filter(function (x) { return x.id === id; })[0] || D.pros[0];
+  var cat = D.categories.filter(function (c) { return c.slug === p.vak; })[0];
+
+  document.title = p.naam + ' — Vakmaat';
+  $('#kruimel').textContent = p.naam;
+
+  /* ---- Kop ---- */
+  $('#prof-top').innerHTML =
+    '<div class="prof-avatar">' + p.initialen + '</div>' +
+    '<div style="flex:1;min-width:260px">' +
+      '<div class="row" style="gap:10px;margin-bottom:8px">' +
+        '<span class="badge">' + I('checkCircle', 13) + 'KvK-gecontroleerd</span>' +
+        (p.vca ? '<span class="badge badge--oker">' + I('shield', 13) + 'VCA</span>' : '') +
+        '<span class="badge badge--grijs">Sinds ' + p.sinds + ' op Vakmaat</span>' +
+      '</div>' +
+      '<h1 style="font-size:clamp(1.7rem,1.3rem+1.6vw,2.4rem)">' + A.esc(p.naam) + '</h1>' +
+      '<p class="lead" style="margin-top:8px;font-size:1.05rem">' + p.vakLabel + ' · ' + p.plaats + '</p>' +
+      '<div class="row" style="margin-top:14px;gap:20px">' +
+        '<span class="rating">' + A.stars(p.score, 17) +
+          '<span class="rating__score" style="font-size:1rem">' + p.score.toFixed(1).replace('.', ',') + '</span>' +
+          '<span class="muted">(' + p.aantal + ' reviews)</span></span>' +
+        '<span class="small muted row" style="gap:6px">' + I('clock', 15) + 'Reageert doorgaans ' + p.reactie + '</span>' +
+        '<span class="small muted row" style="gap:6px">' + I('mapPin', 15) + 'Werkt tot ' + p.straal + ' km rond ' + p.plaats + '</span>' +
+      '</div>' +
+    '</div>';
+
+  /* ---- Reviewteksten per vakgebied ---- */
+  var TEKSTEN = {
+    schilderwerk: [
+      ['Strak afgeleverd en netjes achtergelaten. Elke avond werd de boel opgeruimd, dat is met kleine kinderen in huis echt fijn.', 5, 'Woonkamer en hal', 'Marieke H.', 'Utrecht', '3 weken geleden'],
+      ['Kwamen op de afgesproken dag, prijs bleef zoals in de offerte. Kleine plek bij het kozijn hebben ze zonder mopperen overgedaan.', 5, 'Buitenschilderwerk', 'Ruud van D.', 'Zeist', '2 maanden geleden'],
+      ['Goed werk, maar de planning schoof een week op. Daar is netjes over gebeld, dus ik snap het — vandaar vier sterren.', 4, 'Slaapkamers sauzen', 'Sanne B.', 'Houten', '4 maanden geleden']
+    ],
+    loodgieter: [
+      ['Binnen het uur op de stoep bij een lekkage onder de vloer. Probleem gevonden en dezelfde dag verholpen.', 5, 'Spoedlekkage', 'Karim B.', 'Amsterdam', '2 weken geleden'],
+      ['Nieuwe cv-ketel geplaatst inclusief afvoeren van de oude. Alles uitgelegd, ook de dingen waar ik niet om vroeg.', 5, 'CV-ketel vervangen', 'Lotte de W.', 'Amstelveen', '6 weken geleden'],
+      ['Prima installateur. Wel een pittige prijs, maar het werk is degelijk en er is geen druppel meer te zien.', 4, 'Badkamer aansluiten', 'Dennis K.', 'Diemen', '3 maanden geleden']
+    ],
+    hovenier: [
+      ['De tuin is onherkenbaar. Eerst een schets gekregen met beplantingsplan, daarna precies zo uitgevoerd.', 5, 'Tuin opnieuw aanleggen', 'Peter K.', 'Dalfsen', '1 maand geleden'],
+      ['Bestrating ligt kaarsrecht en er staat geen water meer bij regen. Denken echt mee over afwatering.', 5, 'Terras en bestrating', 'Hanneke S.', 'Zwolle', '3 maanden geleden'],
+      ['Nette ploeg, goede planten geleverd. Alles is aangeslagen, ook de hortensia die ik zelf had opgegeven.', 5, 'Beplanting en border', 'Tom V.', 'Kampen', '5 maanden geleden']
+    ],
+    elektricien: [
+      ['Groepenkast vervangen in een oud huis met rare bedrading. Rustig uitgezocht in plaats van er maar wat van te maken.', 5, 'Groepenkast vervangen', 'Jeroen M.', 'Eindhoven', '3 weken geleden'],
+      ['Laadpaal geplaatst inclusief aanvraag bij de netbeheerder. Ik hoefde zelf niets te regelen.', 5, 'Laadpaal plaatsen', 'Nadia el H.', 'Veldhoven', '2 maanden geleden'],
+      ['Vakwerk, maar ze waren wel een uur later dan afgesproken zonder bericht.', 4, 'Verlichting woonkamer', 'Bas R.', 'Geldrop', '4 maanden geleden']
+    ],
+    dakdekker: [
+      ['Plat dak vernieuwd met EPDM. Fotorapport van voor en na gekregen, dat vond ik een prettige manier van werken.', 5, 'Plat dak vernieuwen', 'Wilma T.', 'Rotterdam', '1 maand geleden'],
+      ['Lekkage boven de slaapkamer verholpen na twee andere bedrijven die het niet vonden.', 5, 'Daklekkage opsporen', 'Ahmed O.', 'Schiedam', '2 maanden geleden'],
+      ['Degelijk werk en een eerlijke prijs. De communicatie vooraf mocht wat vlotter.', 4, 'Dakgoten vervangen', 'Frank de J.', 'Capelle a/d IJssel', '6 maanden geleden']
+    ]
+  };
+  var STANDAARD = [
+    ['Afspraak is afspraak: op tijd begonnen, op tijd klaar, en de prijs bleef staan zoals afgesproken.', 5, 'Klus afgerond via Vakmaat', 'Esther L.', p.plaats, '1 maand geleden'],
+    ['Denkt goed mee en zegt het eerlijk als iets niet nodig is. Dat scheelde mij een paar honderd euro.', 5, 'Klus afgerond via Vakmaat', 'Joris W.', p.wijken[1] || p.plaats, '3 maanden geleden'],
+    ['Goed vakwerk, prettige mensen over de vloer. Alleen het opruimen mocht iets grondiger.', 4, 'Klus afgerond via Vakmaat', 'Miranda P.', p.wijken[2] || p.plaats, '5 maanden geleden']
+  ];
+  var reviews = TEKSTEN[p.vak] || STANDAARD;
+
+  /* Verdeling: afgeleid van de score, zodat de staafjes bij het cijfer passen */
+  var verdeling = (function (score, totaal) {
+    var vijf = Math.round(totaal * (0.52 + (score - 4) * 0.36));
+    var vier = Math.round(totaal * (0.34 - (score - 4) * 0.22));
+    var drie = Math.round((totaal - vijf - vier) * 0.62);
+    var twee = Math.round((totaal - vijf - vier - drie) * 0.6);
+    var een = Math.max(0, totaal - vijf - vier - drie - twee);
+    return [vijf, vier, drie, twee, een];
+  })(p.score, p.aantal);
+
+  /* ---- Hoofdkolom ---- */
+  $('#prof-main').innerHTML =
+    /* Over */
+    '<div class="card card--pad">' +
+      '<h2 style="font-size:1.35rem">Over dit bedrijf</h2>' +
+      '<p style="margin-top:14px;max-width:62ch">' + A.esc(p.over) + '</p>' +
+      '<div class="facts" style="margin-top:24px">' +
+        '<div class="fact"><div class="fact__l">Uurtarief</div><div class="fact__v">' + p.uurtarief + '</div></div>' +
+        '<div class="fact"><div class="fact__l">Medewerkers</div><div class="fact__v">' + p.medewerkers + '</div></div>' +
+        '<div class="fact"><div class="fact__l">Actief sinds</div><div class="fact__v">' + p.sinds + '</div></div>' +
+        '<div class="fact"><div class="fact__l">Garantie</div><div class="fact__v">' + p.garantie + '</div></div>' +
+      '</div>' +
+    '</div>' +
+
+    /* Specialismen */
+    '<div class="card card--pad">' +
+      '<h2 style="font-size:1.35rem">Waar dit bedrijf goed in is</h2>' +
+      '<div class="row" style="gap:10px;margin-top:16px">' +
+        p.specialisme.map(function (s) { return '<span class="badge">' + I('check', 13) + s + '</span>'; }).join('') +
+      '</div>' +
+      '<h3 style="font-size:1rem;margin-top:26px;margin-bottom:12px">Werkgebied</h3>' +
+      '<p class="small muted" style="margin-bottom:12px">Komt standaard binnen ' + p.straal + ' km. Daarbuiten in overleg, meestal tegen voorrijkosten.</p>' +
+      '<div class="row" style="gap:8px">' +
+        p.wijken.map(function (w) { return '<span class="badge badge--grijs">' + I('mapPin', 12) + w + '</span>'; }).join('') +
+      '</div>' +
+    '</div>' +
+
+    /* Werk */
+    '<div class="card card--pad">' +
+      '<h2 style="font-size:1.35rem">Eerder werk</h2>' +
+      '<p class="small muted" style="margin-top:8px">Foto’s die dit bedrijf zelf bij afgeronde klussen heeft geplaatst.</p>' +
+      '<div class="grid grid-3" style="margin-top:18px;gap:12px">' +
+        [0, 1, 2].map(function (i) {
+          return '<div class="werkfoto">' + I('camera', 26) + '</div>';
+        }).join('') +
+      '</div>' +
+      '<p class="tiny muted" style="margin-top:12px">In deze preview zijn de projectfoto’s als placeholder weergegeven.</p>' +
+    '</div>' +
+
+    /* Certificaten */
+    '<div class="card card--pad">' +
+      '<h2 style="font-size:1.35rem">Certificaten en controles</h2>' +
+      '<ul class="checklist" style="margin-top:16px">' +
+        ['KvK-nummer ' + p.kvk + ' — gecontroleerd', 'Btw-nummer geverifieerd']
+          .concat(p.keurmerken).map(function (k) {
+            return '<li>' + I('checkCircle', 18) + '<span>' + k + '</span></li>';
+          }).join('') +
+      '</ul>' +
+    '</div>' +
+
+    /* Reviews */
+    '<div class="card card--pad" id="reviews">' +
+      '<div class="row row--between" style="align-items:flex-start;margin-bottom:22px">' +
+        '<h2 style="font-size:1.35rem">Reviews</h2>' +
+        '<span class="small muted">Alleen van klanten met een afgeronde klus</span>' +
+      '</div>' +
+      '<div class="row" style="gap:36px;align-items:center;margin-bottom:26px;flex-wrap:wrap">' +
+        '<div style="text-align:center">' +
+          '<div style="font-family:var(--font-display);font-weight:700;font-size:3rem;line-height:1;letter-spacing:-.04em">' + p.score.toFixed(1).replace('.', ',') + '</div>' +
+          '<div style="margin-top:8px">' + A.stars(p.score, 16) + '</div>' +
+          '<div class="tiny muted" style="margin-top:6px">' + p.aantal + ' reviews</div>' +
+        '</div>' +
+        '<div style="flex:1;min-width:220px;display:grid;gap:7px">' +
+          verdeling.map(function (n, i) {
+            var ster = 5 - i, pct = p.aantal ? Math.round(n / p.aantal * 100) : 0;
+            return '<div class="bar-row"><span class="muted">' + ster + ' ster</span>' +
+              '<span class="bar"><span style="width:' + pct + '%"></span></span>' +
+              '<span class="muted tiny">' + pct + '%</span></div>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<hr class="divider">' +
+      reviews.map(function (r, i) {
+        return '<div style="padding:22px 0' + (i ? ';border-top:1px solid var(--line)' : '') + '">' +
+          '<div class="row row--between" style="margin-bottom:8px">' +
+            '<div class="row" style="gap:12px">' +
+              '<span class="review__av">' + r[3].split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</span>' +
+              '<span><span class="strong small">' + r[3] + '</span><br>' +
+              '<span class="tiny muted">' + r[2] + ' · ' + r[4] + '</span></span>' +
+            '</div>' +
+            '<span class="tiny muted">' + r[5] + '</span>' +
+          '</div>' +
+          '<div style="margin:10px 0 8px">' + A.stars(r[1], 14) + '</div>' +
+          '<p class="small">' + r[0] + '</p>' +
+        '</div>';
+      }).join('') +
+      '<button class="btn btn--ghost btn--block" style="margin-top:16px" id="meer-reviews">Alle ' + p.aantal + ' reviews bekijken</button>' +
+    '</div>';
+
+  /* ---- Zijkolom ---- */
+  $('#prof-side').innerHTML =
+    '<div class="panel">' +
+      '<div class="panel__body">' +
+        '<h2 style="font-size:1.12rem">Offerte aanvragen</h2>' +
+        '<p class="small muted" style="margin-top:8px">Beschrijf je klus. ' + A.esc(p.naam.split(' ')[0]) + ' reageert doorgaans ' + p.reactie + '.</p>' +
+        '<form id="offerte" style="margin-top:18px">' +
+          '<div class="field" style="margin-top:0">' +
+            '<label class="label" for="o-klus">Wat moet er gebeuren?</label>' +
+            '<textarea class="textarea" id="o-klus" style="min-height:96px" placeholder="Bijv. ' + p.specialisme[0].toLowerCase() + ' voor een tussenwoning uit 1978"></textarea>' +
+            '<p class="err">Vertel in het kort wat je nodig hebt.</p>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label class="label" for="o-mail">E-mailadres</label>' +
+            '<input class="input" id="o-mail" type="email" placeholder="jij@voorbeeld.nl">' +
+            '<p class="err">Vul een geldig e-mailadres in.</p>' +
+          '</div>' +
+          '<button class="btn btn--primary btn--block" style="margin-top:18px" type="submit">Aanvraag versturen</button>' +
+          '<p class="tiny muted" style="margin-top:12px;text-align:center">Gratis en vrijblijvend. Je gegevens gaan alleen naar dit bedrijf.</p>' +
+        '</form>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card card--pad" style="margin-top:16px">' +
+      '<strong style="font-size:.93rem">Liever meerdere prijzen?</strong>' +
+      '<p class="small muted" style="margin:8px 0 14px">Plaats je klus één keer en laat meerdere ' + (cat ? cat.naam.toLowerCase() + 's' : 'bedrijven') + ' uit je regio reageren.</p>' +
+      '<a class="btn btn--ghost btn--block btn--sm" href="klus-plaatsen.html?vak=' + encodeURIComponent(cat ? cat.naam : '') + '">Klus plaatsen</a>' +
+    '</div>' +
+
+    '<div class="card card--pad" style="margin-top:16px;background:var(--brand-50);border-color:var(--brand-100)">' +
+      '<div class="row" style="gap:10px;margin-bottom:10px">' + I('shield', 18) + '<strong style="font-size:.92rem">Veilig zakendoen</strong></div>' +
+      '<p class="small">Betaal nooit het volledige bedrag vooruit en leg afspraken vast in je klus. Gaat er iets mis, dan kunnen we meekijken.</p>' +
+    '</div>';
+
+  /* ---- Offerteformulier ---- */
+  $('#offerte').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var klus = $('#o-klus'), mail = $('#o-mail'), ok = true;
+    function zet(el, fout) { el.closest('.field').classList.toggle('field--error', fout); if (fout) ok = false; }
+    zet(klus, klus.value.trim().length < 10);
+    zet(mail, !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(mail.value.trim()));
+    if (!ok) return;
+    this.innerHTML = '<div style="text-align:center;padding:12px 0">' +
+      '<span style="display:inline-grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100)">' + I('checkCircle', 26) + '</span>' +
+      '<h3 style="font-size:1.05rem;margin-top:14px">Aanvraag verstuurd</h3>' +
+      '<p class="small muted" style="margin-top:8px">' + A.esc(p.naam) + ' heeft je bericht ontvangen en reageert doorgaans ' + p.reactie + '.</p>' +
+      '<a class="btn btn--ghost btn--block btn--sm" style="margin-top:16px" href="mijn-klussen.html">Naar mijn klussen</a></div>';
+    A.toast('Je aanvraag is verstuurd naar ' + p.naam + '.');
+  });
+
+  $('#meer-reviews').addEventListener('click', function () {
+    A.toast('In de preview tonen we de drie recentste reviews.');
+  });
+})();
+</script>
+</body>
+</html>

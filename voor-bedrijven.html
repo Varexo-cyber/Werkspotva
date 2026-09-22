@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Voor vakbedrijven — Vakmaat</title>
+<meta name="description" content="Haal structureel werk uit je eigen regio. Vaste prijs per maand, onbeperkt reageren op klussen, geen commissie over je opdracht.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .biz-hero { background:linear-gradient(150deg, var(--brand-900) 0%, var(--brand-700) 58%, #1B7460 100%); color:#fff; position:relative; overflow:hidden; padding-block:clamp(52px,6vw,88px); }
+  .biz-hero::after { content:""; position:absolute; right:-90px; top:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(229,162,60,.26), transparent 62%); }
+  .biz-hero__inner { position:relative; display:grid; grid-template-columns:1.08fr .92fr; gap:clamp(32px,5vw,64px); align-items:center; }
+  .biz-hero h1, .biz-hero h2 { color:#fff; }
+  .regio-form { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); border-radius:var(--r-lg); padding:26px; backdrop-filter:blur(8px); }
+  .regio-form .input, .regio-form .select { background:rgba(255,255,255,.95); border-color:transparent; }
+  .vs { display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:stretch; }
+  .vs__mid { display:grid; place-items:center; font-family:var(--font-display); font-weight:700; color:var(--muted-2); }
+  @media (max-width:900px){ .biz-hero__inner{grid-template-columns:1fr} .vs{grid-template-columns:1fr} .vs__mid{display:none} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="biz-hero">
+    <div class="wrap biz-hero__inner">
+      <div>
+        <span class="eyebrow" style="color:var(--oker-500)">Voor vakbedrijven</span>
+        <h1 style="margin-top:14px">Je agenda vol,<br>zonder leads af te rekenen.</h1>
+        <p class="lead" style="color:#C6DCD4;margin-top:18px;max-width:52ch">Particulieren plaatsen elke dag klussen in jouw regio. Met een Vakmaat-abonnement reageer je onbeperkt — of de klant nu terugbelt of niet, je betaalt hetzelfde.</p>
+        <div class="row" style="margin-top:32px">
+          <a class="btn btn--accent btn--lg" href="aanmelden.html">Gratis profiel aanmaken</a>
+          <a class="btn btn--onDark btn--lg" href="prijzen.html">Tarieven bekijken</a>
+        </div>
+        <p class="small" style="color:#A8C2B9;margin-top:20px">Geen opstartkosten · Per maand opzegbaar · Geen commissie over je omzet</p>
+      </div>
+
+      <!-- Regiocheck -->
+      <div class="regio-form">
+        <h2 style="font-size:1.2rem">Hoeveel werk ligt er in jouw regio?</h2>
+        <p class="small" style="color:#C6DCD4;margin-top:6px;margin-bottom:18px">Kijk hoeveel klussen er de afgelopen 90 dagen zijn geplaatst binnen jouw bereik.</p>
+        <form id="regio">
+          <div class="field" style="margin-top:0">
+            <label class="label" for="r-vak" style="color:#fff">Jouw vakgebied</label>
+            <select class="select" id="r-vak"></select>
+          </div>
+          <div class="grid grid-2" style="gap:14px;margin-top:16px">
+            <div class="field" style="margin-top:0">
+              <label class="label" for="r-pc" style="color:#fff">Postcode</label>
+              <input class="input" id="r-pc" placeholder="3511 AB" maxlength="7">
+            </div>
+            <div class="field" style="margin-top:0">
+              <label class="label" for="r-straal" style="color:#fff">Bereik</label>
+              <select class="select" id="r-straal">
+                <option value="15">15 km</option>
+                <option value="30" selected>30 km</option>
+                <option value="50">50 km</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn--accent btn--block" style="margin-top:20px" type="submit">Bekijk mijn regio</button>
+        </form>
+        <div id="regio-uit" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.16)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIJFERS -->
+  <section class="section--tight" style="background:var(--surface);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="statbar">
+        <div><div class="stat__num" data-count="38.400" data-post="+">0</div><div class="stat__label">klussen per jaar</div></div>
+        <div><div class="stat__num" data-count="3,8">0</div><div class="stat__label">reacties per klus gemiddeld</div></div>
+        <div><div class="stat__num" data-count="0" data-pre="€ ">0</div><div class="stat__label">commissie over je opdracht</div></div>
+        <div><div class="stat__num" data-count="71" data-post="%">0</div><div class="stat__label">van onze bedrijven blijft langer dan een jaar</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HET VERSCHIL -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Het verschil</span>
+        <h2>Waarom wij niet per lead rekenen</h2>
+        <p class="lead">Betalen per contactmoment klinkt eerlijk, maar in de praktijk betaal je vooral voor klanten die nooit terugbellen. Daarom doen wij het anders.</p>
+      </div>
+
+      <div class="vs">
+        <div class="card card--pad" style="border-color:var(--line-strong)">
+          <span class="badge badge--grijs">Zoals het meestal gaat</span>
+          <h3 style="margin-top:14px;font-size:1.2rem">Betalen per lead</h3>
+          <ul class="checklist" style="margin-top:18px" id="vs-oud"></ul>
+        </div>
+        <div class="vs__mid"><span style="writing-mode:vertical-rl;letter-spacing:.2em;font-size:.8rem;text-transform:uppercase">tegenover</span></div>
+        <div class="card card--pad" style="border-color:var(--brand-700);box-shadow:var(--sh-3)">
+          <span class="badge">Bij Vakmaat</span>
+          <h3 style="margin-top:14px;font-size:1.2rem">Vaste prijs per maand</h3>
+          <ul class="checklist" style="margin-top:18px" id="vs-nieuw"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOE HET WERKT -->
+  <section class="section section--paper">
+    <div class="wrap">
+      <div class="split" style="--split:.95fr 1.05fr" id="werk-grid">
+        <div>
+          <span class="eyebrow">Zo werkt het</span>
+          <h2 style="margin-top:12px">Van aanmelding tot eerste opdracht</h2>
+          <p class="lead" style="margin:16px 0 36px">De meeste bedrijven staan binnen een dag live en reageren dezelfde week op hun eerste klus.</p>
+          <ol class="steps steps--oker">
+            <li class="step"><h3 style="font-size:1.1rem">Profiel aanmaken</h3><p class="muted" style="margin-top:6px">KvK-nummer, vakgebieden en je werkgebied. Wij controleren je inschrijving, meestal binnen een paar uur.</p></li>
+            <li class="step"><h3 style="font-size:1.1rem">Klussen binnenkrijgen</h3><p class="muted" style="margin-top:6px">Elke nieuwe klus in je straal verschijnt in je dashboard. Je stelt zelf in of je een mail of push wilt.</p></li>
+            <li class="step"><h3 style="font-size:1.1rem">Reageren met een prijs</h3><p class="muted" style="margin-top:6px">Je ziet de omschrijving en de foto’s voordat je reageert. Geen blind bieden dus.</p></li>
+            <li class="step"><h3 style="font-size:1.1rem">De klant kiest</h3><p class="muted" style="margin-top:6px">Kiest de klant jou, dan krijg je adres en telefoonnummer en maken jullie het verder samen rond. Wij zitten er niet tussen.</p></li>
+          </ol>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head">
+            <strong style="font-size:.96rem">Nieuwe klussen in je regio</strong>
+            <span class="badge badge--oker">Live voorbeeld</span>
+          </div>
+          <div id="demo-leads"></div>
+          <div style="padding:16px 24px;border-top:1px solid var(--line);text-align:center">
+            <a class="link-arrow" href="dashboard.html">Bekijk het dashboard <span id="dash-arrow"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ERVARINGEN -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Van vakmensen zelf</span>
+        <h2>Zij gingen je voor</h2>
+      </div>
+      <div class="grid grid-3" id="biz-reviews"></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--paper" id="faq">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Vragen</span>
+        <h2>Alles wat vakmensen ons vragen</h2>
+      </div>
+      <div id="faq-acc"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark">
+    <div class="wrap" style="text-align:center">
+      <h2 style="max-width:20ch;margin-inline:auto">Zet vanavond je profiel klaar, morgen staan de klussen erin.</h2>
+      <p class="lead" style="max-width:50ch;margin:18px auto 30px">Aanmaken is gratis. Pas als je onbeperkt wilt reageren, kies je een abonnement.</p>
+      <div class="row" style="justify-content:center">
+        <a class="btn btn--accent btn--lg" href="aanmelden.html">Profiel aanmaken</a>
+        <a class="btn btn--onDark btn--lg" href="prijzen.html">Eerst de tarieven</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+
+  $('#dash-arrow').innerHTML = I('arrowRight', 16);
+
+  /* ---- Regiocheck ---- */
+  $('#r-vak').innerHTML = D.categories.map(function (c) {
+    return '<option value="' + c.slug + '">' + c.naam + '</option>';
+  }).join('');
+
+  $('#regio').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var pc = $('#r-pc').value.trim();
+    if (!/^[1-9][0-9]{3}\s?[A-Za-z]{0,2}$/.test(pc)) {
+      $('#r-pc').closest('.field').classList.add('field--error');
+      $('#r-pc').focus();
+      return;
+    }
+    $('#r-pc').closest('.field').classList.remove('field--error');
+
+    var cat = D.categories.filter(function (c) { return c.slug === $('#r-vak').value; })[0];
+    var straal = parseInt($('#r-straal').value, 10);
+    /* Afgeleid van het landelijke volume, geschaald naar de gekozen straal. */
+    var factor = straal === 15 ? 0.09 : (straal === 30 ? 0.21 : 0.38);
+    var klussen = Math.round(cat.klussen * factor / 4);
+    var bedrijven = Math.max(4, Math.round(klussen / 6.4));
+    var perBedrijf = (klussen / bedrijven).toFixed(1).replace('.', ',');
+
+    var uit = $('#regio-uit');
+    uit.style.display = 'block';
+    uit.innerHTML =
+      '<div class="row row--between" style="margin-bottom:14px">' +
+        '<strong style="color:#fff">' + cat.naam + ' · ' + straal + ' km rond ' + pc.toUpperCase().slice(0, 4) + '</strong>' +
+      '</div>' +
+      '<div class="grid grid-3" style="gap:14px">' +
+        '<div><div style="font-family:var(--font-display);font-weight:700;font-size:1.7rem;color:var(--oker-500);letter-spacing:-.03em">' + klussen + '</div><div class="tiny" style="color:#C6DCD4">klussen per 90 dagen</div></div>' +
+        '<div><div style="font-family:var(--font-display);font-weight:700;font-size:1.7rem;color:#fff;letter-spacing:-.03em">' + bedrijven + '</div><div class="tiny" style="color:#C6DCD4">actieve concurrenten</div></div>' +
+        '<div><div style="font-family:var(--font-display);font-weight:700;font-size:1.7rem;color:#fff;letter-spacing:-.03em">' + perBedrijf + '</div><div class="tiny" style="color:#C6DCD4">klussen per bedrijf</div></div>' +
+      '</div>' +
+      '<a class="btn btn--accent btn--block btn--sm" style="margin-top:18px" href="aanmelden.html">Aanmelden voor deze regio</a>' +
+      '<p class="tiny" style="color:#A8C2B9;margin-top:10px">Schatting op basis van het landelijke aanbod. In de preview zijn dit demogegevens.</p>';
+  });
+
+  /* ---- Vergelijking ---- */
+  var oud = [
+    'Je betaalt per contactmoment, ook als de klant nooit opneemt',
+    'Dezelfde lead gaat naar vier of vijf bedrijven tegelijk',
+    'Je saldo is op halverwege de maand',
+    'Terugbetaling voor een slechte lead kost je een discussie'
+  ];
+  var nieuw = [
+    'Vast bedrag per maand, onbeperkt reageren binnen je straal',
+    'Je ziet foto’s en omschrijving voordat je reageert',
+    'Geen commissie over wat je met de klant afspreekt',
+    'Klus toch niet echt? Eén klik en je reactie wordt gecrediteerd'
+  ];
+  $('#vs-oud').innerHTML = oud.map(function (t) {
+    return '<li>' + I('close', 18) + '<span class="muted">' + t + '</span></li>';
+  }).join('').replace(/<svg/g, '<svg style="color:var(--rood)"');
+  $('#vs-nieuw').innerHTML = nieuw.map(function (t) {
+    return '<li>' + I('checkCircle', 18) + '<span>' + t + '</span></li>';
+  }).join('');
+
+  /* ---- Demo-leads ---- */
+  $('#demo-leads').innerHTML = D.leads.slice(0, 4).map(function (l) {
+    return '<div class="lead-item">' +
+      '<span class="lead-item__icon">' + I(l.icon, 20) + '</span>' +
+      '<span style="min-width:0">' +
+        '<span class="lead-item__title">' + l.titel + '</span>' +
+        '<span class="lead-item__meta">' +
+          '<span>' + I('mapPin', 13) + l.plaats + ' · ' + l.afstand + '</span>' +
+          '<span>' + l.budget + '</span>' +
+        '</span>' +
+      '</span>' +
+      '<span style="text-align:right;flex:none">' +
+        (l.nieuw ? '<span class="badge badge--oker">Nieuw</span><br>' : '') +
+        '<span class="tiny muted">' + l.tijd + '</span>' +
+      '</span>' +
+    '</div>';
+  }).join('');
+
+  /* ---- Reviews van vakmensen ---- */
+  $('#biz-reviews').innerHTML = D.reviews.slice(3, 6).map(function (r, i) {
+    return '<div class="card review reveal" data-delay="' + i * 80 + '">' +
+      A.stars(r.score, 16) +
+      '<p class="review__quote">&bdquo;' + r.tekst + '&rdquo;</p>' +
+      '<div class="review__who">' +
+        '<span class="review__av">' + r.init + '</span>' +
+        '<span><span class="strong small">' + r.naam + '</span><br>' +
+        '<span class="tiny muted">' + r.klus + ' · ' + r.plaats + '</span></span>' +
+      '</div></div>';
+  }).join('');
+
+  A.accordion($('#faq-acc'), D.faqPro);
+})();
+</script>
+</body>
+</html>

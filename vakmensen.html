@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Vakmensen zoeken — Vakmaat</title>
+<meta name="description" content="Bekijk gecontroleerde vakbedrijven in jouw regio. Filter op vakgebied, plaats en beoordeling, en vraag direct een offerte aan.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .zoek { display:grid; grid-template-columns:268px 1fr; gap:36px; align-items:start; }
+  .filters { position:sticky; top:96px; }
+  .fgroup + .fgroup { margin-top:24px; padding-top:24px; border-top:1px solid var(--line); }
+  .fgroup h3 { font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; font-family:var(--font-body); color:var(--muted-2); margin-bottom:12px; }
+  .fcheck { display:flex; align-items:center; gap:10px; padding:6px 0; cursor:pointer; font-size:.92rem; }
+  .fcheck input { width:17px; height:17px; accent-color:var(--brand-700); cursor:pointer; }
+  .fcheck .n { margin-left:auto; font-size:.78rem; color:var(--muted-2); }
+  .banner {
+    background:linear-gradient(120deg, var(--brand-900), var(--brand-700));
+    color:#fff; border-radius:var(--r-lg); padding:clamp(24px,3vw,36px); overflow:hidden; position:relative;
+  }
+  .banner::after {
+    content:""; position:absolute; right:-40px; top:-60px; width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle, rgba(229,162,60,.32), transparent 66%);
+  }
+  @media (max-width:900px){ .zoek{grid-template-columns:1fr} .filters{position:static} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+  <section class="section--tight" style="background:var(--surface);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <nav class="tiny muted" aria-label="Kruimelpad" style="margin-bottom:12px">
+        <a href="index.html">Home</a> / <span id="kruimel">Vakmensen</span>
+      </nav>
+      <h1 id="kop" style="font-size:clamp(1.8rem,1.3rem+1.8vw,2.6rem)">Vakmensen in Nederland</h1>
+      <p class="lead" id="onderkop" style="margin-top:10px;max-width:60ch">Elk bedrijf hieronder is gecontroleerd op KvK en btw-nummer. Reviews komen uitsluitend van klanten met een afgeronde klus.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:32px">
+    <div class="wrap zoek">
+
+      <!-- FILTERS -->
+      <aside class="filters">
+        <div class="card card--pad">
+          <div class="row row--between" style="margin-bottom:18px">
+            <strong style="font-size:.95rem">Filters</strong>
+            <button class="tiny" id="reset" style="color:var(--brand-700);font-weight:600">Wissen</button>
+          </div>
+
+          <div class="field" style="margin-top:0">
+            <label class="label" for="f-zoek">Zoeken</label>
+            <input class="input" id="f-zoek" placeholder="Naam of vak">
+          </div>
+
+          <div class="fgroup">
+            <h3>Vakgebied</h3>
+            <div id="filter-vak"></div>
+          </div>
+
+          <div class="fgroup">
+            <h3>Beoordeling</h3>
+            <div id="filter-score"></div>
+          </div>
+
+          <div class="fgroup">
+            <h3>Kenmerken</h3>
+            <label class="fcheck"><input type="checkbox" data-kenmerk="vca"> VCA-gecertificeerd</label>
+            <label class="fcheck"><input type="checkbox" data-kenmerk="snel"> Reageert binnen 4 uur</label>
+            <label class="fcheck"><input type="checkbox" data-kenmerk="ervaren"> 10+ jaar actief</label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RESULTATEN -->
+      <div>
+        <div class="row row--between" style="margin-bottom:20px">
+          <span class="small muted" id="telling">—</span>
+          <label class="row" style="gap:8px">
+            <span class="small muted">Sorteer</span>
+            <select class="select" id="sorteer" style="width:auto;padding-block:8px">
+              <option value="score">Best beoordeeld</option>
+              <option value="aantal">Meeste reviews</option>
+              <option value="ervaring">Langst actief</option>
+              <option value="naam">Naam A–Z</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="resultaten" style="display:grid;gap:16px"></div>
+
+        <div class="banner" style="margin-top:32px">
+          <div style="position:relative;max-width:34rem">
+            <h2 style="font-size:1.55rem">Liever dat zij naar jou toe komen?</h2>
+            <p style="margin:12px 0 22px;color:#C6DCD4">Plaats je klus en laat vakbedrijven uit je regio zelf met een prijs komen. Gratis, en je zit nergens aan vast.</p>
+            <a class="btn btn--accent" href="klus-plaatsen.html">Klus plaatsen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  var actieveVakken = [], minScore = 0;
+
+  /* Vakgebieden waar daadwerkelijk bedrijven bij horen */
+  var telPerVak = {};
+  D.pros.forEach(function (p) { telPerVak[p.vak] = (telPerVak[p.vak] || 0) + 1; });
+  var vakken = D.categories.filter(function (c) { return telPerVak[c.slug]; });
+
+  $('#filter-vak').innerHTML = vakken.map(function (c) {
+    return '<label class="fcheck"><input type="checkbox" data-vak="' + c.slug + '">' +
+      c.naam + '<span class="n">' + telPerVak[c.slug] + '</span></label>';
+  }).join('');
+
+  $('#filter-score').innerHTML = [
+    { v: 4.8, t: '4,8 en hoger' }, { v: 4.5, t: '4,5 en hoger' },
+    { v: 4.0, t: '4,0 en hoger' }, { v: 0, t: 'Alle beoordelingen' }
+  ].map(function (o, i) {
+    return '<label class="fcheck"><input type="radio" name="score" value="' + o.v + '"' +
+      (i === 3 ? ' checked' : '') + ' style="accent-color:var(--brand-700)">' + o.t + '</label>';
+  }).join('');
+
+  function kaart(p) {
+    var cat = D.categories.filter(function (c) { return c.slug === p.vak; })[0];
+    return '<article class="card card--hover pro" style="padding:22px">' +
+      '<a class="pro__avatar" href="vakman.html?id=' + p.id + '" aria-label="Profiel van ' + A.esc(p.naam) + '">' + p.initialen + '</a>' +
+      '<div style="min-width:0">' +
+        '<div class="pro__head">' +
+          '<div>' +
+            '<a class="pro__name" href="vakman.html?id=' + p.id + '">' + A.esc(p.naam) + '</a>' +
+            '<div class="pro__sub">' + p.vakLabel + ' · ' + p.plaats + ' · werkt tot ' + p.straal + ' km</div>' +
+          '</div>' +
+          '<div style="text-align:right;flex:none">' +
+            '<div class="rating">' + A.stars(p.score, 14) + '<span class="rating__score">' + p.score.toFixed(1).replace('.', ',') + '</span></div>' +
+            '<div class="tiny muted">' + p.aantal + ' reviews</div>' +
+          '</div>' +
+        '</div>' +
+        '<p class="small muted" style="margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">' + A.esc(p.over) + '</p>' +
+        '<div class="pro__tags">' +
+          (p.vca ? '<span class="badge">' + I('shield', 13) + 'VCA</span>' : '') +
+          '<span class="badge badge--oker">' + I('clock', 13) + 'Reageert ' + p.reactie + '</span>' +
+          '<span class="badge badge--grijs">Sinds ' + p.sinds + '</span>' +
+          p.specialisme.slice(0, 2).map(function (s) { return '<span class="badge badge--grijs">' + s + '</span>'; }).join('') +
+        '</div>' +
+        '<div class="pro__foot">' +
+          '<span class="small"><strong>' + p.uurtarief + '</strong> <span class="muted">per uur</span></span>' +
+          '<span class="row" style="gap:8px">' +
+            '<a class="btn btn--ghost btn--sm" href="vakman.html?id=' + p.id + '">Profiel</a>' +
+            '<a class="btn btn--primary btn--sm" href="klus-plaatsen.html?vak=' + encodeURIComponent(cat ? cat.naam : p.vakLabel) + '">Offerte aanvragen</a>' +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function filter() {
+    var q = $('#f-zoek').value.trim().toLowerCase();
+    var kenmerken = $$('[data-kenmerk]').filter(function (c) { return c.checked; })
+      .map(function (c) { return c.getAttribute('data-kenmerk'); });
+
+    var lijst = D.pros.filter(function (p) {
+      if (actieveVakken.length && actieveVakken.indexOf(p.vak) < 0) return false;
+      if (p.score < minScore) return false;
+      if (kenmerken.indexOf('vca') > -1 && !p.vca) return false;
+      if (kenmerken.indexOf('snel') > -1 && !/< ?[1-4] uur|min/.test(p.reactie)) return false;
+      if (kenmerken.indexOf('ervaren') > -1 && p.sinds > 2016) return false;
+      if (q) {
+        var hooi = (p.naam + ' ' + p.vakLabel + ' ' + p.plaats + ' ' + p.specialisme.join(' ')).toLowerCase();
+        if (hooi.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+
+    var sort = $('#sorteer').value;
+    lijst.sort(function (a, b) {
+      if (sort === 'aantal') return b.aantal - a.aantal;
+      if (sort === 'ervaring') return a.sinds - b.sinds;
+      if (sort === 'naam') return a.naam.localeCompare(b.naam, 'nl');
+      return b.score - a.score;
+    });
+
+    $('#telling').innerHTML = lijst.length
+      ? '<strong>' + lijst.length + '</strong> ' + (lijst.length === 1 ? 'bedrijf' : 'bedrijven') + ' gevonden'
+      : 'Geen bedrijven gevonden';
+
+    $('#resultaten').innerHTML = lijst.length
+      ? lijst.map(kaart).join('')
+      : '<div class="card empty">' + I('search', 46) +
+        '<h3>Niets gevonden met deze filters</h3>' +
+        '<p class="muted" style="margin-top:8px;max-width:40ch;margin-inline:auto">Probeer een filter weg te halen, of plaats je klus — dan komen bedrijven vanzelf bij jou.</p>' +
+        '<a class="btn btn--primary" style="margin-top:20px" href="klus-plaatsen.html">Klus plaatsen</a></div>';
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.matches('[data-vak]')) {
+      actieveVakken = $$('[data-vak]').filter(function (c) { return c.checked; })
+        .map(function (c) { return c.getAttribute('data-vak'); });
+    }
+    if (e.target.name === 'score') minScore = parseFloat(e.target.value);
+    filter();
+  });
+  $('#f-zoek').addEventListener('input', filter);
+  $('#sorteer').addEventListener('change', filter);
+  $('#reset').addEventListener('click', function () {
+    $$('[data-vak], [data-kenmerk]').forEach(function (c) { c.checked = false; });
+    document.querySelector('[name=score][value="0"]').checked = true;
+    $('#f-zoek').value = '';
+    actieveVakken = []; minScore = 0;
+    filter();
+  });
+
+  /* Diepe link vanaf de homepage: vakmensen.html?vak=schilderwerk */
+  var vak = new URLSearchParams(location.search).get('vak');
+  if (vak) {
+    var box = document.querySelector('[data-vak="' + vak + '"]');
+    if (box) {
+      box.checked = true;
+      actieveVakken = [vak];
+      var c = D.categories.filter(function (x) { return x.slug === vak; })[0];
+      if (c) {
+        document.title = c.naam + ' zoeken — Vakmaat';
+        $('#kop').textContent = c.naam + ' in de buurt';
+        $('#kruimel').textContent = c.naam;
+        $('#onderkop').textContent = 'Gecontroleerde ' + c.naam.toLowerCase() + 's met reviews van echte klussen. Tarieven vanaf ongeveer € ' + c.vanaf + ' per uur.';
+      }
+    }
+  }
+  filter();
+})();
+</script>
+</body>
+</html>

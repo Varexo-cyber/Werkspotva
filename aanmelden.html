@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Aanmelden als vakbedrijf — Vakmaat</title>
+<meta name="description" content="Maak in vier stappen een bedrijfsprofiel aan en ontvang klussen uit je eigen regio.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .aan { display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:start; }
+  .aan__side { position:sticky; top:96px; }
+  .stap { display:none; }
+  .stap.is-on { display:block; animation:fadeUp .3s var(--ease); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  .vakgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:10px; }
+  .planrij { display:flex; gap:14px; align-items:flex-start; padding:18px; border:1px solid var(--line-strong); border-radius:var(--r); cursor:pointer; background:var(--surface); transition:all .15s var(--ease); }
+  .planrij:hover { border-color:var(--brand-500); background:var(--brand-50); }
+  .planrij:has(input:checked) { border-color:var(--brand-700); background:var(--brand-50); box-shadow:0 0 0 1px var(--brand-700); }
+  .planrij input { position:absolute; opacity:0; }
+  @media (max-width:900px){ .aan{grid-template-columns:1fr} .aan__side{position:static;order:-1} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main" class="section" style="padding-top:36px">
+<div class="wrap">
+
+  <div class="card card--pad" style="margin-bottom:28px;padding:18px 24px">
+    <div class="wizbar" id="wizbar"></div>
+  </div>
+
+  <div class="aan">
+    <div>
+      <form id="aanform" novalidate>
+
+        <!-- 1. BEDRIJF -->
+        <section class="stap is-on" data-stap="1">
+          <h1 style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Over je bedrijf</h1>
+          <p class="lead" style="margin:10px 0 28px">We controleren je KvK-inschrijving voordat je profiel live gaat. Dat houdt het platform schoon voor iedereen.</p>
+
+          <div class="field" style="margin-top:0">
+            <label class="label" for="b-naam">Bedrijfsnaam</label>
+            <input class="input" id="b-naam" placeholder="Bijv. Van den Berg Schilderwerken">
+            <p class="err">Vul je bedrijfsnaam in.</p>
+          </div>
+
+          <div class="grid grid-2" style="gap:20px">
+            <div class="field">
+              <label class="label" for="b-kvk">KvK-nummer</label>
+              <input class="input" id="b-kvk" placeholder="12345678" maxlength="8" inputmode="numeric">
+              <p class="err">Een KvK-nummer bestaat uit 8 cijfers.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="b-sinds">Actief sinds</label>
+              <select class="select" id="b-sinds"></select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="b-grootte">Hoeveel mensen werken er?</label>
+            <select class="select" id="b-grootte">
+              <option>Alleen ik (zzp)</option>
+              <option>2 tot 5</option>
+              <option>6 tot 15</option>
+              <option>16 tot 50</option>
+              <option>Meer dan 50</option>
+            </select>
+          </div>
+
+          <div class="notice notice--info" style="margin-top:24px">
+            <span id="kvk-icon"></span>
+            <p><strong>Waarom we dit vragen.</strong> Alleen bedrijven met een geldige inschrijving komen op Vakmaat. Particulieren zien dat aan het gecontroleerd-label op je profiel, en dat scheelt je een hoop uitleg.</p>
+          </div>
+        </section>
+
+        <!-- 2. VAKGEBIEDEN -->
+        <section class="stap" data-stap="2">
+          <h1 style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Wat doe je?</h1>
+          <p class="lead" style="margin:10px 0 28px">Kies de vakgebieden waarin je werk aanneemt. Je krijgt alleen klussen te zien die hierbij passen.</p>
+
+          <fieldset style="border:0;padding:0">
+            <legend class="label" style="margin-bottom:12px">Vakgebieden <span class="muted" style="font-weight:400">(kies er 1 tot 3)</span></legend>
+            <div class="vakgrid" id="vakkeuze"></div>
+            <p class="err">Kies minstens één vakgebied.</p>
+          </fieldset>
+
+          <div class="field" style="margin-top:28px">
+            <label class="label" for="b-over">Korte omschrijving van je bedrijf</label>
+            <textarea class="textarea" id="b-over" placeholder="Waar ben je goed in, hoe werk je, wat mag een klant van je verwachten?"></textarea>
+            <div class="row row--between" style="margin-top:6px">
+              <p class="err" style="margin:0">Schrijf minstens 40 tekens — dit is wat klanten als eerste lezen.</p>
+              <span class="tiny muted" id="over-teller" style="margin-left:auto">0 tekens</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. WERKGEBIED -->
+        <section class="stap" data-stap="3">
+          <h1 style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Waar wil je werken?</h1>
+          <p class="lead" style="margin:10px 0 28px">Je krijgt klussen te zien binnen deze straal. Later kun je dit altijd bijstellen.</p>
+
+          <div class="grid grid-2" style="gap:20px">
+            <div class="field" style="margin-top:0">
+              <label class="label" for="b-pc">Postcode van je bedrijf</label>
+              <input class="input" id="b-pc" placeholder="3511 AB" maxlength="7">
+              <p class="err">Vul een geldige postcode in, bijv. 3511 AB.</p>
+            </div>
+            <div class="field" style="margin-top:0">
+              <label class="label" for="b-straal">Werkstraal</label>
+              <select class="select" id="b-straal">
+                <option value="15">15 km</option>
+                <option value="30" selected>30 km</option>
+                <option value="50">50 km</option>
+                <option value="100">100 km</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card card--pad" style="margin-top:24px;background:var(--paper)">
+            <div class="row row--between" style="margin-bottom:16px">
+              <strong style="font-size:.95rem">Wat dit je oplevert</strong>
+              <span class="badge badge--oker">Schatting</span>
+            </div>
+            <div class="grid grid-3" style="gap:18px" id="schatting"></div>
+            <p class="tiny muted" style="margin-top:16px">Gebaseerd op het aantal klussen dat de afgelopen 90 dagen in deze straal is geplaatst.</p>
+          </div>
+        </section>
+
+        <!-- 4. ABONNEMENT + ACCOUNT -->
+        <section class="stap" data-stap="4">
+          <h1 style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem)">Kies je abonnement</h1>
+          <p class="lead" style="margin:10px 0 28px">Beginnen kan gratis. Je kunt altijd later overstappen — ook midden in de maand.</p>
+
+          <div style="display:grid;gap:12px" id="plankeuze"></div>
+
+          <h2 style="font-size:1.2rem;margin-top:36px">Je inloggegevens</h2>
+          <div class="grid grid-2" style="gap:20px;margin-top:16px">
+            <div class="field" style="margin-top:0">
+              <label class="label" for="b-contact">Contactpersoon</label>
+              <input class="input" id="b-contact" autocomplete="name">
+              <p class="err">Vul een naam in.</p>
+            </div>
+            <div class="field" style="margin-top:0">
+              <label class="label" for="b-tel">Telefoonnummer</label>
+              <input class="input" id="b-tel" type="tel" placeholder="06 12 34 56 78">
+              <p class="err">Vul een geldig telefoonnummer in.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="b-mail">Zakelijk e-mailadres</label>
+            <input class="input" id="b-mail" type="email" placeholder="info@jouwbedrijf.nl">
+            <p class="err">Vul een geldig e-mailadres in.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="b-ww">Wachtwoord</label>
+            <input class="input" id="b-ww" type="password" placeholder="Minimaal 8 tekens">
+            <p class="err">Kies een wachtwoord van minstens 8 tekens.</p>
+            <div class="progress" style="margin-top:10px;height:5px"><div class="progress__bar" id="ww-bar" style="width:0%"></div></div>
+            <p class="hint" id="ww-tekst">Gebruik minstens 8 tekens, het liefst met een cijfer erin.</p>
+          </div>
+
+          <label class="choice choice--check" style="margin-top:24px">
+            <input type="checkbox" id="b-akkoord">
+            <span class="choice__dot"></span>
+            <span class="choice__body">
+              <span class="choice__title">Ik ga akkoord met de algemene voorwaarden</span>
+              <span class="choice__sub">Je profiel gaat live zodra we je KvK-inschrijving hebben gecontroleerd. Opzeggen kan per maand.</span>
+            </span>
+          </label>
+          <p class="err" id="err-akkoord" style="display:none">Je moet akkoord gaan om je aanmelding af te ronden.</p>
+        </section>
+
+        <!-- 5. KLAAR -->
+        <section class="stap" data-stap="5">
+          <div style="text-align:center;padding:24px 0 8px">
+            <span id="klaar-icon" style="display:inline-grid;place-items:center;width:72px;height:72px;border-radius:50%;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100)"></span>
+            <h1 style="font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem);margin-top:20px">Welkom bij Vakmaat</h1>
+            <p class="lead" style="max-width:48ch;margin:14px auto 0">We controleren je KvK-inschrijving — meestal binnen een paar uur. Ondertussen kun je je profiel alvast afmaken.</p>
+          </div>
+
+          <div class="card card--pad" style="margin-top:28px">
+            <strong style="font-size:.95rem">Nog even dit afmaken</strong>
+            <ul class="checklist" style="margin-top:16px" id="todo"></ul>
+          </div>
+
+          <div class="row" style="justify-content:center;margin-top:28px">
+            <a class="btn btn--primary btn--lg" href="dashboard.html">Naar mijn dashboard</a>
+            <a class="btn btn--ghost btn--lg" href="index.html">Later verder</a>
+          </div>
+        </section>
+
+        <div class="wiz__nav" id="nav" style="display:flex;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)">
+          <button type="button" class="btn btn--ghost" id="vorige">Vorige</button>
+          <button type="button" class="btn btn--primary" id="volgende" style="margin-left:auto">Volgende stap</button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="aan__side">
+      <div class="panel">
+        <div class="panel__head" style="padding:16px 20px">
+          <strong style="font-size:.95rem">Je profiel</strong>
+          <span class="tiny muted" id="pct">25%</span>
+        </div>
+        <div class="panel__body" style="padding:20px">
+          <div class="progress" style="margin-bottom:20px"><div class="progress__bar" id="bar" style="width:25%"></div></div>
+          <dl class="sum" id="live" style="font-size:.9rem"></dl>
+        </div>
+      </div>
+
+      <div class="card card--pad" style="margin-top:16px">
+        <ul class="checklist small" id="usp"></ul>
+      </div>
+    </aside>
+  </div>
+</div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  var NAMEN = ['Bedrijf', 'Vakgebieden', 'Werkgebied', 'Abonnement'];
+  var stap = 1;
+
+  $('#kvk-icon').innerHTML = I('shield', 19);
+  $('#klaar-icon').innerHTML = I('checkCircle', 34);
+
+  $('#usp').innerHTML = [
+    'Gratis profiel, geen opstartkosten',
+    'Geen commissie over je opdracht',
+    'Per maand opzegbaar',
+    'Gemiddeld 3,8 reacties per klus — dus reële kans'
+  ].map(function (t) { return '<li>' + I('checkCircle', 17) + '<span>' + t + '</span></li>'; }).join('');
+
+  $('#todo').innerHTML = [
+    'Voeg drie foto’s van eerder werk toe',
+    'Upload je certificaten (VCA, Sterkin, Groenkeur)',
+    'Stel in hoe je bericht wilt krijgen bij nieuwe klussen',
+    'Nodig oud-klanten uit om een review achter te laten'
+  ].map(function (t) { return '<li>' + I('check', 18) + '<span>' + t + '</span></li>'; }).join('');
+
+  /* Jaartallen */
+  var nu = new Date().getFullYear(), opts = '';
+  for (var j = nu; j >= nu - 45; j--) opts += '<option' + (j === nu - 6 ? ' selected' : '') + '>' + j + '</option>';
+  $('#b-sinds').innerHTML = opts;
+
+  /* Vakgebieden */
+  $('#vakkeuze').innerHTML = D.categories.map(function (c) {
+    return '<label class="choice choice--check" style="padding:12px 14px">' +
+      '<input type="checkbox" name="vak" value="' + c.slug + '" data-naam="' + c.naam + '">' +
+      '<span class="choice__dot"></span>' +
+      '<span class="choice__body"><span class="choice__title" style="font-size:.9rem">' + c.naam + '</span></span></label>';
+  }).join('');
+
+  /* Maximaal 3 vakgebieden */
+  $('#vakkeuze').addEventListener('change', function () {
+    var aan = $$('[name=vak]:checked');
+    $$('[name=vak]').forEach(function (c) {
+      c.disabled = aan.length >= 3 && !c.checked;
+      c.closest('.choice').style.opacity = c.disabled ? '.45' : '';
+    });
+    ververs();
+  });
+
+  /* Abonnementen */
+  $('#plankeuze').innerHTML = D.plans.map(function (pl, i) {
+    return '<label class="planrij" style="position:relative">' +
+      '<input type="radio" name="plan" value="' + pl.id + '"' + (i === 1 ? ' checked' : '') + '>' +
+      '<span class="choice__dot"></span>' +
+      '<span style="flex:1;min-width:0">' +
+        '<span class="row row--between" style="gap:10px">' +
+          '<strong>' + pl.naam + (pl.flag ? ' <span class="badge" style="margin-left:6px">' + pl.flag + '</span>' : '') + '</strong>' +
+          '<strong style="white-space:nowrap">' + (pl.maand ? '€ ' + pl.maand + ' p/m' : 'Gratis') + '</strong>' +
+        '</span>' +
+        '<span class="small muted" style="display:block;margin-top:6px">' + pl.pitch + '</span>' +
+      '</span></label>';
+  }).join('');
+
+  /* Tellers en validatie */
+  $('#b-over').addEventListener('input', function () {
+    var n = this.value.length;
+    $('#over-teller').textContent = n + ' tekens';
+    $('#over-teller').style.color = n >= 40 ? 'var(--groen-ok)' : '';
+  });
+
+  $('#b-ww').addEventListener('input', function () {
+    var v = this.value, sterkte = 0;
+    if (v.length >= 8) sterkte += 40;
+    if (/[0-9]/.test(v)) sterkte += 20;
+    if (/[A-Z]/.test(v)) sterkte += 20;
+    if (/[^A-Za-z0-9]/.test(v)) sterkte += 20;
+    $('#ww-bar').style.width = sterkte + '%';
+    $('#ww-bar').style.background = sterkte < 40 ? 'var(--rood)' : (sterkte < 80 ? 'var(--oker-500)' : 'var(--brand-600)');
+    $('#ww-tekst').textContent = sterkte < 40 ? 'Nog te kort — minstens 8 tekens.'
+      : (sterkte < 80 ? 'Redelijk. Een hoofdletter of leesteken maakt het sterker.' : 'Sterk wachtwoord.');
+  });
+
+  $('#b-pc').addEventListener('input', schat);
+  $('#b-straal').addEventListener('change', schat);
+  ['#b-naam', '#b-kvk', '#b-contact', '#b-mail', '#b-tel'].forEach(function (s) {
+    $(s).addEventListener('input', ververs);
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.name === 'plan') ververs();
+  });
+
+  function schat() {
+    var vakken = $$('[name=vak]:checked').map(function (c) { return c.value; });
+    var basis = vakken.length
+      ? vakken.reduce(function (t, v) {
+          var c = D.categories.filter(function (x) { return x.slug === v; })[0];
+          return t + (c ? c.klussen : 0);
+        }, 0)
+      : 700;
+    var straal = parseInt($('#b-straal').value, 10);
+    var factor = straal <= 15 ? 0.09 : (straal <= 30 ? 0.21 : (straal <= 50 ? 0.38 : 0.62));
+    var per90 = Math.round(basis * factor / 4);
+    var perMaand = Math.round(per90 / 3);
+    var concurrenten = Math.max(3, Math.round(per90 / 6.4));
+
+    $('#schatting').innerHTML = [
+      [per90, 'klussen per 90 dagen'],
+      [perMaand, 'klussen per maand'],
+      [concurrenten, 'bedrijven in je straal']
+    ].map(function (r) {
+      return '<div><div style="font-family:var(--font-display);font-weight:700;font-size:1.7rem;letter-spacing:-.03em">' + r[0] + '</div>' +
+        '<div class="tiny muted">' + r[1] + '</div></div>';
+    }).join('');
+  }
+
+  function ververs() {
+    var rijen = [];
+    if ($('#b-naam').value.trim()) rijen.push(['Bedrijf', $('#b-naam').value.trim()]);
+    if (/^[0-9]{8}$/.test($('#b-kvk').value.trim())) rijen.push(['KvK', $('#b-kvk').value.trim()]);
+    var vakken = $$('[name=vak]:checked').map(function (c) { return c.getAttribute('data-naam'); });
+    if (vakken.length) rijen.push(['Vakgebieden', vakken.join(', ')]);
+    if (/^[1-9][0-9]{3}\s?[A-Za-z]{2}$/.test($('#b-pc').value.trim())) {
+      rijen.push(['Werkgebied', $('#b-pc').value.trim().toUpperCase() + ' · ' + $('#b-straal').value + ' km']);
+    }
+    var plan = document.querySelector('[name=plan]:checked');
+    if (plan && stap >= 4) {
+      var pl = D.plans.filter(function (p) { return p.id === plan.value; })[0];
+      rijen.push(['Abonnement', pl.naam + (pl.maand ? ' — € ' + pl.maand + ' p/m' : ' — gratis')]);
+    }
+    $('#live').innerHTML = rijen.length
+      ? rijen.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + A.esc(r[1]) + '</dd>'; }).join('')
+      : '<dd class="muted">Nog niets ingevuld.</dd>';
+  }
+
+  function fout(el, aan) {
+    var f = el.closest('.field') || el.closest('fieldset');
+    if (f) f.classList.toggle('field--error', aan);
+    return !aan;
+  }
+
+  function geldig(n) {
+    var ok = true;
+    if (n === 1) {
+      ok = fout($('#b-naam'), !$('#b-naam').value.trim()) && ok;
+      ok = fout($('#b-kvk'), !/^[0-9]{8}$/.test($('#b-kvk').value.trim())) && ok;
+    }
+    if (n === 2) {
+      ok = fout($('#vakkeuze'), !$$('[name=vak]:checked').length) && ok;
+      ok = fout($('#b-over'), $('#b-over').value.trim().length < 40) && ok;
+    }
+    if (n === 3) {
+      ok = fout($('#b-pc'), !/^[1-9][0-9]{3}\s?[A-Za-z]{2}$/.test($('#b-pc').value.trim())) && ok;
+    }
+    if (n === 4) {
+      ok = fout($('#b-contact'), !$('#b-contact').value.trim()) && ok;
+      ok = fout($('#b-tel'), $('#b-tel').value.replace(/\D/g, '').length < 10) && ok;
+      ok = fout($('#b-mail'), !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test($('#b-mail').value.trim())) && ok;
+      ok = fout($('#b-ww'), $('#b-ww').value.length < 8) && ok;
+      var akk = $('#b-akkoord').checked;
+      $('#err-akkoord').style.display = akk ? 'none' : 'block';
+      ok = akk && ok;
+    }
+    return ok;
+  }
+
+  function balk() {
+    $('#wizbar').innerHTML = NAMEN.map(function (naam, i) {
+      var n = i + 1, kl = n < stap ? 'is-done' : (n === stap ? 'is-active' : '');
+      return '<span class="wizbar__step ' + kl + '"><span class="wizbar__dot">' +
+        (n < stap ? I('check', 13) : n) + '</span><span class="hide-sm">' + naam + '</span></span>' +
+        (n < NAMEN.length ? '<span class="wizbar__line"></span>' : '');
+    }).join('');
+    var pct = Math.round(Math.min(stap, 4) / 4 * 100);
+    $('#bar').style.width = pct + '%';
+    $('#pct').textContent = pct + '%';
+  }
+
+  function toon(n) {
+    stap = n;
+    $$('.stap').forEach(function (s) { s.classList.toggle('is-on', s.getAttribute('data-stap') === String(n)); });
+    balk(); ververs();
+    $('#vorige').style.visibility = n === 1 ? 'hidden' : 'visible';
+    $('#volgende').textContent = n === 4 ? 'Aanmelding afronden' : 'Volgende stap';
+    $('#nav').style.display = n === 5 ? 'none' : 'flex';
+    if (n === 3) schat();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  $('#volgende').addEventListener('click', function () {
+    if (!geldig(stap)) {
+      var e = document.querySelector('.stap.is-on .field--error input, .stap.is-on .field--error textarea');
+      if (e) e.focus();
+      return;
+    }
+    if (stap === 4) {
+      toon(5);
+      A.toast('Je aanmelding is binnen — we controleren je KvK-inschrijving.');
+      return;
+    }
+    toon(stap + 1);
+  });
+  $('#vorige').addEventListener('click', function () { if (stap > 1) toon(stap - 1); });
+
+  /* Vooraf gekozen abonnement via prijzen.html?plan=pro */
+  var plan = new URLSearchParams(location.search).get('plan');
+  if (plan) {
+    var r = document.querySelector('[name=plan][value="' + plan + '"]');
+    if (r) r.checked = true;
+  }
+  balk(); schat(); ververs();
+})();
+</script>
+</body>
+</html>
