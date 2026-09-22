@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Dashboard — Vakmaat voor bedrijven</title>
+<meta name="description" content="Je leads, reacties en resultaten op één plek.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .lead-detail { display:grid; grid-template-columns:1fr 300px; gap:24px; }
+  .tabs { display:flex; gap:4px; border-bottom:1px solid var(--line); margin-bottom:0; }
+  .tabs button {
+    padding:12px 16px; font-size:.92rem; font-weight:600; color:var(--muted);
+    border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .15s var(--ease);
+  }
+  .tabs button:hover { color:var(--ink); }
+  .tabs button.is-on { color:var(--brand-700); border-bottom-color:var(--brand-700); }
+  .modal { position:fixed; inset:0; z-index:120; display:none; }
+  .modal.is-on { display:block; }
+  .modal__bg { position:absolute; inset:0; background:rgba(15,31,27,.42); backdrop-filter:blur(3px); }
+  .modal__box {
+    position:relative; max-width:560px; margin:6vh auto; background:var(--surface);
+    border-radius:var(--r-lg); box-shadow:var(--sh-lift); max-height:88vh; overflow-y:auto;
+    animation:pop .26s var(--ease);
+  }
+  @keyframes pop { from{opacity:0;transform:translateY(18px) scale(.985)} to{opacity:1;transform:none} }
+  @media (max-width:780px){ .lead-detail{grid-template-columns:1fr} .modal__box{margin:0;max-height:100vh;border-radius:0} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header="app"></header>
+
+<div class="app">
+  <!-- ZIJMENU -->
+  <nav class="side" aria-label="Dashboardmenu">
+    <div class="side__group">
+      <div class="side__label">Werk</div>
+      <a href="dashboard.html" class="is-active" data-ico="inbox">Nieuwe klussen<span class="count">5</span></a>
+      <a href="dashboard.html#reacties" data-ico="chat">Mijn reacties</a>
+      <a href="dashboard.html#agenda" data-ico="calendar">Agenda</a>
+    </div>
+    <div class="side__group">
+      <div class="side__label">Bedrijf</div>
+      <a href="vakman.html?id=vdb-schilderwerken" data-ico="building">Mijn profiel</a>
+      <a href="dashboard.html#reviews" data-ico="star">Reviews</a>
+      <a href="dashboard.html#cijfers" data-ico="chart">Resultaten</a>
+    </div>
+    <div class="side__group">
+      <div class="side__label">Account</div>
+      <a href="prijzen.html" data-ico="credit">Abonnement</a>
+      <a href="dashboard.html#instellingen" data-ico="settings">Instellingen</a>
+      <a href="index.html" data-ico="logout">Uitloggen</a>
+    </div>
+  </nav>
+
+  <!-- HOOFD -->
+  <main class="main" id="main">
+    <div class="row row--between" style="margin-bottom:8px">
+      <div>
+        <h1 style="font-size:1.75rem">Goedemiddag, Joost</h1>
+        <p class="muted" style="margin-top:4px">Van den Berg Schilderwerken · Utrecht · Pro-abonnement</p>
+      </div>
+      <a class="btn btn--ghost btn--sm hide-sm" href="vakman.html?id=vdb-schilderwerken">Bekijk mijn profiel</a>
+    </div>
+
+    <!-- Profielcompleetheid -->
+    <div class="card card--pad" style="margin:24px 0;background:var(--oker-50);border-color:var(--oker-200)">
+      <div class="row row--between" style="gap:20px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <div class="row" style="gap:10px;margin-bottom:8px">
+            <span id="tip-ico" style="color:var(--oker-700)"></span>
+            <strong style="font-size:.95rem">Je profiel is voor 78% compleet</strong>
+          </div>
+          <p class="small muted">Bedrijven met een compleet profiel worden ruim twee keer zo vaak gekozen. Je mist nog drie foto's van eerder werk.</p>
+          <div class="progress" style="margin-top:12px;max-width:420px"><div class="progress__bar progress__bar--oker" style="width:78%"></div></div>
+        </div>
+        <button class="btn btn--accent btn--sm" id="btn-profiel">Profiel afmaken</button>
+      </div>
+    </div>
+
+    <!-- KPI's -->
+    <div class="grid grid-4" style="margin-bottom:28px" id="kpis"></div>
+
+    <div class="lead-detail">
+      <!-- Leads -->
+      <div class="panel">
+        <div class="panel__head">
+          <div>
+            <strong>Nieuwe klussen in je regio</strong>
+            <p class="tiny muted" style="margin-top:2px">Schilderwerk · binnen 35 km van Utrecht</p>
+          </div>
+          <span class="badge badge--oker">5 nieuw</span>
+        </div>
+        <div class="tabs" style="padding-inline:24px">
+          <button class="is-on" data-tab="alle">Alle</button>
+          <button data-tab="nieuw">Alleen nieuw</button>
+          <button data-tab="dichtbij">Dichtbij</button>
+        </div>
+        <div id="leads"></div>
+      </div>
+
+      <!-- Zijkolom -->
+      <div class="stack">
+        <div class="card card--pad">
+          <strong style="font-size:.93rem">Reacties deze maand</strong>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:2.2rem;letter-spacing:-.04em;margin:8px 0 4px">17</div>
+          <p class="small muted">Onbeperkt bij Pro. Je hoeft niets bij te kopen.</p>
+          <hr class="divider" style="margin:16px 0">
+          <div class="row row--between small"><span class="muted">Gewonnen</span><strong>4 opdrachten</strong></div>
+          <div class="row row--between small" style="margin-top:8px"><span class="muted">Scoringspercentage</span><strong>24%</strong></div>
+          <div class="row row--between small" style="margin-top:8px"><span class="muted">Omzet uit Vakmaat</span><strong>€ 7.340</strong></div>
+        </div>
+
+        <div class="card card--pad">
+          <strong style="font-size:.93rem">Reacties per maand</strong>
+          <div class="chart" id="chart"></div>
+        </div>
+
+        <div class="card card--pad" style="background:var(--brand-50);border-color:var(--brand-100)">
+          <div class="row" style="gap:10px;margin-bottom:10px">
+            <span id="adv-ico"></span><strong style="font-size:.92rem">Tip</strong>
+          </div>
+          <p class="small">Je reageert gemiddeld na 3 uur. Bedrijven die binnen het uur reageren winnen bijna twee keer zo vaak de klus. Zet meldingen aan op je telefoon.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Reactie-venster -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-kop">
+  <div class="modal__bg" data-sluit></div>
+  <div class="modal__box">
+    <div class="panel__head" style="position:sticky;top:0;background:var(--surface);z-index:2">
+      <strong id="modal-kop">Reageren op klus</strong>
+      <button data-sluit aria-label="Sluiten" style="color:var(--muted)" id="sluit-ico"></button>
+    </div>
+    <div class="panel__body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  /* Iconen in het zijmenu */
+  $$('.side a[data-ico]').forEach(function (a) {
+    a.insertAdjacentHTML('afterbegin', I(a.getAttribute('data-ico'), 18));
+  });
+  $('#tip-ico').innerHTML = I('sparkle', 18);
+  $('#adv-ico').innerHTML = I('trend', 18);
+  $('#sluit-ico').innerHTML = I('close', 20);
+
+  /* KPI's */
+  $('#kpis').innerHTML = [
+    { ico: 'inbox', l: 'Nieuwe klussen', v: '5', d: '+2 sinds gisteren' },
+    { ico: 'chat', l: 'Open gesprekken', v: '3', d: '1 wacht op jou', down: true },
+    { ico: 'thumb', l: 'Gewonnen deze maand', v: '4', d: '+1 t.o.v. vorige maand' },
+    { ico: 'star', l: 'Beoordeling', v: '4,9', d: '187 reviews' }
+  ].map(function (k) {
+    return '<div class="card kpi">' +
+      '<div class="kpi__label">' + I(k.ico, 15) + k.l + '</div>' +
+      '<div class="kpi__value">' + k.v + '</div>' +
+      '<div class="kpi__delta' + (k.down ? ' is-down' : '') + '">' + k.d + '</div></div>';
+  }).join('');
+
+  /* Grafiek */
+  var maanden = [['apr', 11], ['mei', 16], ['jun', 22], ['jul', 14], ['aug', 9], ['sep', 17]];
+  var max = Math.max.apply(null, maanden.map(function (m) { return m[1]; }));
+  $('#chart').innerHTML = maanden.map(function (m) {
+    return '<div class="chart__col">' +
+      '<div class="chart__bar" data-v="' + m[1] + '" style="height:' + Math.round(m[1] / max * 100) + '%"></div>' +
+      '<div class="chart__label">' + m[0] + '</div></div>';
+  }).join('');
+
+  /* Leads */
+  function tekenLeads(tab) {
+    var lijst = D.leads.slice();
+    if (tab === 'nieuw') lijst = lijst.filter(function (l) { return l.nieuw; });
+    if (tab === 'dichtbij') {
+      lijst = lijst.filter(function (l) { return parseFloat(l.afstand.replace(',', '.')) <= 10; });
+    }
+    $('#leads').innerHTML = lijst.length ? lijst.map(function (l) {
+      return '<div class="lead-item" data-id="' + l.id + '" style="cursor:pointer">' +
+        '<span class="lead-item__icon">' + I(l.icon, 20) + '</span>' +
+        '<span style="min-width:0">' +
+          '<span class="lead-item__title">' + l.titel +
+            (l.nieuw ? ' <span class="badge badge--oker" style="margin-left:6px">Nieuw</span>' : '') + '</span>' +
+          '<span class="lead-item__meta">' +
+            '<span>' + I('mapPin', 13) + l.plaats + ' · ' + l.afstand + '</span>' +
+            '<span>' + l.budget + '</span>' +
+            '<span>' + I('clock', 13) + l.wanneer + '</span>' +
+          '</span>' +
+        '</span>' +
+        '<span style="text-align:right;flex:none">' +
+          '<span class="tiny muted" style="display:block">' + l.tijd + '</span>' +
+          '<span class="tiny ' + (l.reacties ? 'muted' : 'strong') + '" style="display:block;margin-top:4px">' +
+            (l.reacties ? l.reacties + (l.reacties === 1 ? ' reactie' : ' reacties') : 'Nog geen reacties') + '</span>' +
+        '</span>' +
+      '</div>';
+    }).join('') : '<div class="empty">' + I('inbox', 46) +
+      '<h3 style="font-size:1.05rem">Geen klussen met dit filter</h3>' +
+      '<p class="muted small" style="margin-top:6px">Verbreed je werkstraal om meer klussen te zien.</p></div>';
+  }
+  tekenLeads('alle');
+
+  $('.tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]');
+    if (!b) return;
+    $$('.tabs button').forEach(function (x) { x.classList.toggle('is-on', x === b); });
+    tekenLeads(b.getAttribute('data-tab'));
+  });
+
+  /* Reactievenster */
+  $('#leads').addEventListener('click', function (e) {
+    var r = e.target.closest('[data-id]');
+    if (!r) return;
+    var l = D.leads.filter(function (x) { return x.id === r.getAttribute('data-id'); })[0];
+    open(l);
+  });
+
+  function open(l) {
+    $('#modal-kop').textContent = 'Klus ' + l.id;
+    $('#modal-body').innerHTML =
+      '<h2 style="font-size:1.25rem">' + l.titel + '</h2>' +
+      '<div class="row" style="gap:10px;margin-top:12px">' +
+        '<span class="badge badge--grijs">' + I('mapPin', 13) + l.plaats + '</span>' +
+        '<span class="badge badge--grijs">' + I('euro', 13) + l.budget + '</span>' +
+        '<span class="badge badge--grijs">' + I('clock', 13) + l.wanneer + '</span>' +
+      '</div>' +
+      '<p style="margin-top:18px">' + l.toelichting + '</p>' +
+      '<div class="notice" style="margin-top:20px">' + I('lock', 19) +
+        '<p>Adres en telefoonnummer van ' + l.naam + ' krijg je zodra je reactie is geaccepteerd.</p></div>' +
+      '<hr class="divider" style="margin:24px 0">' +
+      '<form id="reactie">' +
+        '<div class="grid grid-2" style="gap:16px">' +
+          '<div class="field" style="margin-top:0">' +
+            '<label class="label" for="r-prijs">Jouw prijsindicatie</label>' +
+            '<input class="input" id="r-prijs" placeholder="€ 1.850" inputmode="numeric">' +
+            '<p class="err">Vul een prijsindicatie in.</p>' +
+          '</div>' +
+          '<div class="field" style="margin-top:0">' +
+            '<label class="label" for="r-start">Wanneer kun je starten?</label>' +
+            '<select class="select" id="r-start">' +
+              '<option>Deze week</option><option selected>Volgende week</option>' +
+              '<option>Over 2 tot 4 weken</option><option>In overleg</option>' +
+            '</select>' +
+          '</div>' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="label" for="r-bericht">Je bericht aan de klant</label>' +
+          '<textarea class="textarea" id="r-bericht" placeholder="Stel jezelf kort voor en vertel wat je voor deze prijs doet."></textarea>' +
+          '<p class="err">Schrijf minstens 30 tekens.</p>' +
+          '<p class="hint">Reacties met een persoonlijk bericht worden 3x vaker gekozen dan alleen een bedrag.</p>' +
+        '</div>' +
+        '<div class="row" style="margin-top:24px">' +
+          '<button type="button" class="btn btn--ghost" data-sluit>Annuleren</button>' +
+          '<button type="submit" class="btn btn--primary" style="margin-left:auto">Reactie versturen</button>' +
+        '</div>' +
+      '</form>';
+
+    $('#modal').classList.add('is-on');
+    document.body.style.overflow = 'hidden';
+
+    $('#reactie').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var prijs = $('#r-prijs'), ber = $('#r-bericht'), ok = true;
+      function zet(el, f) { el.closest('.field').classList.toggle('field--error', f); if (f) ok = false; }
+      zet(prijs, !prijs.value.trim());
+      zet(ber, ber.value.trim().length < 30);
+      if (!ok) return;
+      sluit();
+      A.toast('Je reactie is verstuurd naar ' + l.naam + '.');
+    });
+  }
+
+  function sluit() {
+    $('#modal').classList.remove('is-on');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-sluit]')) sluit();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') sluit();
+  });
+
+  $('#btn-profiel').addEventListener('click', function () {
+    A.toast('In de preview is het profielbeheer nog niet ingericht.');
+  });
+})();
+</script>
+</body>
+</html>

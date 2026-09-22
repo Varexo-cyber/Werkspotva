@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Tarieven voor vakbedrijven — Vakmaat</title>
+<meta name="description" content="Vaste prijs per maand in plaats van betalen per lead. Bekijk de abonnementen van Vakmaat voor zzp'ers en vakbedrijven.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .verg th:first-child { width:38%; }
+  .verg td { text-align:center; }
+  .verg td:first-child { text-align:left; font-weight:500; }
+  .verg .ja { color:var(--brand-600); }
+  .verg .nee { color:var(--line-strong); }
+  .calc { display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; }
+  @media (max-width:760px){ .calc{grid-template-columns:1fr} .verg{font-size:.84rem} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+
+  <section class="section" style="padding-bottom:32px">
+    <div class="wrap">
+      <div class="section-head section-head--center" style="margin-bottom:32px">
+        <span class="eyebrow eyebrow--center">Tarieven</span>
+        <h1>Eén vast bedrag. Onbeperkt reageren.</h1>
+        <p class="lead">Geen leads afrekenen die nooit terugbellen. Je weet vooraf wat een maand je kost, en daarmee ook wat een opdracht je maximaal kost.</p>
+      </div>
+
+      <div class="row" style="justify-content:center;margin-bottom:36px">
+        <div class="toggle" role="group" aria-label="Betaalperiode">
+          <button class="is-active" data-periode="maand">Per maand</button>
+          <button data-periode="jaar">Per jaar <span style="color:var(--oker-700)">· 2 maanden gratis</span></button>
+        </div>
+      </div>
+
+      <div class="plans" id="plannen"></div>
+
+      <p class="small muted" style="text-align:center;margin-top:28px">Alle bedragen zijn exclusief btw. Maandabonnementen zijn per maand opzegbaar.</p>
+    </div>
+  </section>
+
+  <!-- Terugverdienrekenaar -->
+  <section class="section section--paper">
+    <div class="wrap">
+      <div class="card card--pad calc" style="padding:clamp(24px,3vw,44px)">
+        <div>
+          <span class="eyebrow">Rekenvoorbeeld</span>
+          <h2 style="margin-top:12px;font-size:clamp(1.5rem,1.2rem+1.2vw,2rem)">Wanneer verdien je het terug?</h2>
+          <p class="lead" style="margin-top:14px;font-size:1.02rem">Vul in wat een gemiddelde opdracht je oplevert en hoeveel aanvragen je omzet in werk. Wij rekenen de rest uit.</p>
+
+          <div class="field" style="margin-top:24px">
+            <label class="label" for="c-omzet">Gemiddelde opdrachtwaarde</label>
+            <input class="input" id="c-omzet" type="number" min="100" step="50" value="1800">
+          </div>
+          <div class="field">
+            <label class="label" for="c-marge">Marge die je overhoudt (%)</label>
+            <input class="input" id="c-marge" type="number" min="5" max="90" value="35">
+          </div>
+          <div class="field">
+            <label class="label" for="c-scoor">Van elke 10 reacties win je er…</label>
+            <input class="input" id="c-scoor" type="number" min="1" max="10" value="2">
+          </div>
+        </div>
+
+        <div class="panel" style="background:var(--brand-900);border-color:var(--brand-900);color:#E8F0ED">
+          <div class="panel__body" style="padding:32px">
+            <span class="badge badge--dark">Pro-abonnement · € 89 p/m</span>
+            <div style="margin-top:22px">
+              <div class="tiny" style="color:#A8C2B9">Marge per gewonnen opdracht</div>
+              <div style="font-family:var(--font-display);font-weight:700;font-size:2.4rem;letter-spacing:-.04em;color:#fff;margin-top:4px" id="c-marge-uit">€ 630</div>
+            </div>
+            <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:24px 0">
+            <div style="display:grid;gap:16px">
+              <div class="row row--between"><span class="small" style="color:#A8C2B9">Opdrachten nodig om quitte te spelen</span><strong style="color:#fff" id="c-break">1</strong></div>
+              <div class="row row--between"><span class="small" style="color:#A8C2B9">Reacties die daarvoor nodig zijn</span><strong style="color:#fff" id="c-reacties">5</strong></div>
+              <div class="row row--between"><span class="small" style="color:#A8C2B9">Marge bij 4 opdrachten per maand</span><strong style="color:var(--oker-500)" id="c-winst">€ 2.431</strong></div>
+            </div>
+            <p class="tiny" style="color:#A8C2B9;margin-top:24px">Een rekenvoorbeeld, geen belofte. Wat je binnenhaalt hangt af van je vak, je regio en hoe snel je reageert.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vergelijking -->
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Naast elkaar</span>
+        <h2>Wat zit er in welk abonnement?</h2>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <table class="verg table" id="verg-tabel"></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--paper" id="faq">
+    <div class="wrap wrap--narrow">
+      <div class="section-head section-head--center">
+        <span class="eyebrow eyebrow--center">Vragen van vakmensen</span>
+        <h2>Goed om te weten</h2>
+      </div>
+      <div id="faq-acc"></div>
+
+      <div class="card card--pad" style="margin-top:36px;text-align:center">
+        <h3>Nog twijfels?</h3>
+        <p class="lead" style="margin:10px auto 22px;max-width:46ch;font-size:1rem">Bel ons even. We kijken samen hoeveel klussen er in jouw regio in jouw vak worden geplaatst — en of dat genoeg is.</p>
+        <div class="row" style="justify-content:center">
+          <a class="btn btn--primary" href="aanmelden.html">Profiel aanmaken</a>
+          <a class="btn btn--ghost" href="voor-bedrijven.html">Meer over Vakmaat voor bedrijven</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var periode = 'maand';
+
+  function tekenPlannen() {
+    $('#plannen').innerHTML = D.plans.map(function (pl) {
+      var bedrag = periode === 'jaar' ? Math.round(pl.jaar / 12) : pl.maand;
+      var prijs = pl.maand === 0
+        ? '<span class="plan__amount">Gratis</span>'
+        : '<span class="plan__amount">€ ' + bedrag + '</span><span class="plan__per">per maand' +
+          (periode === 'jaar' ? ', jaarlijks betaald' : '') + '</span>';
+
+      return '<div class="card plan' + (pl.primair ? ' plan--feature' : '') + '">' +
+        (pl.flag ? '<span class="plan__flag">' + pl.flag + '</span>' : '') +
+        '<h2 style="font-size:1.3rem">' + pl.naam + '</h2>' +
+        '<div class="plan__price">' + prijs + '</div>' +
+        '<p class="small muted">' + pl.pitch + '</p>' +
+        '<ul>' + pl.punten.map(function (pt) {
+          return '<li' + (pt.ok ? '' : ' class="is-off"') + '>' + I(pt.ok ? 'check' : 'close', 17) + '<span>' + pt.t + '</span></li>';
+        }).join('') + '</ul>' +
+        '<a class="btn ' + (pl.primair ? 'btn--primary' : 'btn--ghost') + ' btn--block" href="aanmelden.html?plan=' + pl.id + '">' + pl.cta + '</a>' +
+        (pl.maand ? '<p class="tiny muted" style="text-align:center;margin-top:12px">' +
+          (periode === 'jaar' ? '€ ' + pl.jaar.toLocaleString('nl-NL') + ' per jaar' : 'Per maand opzegbaar') + '</p>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  document.querySelector('.toggle').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-periode]');
+    if (!b) return;
+    periode = b.getAttribute('data-periode');
+    this.querySelectorAll('button').forEach(function (x) { x.classList.toggle('is-active', x === b); });
+    tekenPlannen();
+  });
+  tekenPlannen();
+
+  /* ---- Rekenaar ---- */
+  function reken() {
+    var omzet = Math.max(0, parseFloat($('#c-omzet').value) || 0);
+    var marge = Math.min(90, Math.max(1, parseFloat($('#c-marge').value) || 1));
+    var scoor = Math.min(10, Math.max(1, parseFloat($('#c-scoor').value) || 1));
+    var abo = 89;
+
+    var margePer = omzet * marge / 100;
+    var nodig = Math.max(1, Math.ceil(abo / Math.max(1, margePer)));
+    var reacties = Math.ceil(nodig * 10 / scoor);
+    var winst = margePer * 4 - abo;
+
+    var fmt = function (n) { return '€ ' + Math.round(n).toLocaleString('nl-NL'); };
+    $('#c-marge-uit').textContent = fmt(margePer);
+    $('#c-break').textContent = nodig + (nodig === 1 ? ' opdracht' : ' opdrachten');
+    $('#c-reacties').textContent = reacties + ' reacties';
+    $('#c-winst').textContent = fmt(winst);
+  }
+  ['#c-omzet', '#c-marge', '#c-scoor'].forEach(function (s) {
+    $(s).addEventListener('input', reken);
+  });
+  reken();
+
+  /* ---- Vergelijkingstabel ---- */
+  var rijen = {};
+  D.plans.forEach(function (pl) {
+    pl.punten.forEach(function (pt) {
+      if (/^Alles uit /.test(pt.t)) return;
+      if (!rijen[pt.t]) rijen[pt.t] = {};
+      rijen[pt.t][pl.id] = pt.ok;
+    });
+  });
+  /* Wat in Pro zit, zit ook in Bedrijf; wat in Starter zit, zit overal in. */
+  Object.keys(rijen).forEach(function (t) {
+    if (rijen[t].start) { rijen[t].pro = true; rijen[t].bedrijf = true; }
+    if (rijen[t].pro) rijen[t].bedrijf = true;
+  });
+
+  $('#verg-tabel').innerHTML =
+    '<thead><tr><th>Wat je krijgt</th>' +
+      D.plans.map(function (pl) { return '<th style="text-align:center">' + pl.naam + '</th>'; }).join('') +
+    '</tr></thead><tbody>' +
+    Object.keys(rijen).map(function (t) {
+      return '<tr><td>' + t + '</td>' + D.plans.map(function (pl) {
+        var ja = !!rijen[t][pl.id];
+        return '<td><span class="' + (ja ? 'ja' : 'nee') + '">' + I(ja ? 'check' : 'close', 18) + '</span></td>';
+      }).join('') + '</tr>';
+    }).join('') +
+    '<tr><td><strong>Prijs per maand</strong></td>' +
+      D.plans.map(function (pl) {
+        return '<td><strong>' + (pl.maand ? '€ ' + pl.maand : 'Gratis') + '</strong></td>';
+      }).join('') +
+    '</tr></tbody>';
+
+  A.accordion($('#faq-acc'), D.faqPro);
+})();
+</script>
+</body>
+</html>

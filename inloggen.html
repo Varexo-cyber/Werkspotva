@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Inloggen — Vakmaat</title>
+<meta name="description" content="Log in op je Vakmaat-account om je klussen of je leads te bekijken.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .login { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 72px); }
+  .login__form { display:grid; place-items:center; padding:48px 24px; }
+  .login__zij {
+    background:linear-gradient(155deg, var(--brand-900), var(--brand-700));
+    color:#fff; padding:56px 48px; display:flex; flex-direction:column; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .login__zij::after { content:""; position:absolute; right:-120px; bottom:-140px; width:480px; height:480px; border-radius:50%; background:radial-gradient(circle, rgba(229,162,60,.24), transparent 64%); }
+  .rol { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:26px; }
+  @media (max-width:880px){ .login{grid-template-columns:1fr} .login__zij{display:none} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header></header>
+
+<main id="main">
+<div class="login">
+
+  <div class="login__form">
+    <div style="width:100%;max-width:400px">
+      <h1 style="font-size:clamp(1.7rem,1.3rem+1.4vw,2.3rem)">Welkom terug</h1>
+      <p class="lead" style="margin:10px 0 28px;font-size:1rem">Log in om je klussen, offertes en berichten te bekijken.</p>
+
+      <div class="rol">
+        <label class="choice" style="padding:12px;justify-content:center">
+          <input type="radio" name="rol" value="klant" checked>
+          <span class="choice__dot"></span>
+          <span class="choice__body"><span class="choice__title" style="font-size:.9rem">Particulier</span></span>
+        </label>
+        <label class="choice" style="padding:12px;justify-content:center">
+          <input type="radio" name="rol" value="bedrijf">
+          <span class="choice__dot"></span>
+          <span class="choice__body"><span class="choice__title" style="font-size:.9rem">Vakbedrijf</span></span>
+        </label>
+      </div>
+
+      <form id="loginform" novalidate>
+        <div class="field" style="margin-top:0">
+          <label class="label" for="l-mail">E-mailadres</label>
+          <input class="input" id="l-mail" type="email" autocomplete="username" placeholder="jij@voorbeeld.nl">
+          <p class="err">Vul een geldig e-mailadres in.</p>
+        </div>
+        <div class="field">
+          <div class="row row--between" style="margin-bottom:8px">
+            <label class="label" for="l-ww" style="margin:0">Wachtwoord</label>
+            <a class="tiny" href="#" style="color:var(--brand-700);font-weight:600">Wachtwoord vergeten?</a>
+          </div>
+          <input class="input" id="l-ww" type="password" autocomplete="current-password">
+          <p class="err">Vul je wachtwoord in.</p>
+        </div>
+
+        <label class="fcheck row" style="margin-top:18px;gap:10px;font-size:.9rem;cursor:pointer">
+          <input type="checkbox" style="width:17px;height:17px;accent-color:var(--brand-700)"> Ingelogd blijven op dit apparaat
+        </label>
+
+        <button class="btn btn--primary btn--block btn--lg" style="margin-top:24px" type="submit">Inloggen</button>
+      </form>
+
+      <div class="notice notice--info" style="margin-top:24px">
+        <span id="demo-icon"></span>
+        <p><strong>Preview.</strong> Dit is een demo-omgeving — vul een willekeurig e-mailadres en wachtwoord in en je komt gewoon binnen.</p>
+      </div>
+
+      <p class="small muted" style="text-align:center;margin-top:28px">
+        Nog geen account? <a href="aanmelden.html" style="color:var(--brand-700);font-weight:600">Meld je aan als vakbedrijf</a>
+        of <a href="klus-plaatsen.html" style="color:var(--brand-700);font-weight:600">plaats je eerste klus</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="login__zij">
+    <div style="position:relative;max-width:26rem">
+      <span class="badge badge--dark">Vakmaat in cijfers</span>
+      <h2 style="color:#fff;font-size:clamp(1.6rem,1.2rem+1.4vw,2.2rem);margin-top:18px">Elke dag ruim honderd nieuwe klussen</h2>
+      <p style="color:#C6DCD4;margin-top:14px">Van een lekkende kraan in Groningen tot een complete uitbouw in Breda. Alles op één plek, met bedrijven die gecontroleerd zijn.</p>
+      <div style="display:grid;gap:22px;margin-top:36px" id="zij-cijfers"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+
+  $('#demo-icon').innerHTML = I('info', 19);
+
+  $('#zij-cijfers').innerHTML = [
+    ['38.400+', 'klussen per jaar geplaatst'],
+    ['6.180', 'gecontroleerde vakbedrijven'],
+    ['19 uur', 'tot de eerste offerte, gemiddeld']
+  ].map(function (r) {
+    return '<div><div style="font-family:var(--font-display);font-weight:700;font-size:2rem;letter-spacing:-.035em;color:#fff">' + r[0] + '</div>' +
+      '<div class="small" style="color:#A8C2B9;margin-top:4px">' + r[1] + '</div></div>';
+  }).join('');
+
+  $('#loginform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var mail = $('#l-mail'), ww = $('#l-ww'), ok = true;
+    function zet(el, fout) { el.closest('.field').classList.toggle('field--error', fout); if (fout) ok = false; }
+    zet(mail, !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(mail.value.trim()));
+    zet(ww, !ww.value);
+    if (!ok) return;
+
+    var rol = document.querySelector('[name=rol]:checked').value;
+    A.toast('Welkom terug — je wordt doorgestuurd.');
+    setTimeout(function () {
+      location.href = rol === 'bedrijf' ? 'dashboard.html' : 'mijn-klussen.html';
+    }, 700);
+  });
+})();
+</script>
+</body>
+</html>

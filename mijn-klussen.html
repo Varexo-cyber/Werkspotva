@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<title>Mijn klussen — Vakmaat</title>
+<meta name="description" content="Bekijk je klussen, vergelijk de ontvangen offertes en kies met wie je verder wilt.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14594A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2314594A'/%3E%3Cpath d='M7 19.4 20 8.6l13 10.8' stroke='%23E5A23C' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 15.8v7.3' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M20 23.6 23.2 27 20 30.4 16.8 27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vakmaat.css">
+<style>
+  .kolommen { display:grid; grid-template-columns:1fr 320px; gap:24px; align-items:start; }
+  .offerte { padding:22px; }
+  .offerte + .offerte { border-top:1px solid var(--line); }
+  .offerte.is-gekozen { background:var(--brand-50); }
+  @media (max-width:860px){ .kolommen{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Naar de inhoud</a>
+<header data-header="app"></header>
+
+<div class="app">
+  <nav class="side" aria-label="Menu">
+    <div class="side__group">
+      <div class="side__label">Mijn klussen</div>
+      <a href="mijn-klussen.html" class="is-active" data-ico="doc">Lopende klussen<span class="count">1</span></a>
+      <a href="mijn-klussen.html#afgerond" data-ico="checkCircle">Afgerond</a>
+      <a href="klus-plaatsen.html" data-ico="plus">Nieuwe klus</a>
+    </div>
+    <div class="side__group">
+      <div class="side__label">Account</div>
+      <a href="mijn-klussen.html#berichten" data-ico="chat">Berichten<span class="count">3</span></a>
+      <a href="mijn-klussen.html#gegevens" data-ico="user">Mijn gegevens</a>
+      <a href="index.html" data-ico="logout">Uitloggen</a>
+    </div>
+  </nav>
+
+  <main class="main" id="main">
+    <div class="row row--between" style="margin-bottom:28px">
+      <div>
+        <h1 style="font-size:1.75rem">Mijn klussen</h1>
+        <p class="muted" style="margin-top:4px" id="welkom">Je hebt één lopende klus met 3 offertes.</p>
+      </div>
+      <a class="btn btn--primary btn--sm" href="klus-plaatsen.html">Nieuwe klus plaatsen</a>
+    </div>
+
+    <div class="kolommen">
+      <div class="stack">
+        <!-- Klus -->
+        <div class="panel">
+          <div class="panel__head">
+            <div>
+              <strong id="klus-titel">Woonkamer en hal schilderen</strong>
+              <p class="tiny muted" style="margin-top:3px" id="klus-meta">Klus A-8841 · Utrecht Oost · geplaatst 2 dagen geleden</p>
+            </div>
+            <span class="badge">Actief</span>
+          </div>
+          <div class="panel__body">
+            <p class="small" id="klus-tekst">Woonkamer (28 m²) en hal met trapgat. Muren zijn al gesausd maar er zitten scheurtjes. Plafonds mogen ook mee. Kozijnen binnen: 4 stuks.</p>
+            <div class="row" style="gap:10px;margin-top:16px" id="klus-badges"></div>
+          </div>
+        </div>
+
+        <!-- Offertes -->
+        <div class="panel">
+          <div class="panel__head">
+            <div>
+              <strong>Ontvangen offertes</strong>
+              <p class="tiny muted" style="margin-top:3px">Je zit nergens aan vast. Stel gerust eerst wat vragen.</p>
+            </div>
+            <label class="row" style="gap:8px">
+              <span class="tiny muted">Sorteer</span>
+              <select class="select" id="sorteer" style="width:auto;padding:6px 30px 6px 10px;font-size:.84rem">
+                <option value="prijs">Laagste prijs</option>
+                <option value="score">Beste beoordeling</option>
+                <option value="start">Snelste start</option>
+              </select>
+            </label>
+          </div>
+          <div id="offertes"></div>
+        </div>
+
+        <div class="notice notice--info">
+          <span id="tip-ico"></span>
+          <p><strong>Nog even wachten?</strong> Bij deze klus komen er doorgaans nog één tot twee offertes binnen. Klussen blijven 14 dagen open staan.</p>
+        </div>
+      </div>
+
+      <!-- Zijkolom -->
+      <div class="stack">
+        <div class="card card--pad">
+          <strong style="font-size:.93rem">Prijzen naast elkaar</strong>
+          <div style="display:grid;gap:14px;margin-top:16px" id="vergelijk"></div>
+          <hr class="divider" style="margin:18px 0">
+          <div class="row row--between small"><span class="muted">Verschil hoog–laag</span><strong id="verschil">€ 455</strong></div>
+          <div class="row row--between small" style="margin-top:8px"><span class="muted">Gemiddelde prijs</span><strong id="gemiddeld">€ 1.895</strong></div>
+        </div>
+
+        <div class="card card--pad">
+          <strong style="font-size:.93rem">Waar let je op?</strong>
+          <ul class="checklist small" style="margin-top:14px" id="letop"></ul>
+        </div>
+
+        <div class="card card--pad" style="background:var(--paper-2)">
+          <strong style="font-size:.93rem">Klus intrekken</strong>
+          <p class="small muted" style="margin:8px 0 14px">Toch geen klus meer? Dan sluiten we hem en krijgen vakbedrijven geen reacties meer binnen.</p>
+          <button class="btn btn--ghost btn--sm btn--block" id="btn-intrekken">Klus sluiten</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+(function () {
+  var I = window.VMIcon, D = window.VM, A = window.VMApp;
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  $$('.side a[data-ico]').forEach(function (a) {
+    a.insertAdjacentHTML('afterbegin', I(a.getAttribute('data-ico'), 18));
+  });
+  $('#tip-ico').innerHTML = I('info', 19);
+
+  /* Heeft de bezoeker net een klus geplaatst? Toon die dan. */
+  var eigen = A.store.get('laatsteKlus', null);
+  var badges = ['Schilderwerk', 'Binnen 2 weken', '€ 1.500 – € 2.500', '4 foto’s'];
+  if (eigen && eigen.titel) {
+    $('#klus-titel').textContent = eigen.titel;
+    $('#klus-meta').textContent = 'Klus A-8852 · ' + (eigen.postcode || 'Utrecht') + ' · zojuist geplaatst';
+    $('#klus-tekst').textContent = 'Je hebt deze klus net geplaatst. Vakbedrijven in je regio zijn op de hoogte gebracht; hieronder verschijnen hun offertes.';
+    badges = [eigen.vak || 'Klus', eigen.wanneer || 'In overleg', eigen.budget || 'Richtbudget onbekend',
+      (eigen.fotos || 0) + (eigen.fotos === 1 ? ' foto' : ' foto’s')];
+  }
+  $('#klus-badges').innerHTML = badges.map(function (b) {
+    return '<span class="badge badge--grijs">' + A.esc(b) + '</span>';
+  }).join('');
+
+  $('#letop').innerHTML = [
+    'Staat er btw bij het bedrag, en zit materiaal erin?',
+    'Is er een startdatum genoemd of alleen "in overleg"?',
+    'Geeft het bedrijf garantie, en op wat precies?',
+    'Betaal nooit het hele bedrag vooruit'
+  ].map(function (t) { return '<li>' + I('check', 17) + '<span>' + t + '</span></li>'; }).join('');
+
+  function bedrag(o) { return parseInt(o.bedrag.replace(/\D/g, ''), 10); }
+
+  function teken() {
+    var lijst = D.offertes.slice();
+    var sort = $('#sorteer').value;
+    lijst.sort(function (a, b) {
+      if (sort === 'score') return b.score - a.score;
+      if (sort === 'start') return a.start.localeCompare(b.start, 'nl');
+      return bedrag(a) - bedrag(b);
+    });
+
+    $('#offertes').innerHTML = lijst.map(function (o, i) {
+      var goedkoopst = bedrag(o) === Math.min.apply(null, D.offertes.map(bedrag));
+      return '<div class="offerte" data-pro="' + A.esc(o.pro) + '">' +
+        '<div class="row row--between" style="align-items:flex-start;gap:16px">' +
+          '<div class="row" style="gap:14px;align-items:flex-start;flex:1;min-width:0">' +
+            '<span class="pro__avatar" style="width:48px;height:48px;font-size:1rem;border-radius:12px">' + o.init + '</span>' +
+            '<div style="min-width:0">' +
+              '<div class="row" style="gap:8px">' +
+                '<strong style="font-size:1rem">' + o.pro + '</strong>' +
+                (o.status === 'nieuw' ? '<span class="badge badge--oker">Nieuw</span>' : '') +
+              '</div>' +
+              '<div class="rating" style="margin-top:5px">' + A.stars(o.score, 13) +
+                '<span class="rating__score">' + o.score.toFixed(1).replace('.', ',') + '</span>' +
+                '<span class="muted">(' + o.aantal + ')</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="text-align:right;flex:none">' +
+            '<div style="font-family:var(--font-display);font-weight:700;font-size:1.5rem;letter-spacing:-.035em">' + o.bedrag + '</div>' +
+            '<div class="tiny muted">' + o.excl + '</div>' +
+            (goedkoopst ? '<span class="badge" style="margin-top:6px">Laagste prijs</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<p class="small" style="margin-top:16px;padding:14px 16px;background:var(--paper);border-radius:var(--r);border:1px solid var(--line)">&bdquo;' + o.bericht + '&rdquo;</p>' +
+        '<div class="row row--between" style="margin-top:16px;gap:12px">' +
+          '<span class="small muted row" style="gap:16px">' +
+            '<span class="row" style="gap:5px">' + I('calendar', 14) + 'Start ' + o.start + '</span>' +
+            '<span class="row" style="gap:5px">' + I('clock', 14) + o.duur + '</span>' +
+          '</span>' +
+          '<span class="row" style="gap:8px">' +
+            '<button class="btn btn--ghost btn--sm" data-actie="vraag">Vraag stellen</button>' +
+            '<button class="btn btn--primary btn--sm" data-actie="kies">Kies dit bedrijf</button>' +
+          '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  teken();
+  $('#sorteer').addEventListener('change', teken);
+
+  /* Prijsvergelijking */
+  var bedragen = D.offertes.map(bedrag);
+  var hoogste = Math.max.apply(null, bedragen);
+  $('#vergelijk').innerHTML = D.offertes.map(function (o) {
+    return '<div>' +
+      '<div class="row row--between tiny" style="margin-bottom:6px">' +
+        '<span class="muted" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%">' + o.pro + '</span>' +
+        '<strong>' + o.bedrag + '</strong></div>' +
+      '<div class="bar" style="height:7px;background:var(--paper-2);border-radius:999px;overflow:hidden">' +
+        '<span style="display:block;height:100%;width:' + Math.round(bedrag(o) / hoogste * 100) + '%;background:var(--brand-600);border-radius:999px"></span>' +
+      '</div></div>';
+  }).join('');
+  $('#verschil').textContent = '€ ' + (hoogste - Math.min.apply(null, bedragen)).toLocaleString('nl-NL');
+  $('#gemiddeld').textContent = '€ ' + Math.round(bedragen.reduce(function (a, b) { return a + b; }, 0) / bedragen.length).toLocaleString('nl-NL');
+
+  /* Acties */
+  $('#offertes').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-actie]');
+    if (!b) return;
+    var rij = b.closest('.offerte');
+    var pro = rij.getAttribute('data-pro');
+
+    if (b.getAttribute('data-actie') === 'vraag') {
+      A.toast('Je bericht aan ' + pro + ' staat klaar in je gesprekken.');
+      return;
+    }
+    $$('.offerte').forEach(function (r) { r.classList.remove('is-gekozen'); });
+    rij.classList.add('is-gekozen');
+    b.textContent = 'Gekozen';
+    b.classList.remove('btn--primary');
+    b.classList.add('btn--ghost');
+    b.disabled = true;
+    A.toast(pro + ' heeft nu je adres en telefoonnummer.');
+  });
+
+  $('#btn-intrekken').addEventListener('click', function () {
+    A.toast('In de preview blijft je klus gewoon open staan.');
+  });
+})();
+</script>
+</body>
+</html>
