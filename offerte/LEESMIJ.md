@@ -14,11 +14,10 @@ als de Varexo-facturen: licht, strak, geen logo.
 De algemene voorwaarden en het privacybeleid levert de opdrachtgever zelf aan;
 Varexo plaatst ze op de website. Dat staat op pagina 2 onder "Niet inbegrepen".
 
-## Nog invullen
+## Opdrachtgever
 
-Alleen de gegevens van de opdrachtgever staan nog open (geel gemarkeerd):
-bedrijfsnaam, adres, e-mail, telefoon en KvK-nummer. Pas ze aan in
-`offerte.html` en genereer opnieuw.
+J.W. van Engelen, Postbus 118, 7470 AC Goor. KvK 56084765.
+De offerte is compleet; er staan geen invulvelden meer open.
 
 ## Bedragen
 
