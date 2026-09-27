@@ -1,6 +1,6 @@
 # Offerte — klussenplatform
 
-`Varexo-offerte-klussenplatform.pdf` — 4 pagina's A4, opgemaakt in dezelfde stijl
+`Varexo-offerte-klussenplatform.pdf` — 3 pagina's A4, opgemaakt in dezelfde stijl
 als de Varexo-facturen: licht, strak, geen logo.
 
 ## Indeling
@@ -8,9 +8,11 @@ als de Varexo-facturen: licht, strak, geen logo.
 | Pagina | Inhoud |
 |---|---|
 | 1 | Kop, adresgegevens, regels met bedragen en totalen, betaalgegevens |
-| 2 | Samenvatting van de wensen van de opdrachtgever, en wat niet inbegrepen is |
+| 2 | Samenvatting van de wensen, wat wel en niet in het maandbedrag zit |
 | 3 | De tien onderdelen die gebouwd worden |
-| 4 | Werkwijze in vijf fasen, afspraken en ondertekening |
+
+De algemene voorwaarden en het privacybeleid levert de opdrachtgever zelf aan;
+Varexo plaatst ze op de website. Dat staat op pagina 2 onder "Niet inbegrepen".
 
 ## Nog invullen
 
