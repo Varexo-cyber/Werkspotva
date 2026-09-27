@@ -1,17 +1,39 @@
 # Offerte — klussenplatform
 
-`Varexo-offerte-klussenplatform.pdf` — 5 pagina's A4, in de Varexo-huisstijl
-(donker, emerald accent, mono-accenten zoals op varexo.nl).
+`Varexo-offerte-klussenplatform.pdf` — 4 pagina's A4, opgemaakt in dezelfde stijl
+als de Varexo-facturen: licht, strak, geen logo.
+
+## Indeling
+
+| Pagina | Inhoud |
+|---|---|
+| 1 | Kop, adresgegevens, regels met bedragen en totalen, betaalgegevens |
+| 2 | Samenvatting van de wensen van de opdrachtgever, en wat niet inbegrepen is |
+| 3 | De tien onderdelen die gebouwd worden |
+| 4 | Werkwijze in vijf fasen, afspraken en ondertekening |
 
 ## Nog invullen
 
-De gemarkeerde velden in het PDF staan nog open. Pas ze aan in `offerte.html`
-en genereer opnieuw:
+Alleen de gegevens van de opdrachtgever staan nog open (geel gemarkeerd):
+bedrijfsnaam, adres, e-mail, telefoon en KvK-nummer. Pas ze aan in
+`offerte.html` en genereer opnieuw.
 
-- Telefoonnummer
-- Naam, bedrijfsnaam, adres en e-mail van de opdrachtgever
-- Adres, KvK-nummer en btw-nummer van Varexo
-- Of de bedragen **inclusief of exclusief btw** zijn
+## Bedragen
+
+| | |
+|---|---|
+| Ontwerp en realisatie, eenmalig | € 599,99 |
+| Onderhoud eerste twee maanden | € 0,00 |
+| Website Onderhoud & Beheer | € 19,99 per maand |
+| E-mailadres op eigen domein | € 9,99 per maand |
+| **Doorlopend vanaf maand 3** | **€ 29,98 per maand** |
+
+Alle bedragen zijn vrijgesteld van btw in verband met de KOR, gelijk aan de
+overige Varexo-facturen.
+
+Het abonnement van € 35 per maand dat vakbedrijven op het platform betalen is
+de inkomstenbron van de opdrachtgever en staat los van deze offerte. Dat is op
+pagina 2 expliciet benoemd, zodat daar geen verwarring over ontstaat.
 
 ## Opnieuw genereren
 
@@ -19,23 +41,6 @@ en genereer opnieuw:
 node render.js
 ```
 
-Levert `Varexo-offerte-klussenplatform.pdf` op. Het document is opgemaakt in
-HTML, dus tekst en bedragen pas je gewoon aan in `offerte.html`.
-
-Let op: elke pagina moet exact 1123 px hoog blijven (A4 op 96 dpi). `render.js`
-drukt de hoogtes af; wordt er eentje hoger, dan loopt hij over naar een extra
-pagina en moet er ergens ruimte terug.
-
-## Bedragen in dit document
-
-| | |
-|---|---|
-| Eenmalig, bouw en oplevering | € 599,99 |
-| Onderhoud eerste twee maanden | inbegrepen |
-| Hosting en onderhoud | € 19,99 per maand |
-| E-mailadres op eigen domein | € 9,99 per maand |
-| **Maandelijks totaal vanaf maand 3** | **€ 29,98** |
-
-Het abonnement van € 35 per maand dat vakbedrijven op het platform betalen,
-is de inkomstenbron van de opdrachtgever en staat los van deze offerte. Dat
-staat expliciet op pagina 4, zodat daar geen verwarring over ontstaat.
+`render.js` drukt de hoogte van elke pagina af. Die moet exact 1123 px blijven
+(A4 op 96 dpi); wordt er eentje hoger, dan loopt hij over naar een extra pagina
+en moet er ergens ruimte terug.
