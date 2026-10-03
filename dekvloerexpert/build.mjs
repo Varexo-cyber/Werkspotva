@@ -9,6 +9,7 @@ import { site } from './src/config.mjs';
 import { loadPlaces, PROVINCES } from './src/places.mjs';
 import * as P from './src/pages.mjs';
 import { placePage, muniHub, provincePage, werkgebied } from './src/place-pages.mjs';
+import { loadMedia } from './src/media.mjs';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const out = join(root, 'dist');
@@ -17,7 +18,8 @@ const data = loadPlaces(join(root, 'data/plaatsen.csv'));
 // Footer: hoofdplaats per provincie + grootste steden, voor interne links vanaf elke pagina.
 const BIG = ['Amsterdam', 'Rotterdam', 'Den Haag', 'Utrecht', 'Eindhoven', 'Groningen', 'Tilburg', 'Almere', 'Breda', 'Nijmegen', 'Apeldoorn', 'Haarlem', 'Arnhem', 'Enschede', 'Amersfoort', 'Zaanstad', "'s-Hertogenbosch", 'Zwolle', 'Leiden', 'Maastricht', 'Dordrecht', 'Alkmaar', 'Leeuwarden', 'Middelburg', 'Assen'];
 const footerPlaces = BIG.map(n => data.munis.find(m => m.name === n)).filter(Boolean).map(m => ({ slug: m.slug, name: m.name }));
-const ctx = { ...data, footerPlaces };
+const media = loadMedia(join(root, 'public'));
+const ctx = { ...data, footerPlaces, media };
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
@@ -68,6 +70,7 @@ if (data.legacySlugs.length > 1) console.warn('Let op: nieuwe afwijkende slugs i
 
 console.log(`✓ ${urls.length} pagina's gebouwd in dist/`);
 console.log(`  ${data.places.length} plaatspagina's, ${data.munis.filter(m => m.hubOnly).length} gemeentepagina's, ${data.provinces.length} provinciepagina's`);
+console.log(`  media: ${media.real ? media.gallery.length + ' eigen foto\'s/video\'s' : 'nog geen eigen foto\'s (placeholders)'}${media.heroVideo ? ', herovideo' : ''}`);
 console.log(`  ${data.zoneCount} "Zone"-regels uit de CSV → 301 naar de echte plaatspagina`);
 
 if (process.argv.includes('--serve')) {

@@ -1,7 +1,7 @@
 // Plaatspagina's, gemeente-overzichten, provinciepagina's en het werkgebied.
 import { site } from './config.mjs';
 import { page, hero, cta, icon, esc, crumbLd, faqLd, faqHtml, abs } from './layout.mjs';
-import { stepsHtml, optionByKey } from './blocks.mjs';
+import { stepsHtml, optionByKey, calculator } from './blocks.mjs';
 import * as C from './content.mjs';
 
 const fill = C.fill;
@@ -103,6 +103,7 @@ ${hero({
 ${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.m2} m²</td><td>${e.cm} cm</td><td>${C.rangeText([e.lo, e.hi])}</td></tr>`).join('')}
 </tbody></table></div>
 <p class="note">Indicatie inclusief materiaal en aanbrengen, exclusief btw en opties. U ontvangt altijd een vaste prijs na inmeting. <a href="/cementdekvloer-kosten-per-m2">Meer over de kosten per m²</a>.</p>
+<div style="margin-top:40px" class="reveal">${calculator(p.name)}</div>
 </div></section>
 
 <section class="dark"><div class="wrap">

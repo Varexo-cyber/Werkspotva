@@ -66,6 +66,7 @@ export function header(active) {
     return `<li><a href="${href}"${active === href ? ' aria-current="page"' : ''}>${label}</a></li>`;
   }).join('');
   return `<a class="skip" href="#main">Naar inhoud</a>
+<div class="progress" aria-hidden="true"><span></span></div>
 <header class="site-header"><nav class="nav" aria-label="Hoofdmenu">
 <a class="logo" href="/" aria-label="${site.name} home"><b>DEKVLOER<span>EXPERT</span></b><small>ZANDCEMENT DEKVLOEREN</small></a>
 <ul class="menu">${items}</ul>
@@ -103,9 +104,11 @@ export function footer(footerPlaces = []) {
 <p style="margin-top:26px"><a class="btn btn-teal btn-sm" href="/offerte">Offerte aanvragen</a></p></div>
 </div>
 ${footerPlaces.length ? `<div class="f-places"><h4>Zandcement dekvloer in onder meer</h4><ul>${footerPlaces.map(p => `<li><a href="/${p.slug}">${esc(p.name)}</a></li>`).join('')}<li><a class="strong" href="/werkgebied">Alle plaatsen</a></li></ul></div>` : ''}
+<div class="wordmark" aria-hidden="true">DEKVLOER<span>EXPERT</span></div>
 <div class="f-bottom"><span>© ${new Date().getFullYear()} ${site.name}. Alle rechten voorbehouden.${site.kvk ? ` KvK ${site.kvk}.` : ''} <a href="/privacy">Privacy</a></span><span>Website door <b><a href="${site.builtBy.url}" target="_blank" rel="noopener">${site.builtBy.name}</a></b></span></div>
 </div></footer>
-<a class="wa-fab" href="${wa()}" target="_blank" rel="noopener" aria-label="Stuur een WhatsApp-bericht">${waIcon}</a>`;
+<a class="wa-fab" href="${wa()}" target="_blank" rel="noopener" aria-label="Stuur een WhatsApp-bericht">${waIcon}</a>
+<nav class="mbar" aria-label="Snel contact"><a href="${tel}">${icon('phone')}<span>Bellen</span></a><a href="${wa()}" target="_blank" rel="noopener">${waIcon}<span>WhatsApp</span></a><a class="go" href="/offerte">${icon('arrow')}<span>Offerte</span></a></nav>`;
 }
 
 export const businessLd = () => ({
@@ -142,9 +145,10 @@ ${noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots" cont
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#111514">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="/assets/fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}</script>
 </head>
@@ -161,10 +165,11 @@ ${footer(footerPlaces)}
 }
 
 // ───────────────────────── Herbruikbare blokken
-export function hero({ crumbs, pill = 'Zandcement dekvloeren · Landelijk actief', h1, lead, img = '/assets/img/hero.jpg', checks, buttons, sub = true, extra = '' }) {
-  return `<section class="hero${sub ? ' sub' : ''}">
-<div class="hero-bg" style="background-image:url('${img}')"></div>
-<div class="wrap"><div class="hero-inner">
+export function hero({ crumbs, pill = 'Zandcement dekvloeren · Landelijk actief', h1, lead, img = '/assets/img/hero.jpg', video = '', checks, buttons, sub = true, extra = '', aside = '' }) {
+  return `<section class="hero${sub ? ' sub' : ''}${aside ? ' has-aside' : ''}">
+<div class="hero-bg" style="background-image:url('${img}')">${video ? `<video autoplay muted loop playsinline preload="metadata" poster="${img}"><source src="${video}" type="video/mp4"></video>` : ''}</div>
+<div class="hero-sweep" aria-hidden="true"></div>
+<div class="wrap hero-grid"><div class="hero-inner">
 ${crumbs ? breadcrumb(crumbs) : ''}
 <span class="pill">${pill}</span>
 <h1>${h1}</h1>
@@ -172,7 +177,7 @@ ${lead ? `<p class="lead">${lead}</p>` : ''}
 ${checks ? `<ul class="checks">${checks.map(c => `<li><span class="tick">${icon('check')}</span>${c}</li>`).join('')}</ul>` : ''}
 ${extra}
 ${buttons ?? `<div class="btn-row"><a class="btn btn-teal" href="/offerte">Vrijblijvende offerte ${icon('arrow')}</a><a class="btn btn-ghost" href="${tel}">${icon('phone')} Bel direct</a></div>`}
-</div></div></section>`;
+</div>${aside}</div></section>`;
 }
 
 export function breadcrumb(items) {
