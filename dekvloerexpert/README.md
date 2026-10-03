@@ -75,6 +75,7 @@ Alles staat in `src/config.mjs`, tenzij anders vermeld.
 - [ ] **Domein** (`url`): nodig voor de canonical-URL's en de sitemap.
 - [ ] **Prijzen** (`price`): nu € 18–26 per m² voor 5 cm, € 750 minimum. Laat de klant dit bevestigen.
 - [ ] **Cijfers** (`stats`): 15+ jaar, 2500+ projecten. Komen uit de demo; laat bevestigen.
+- [ ] **Eigen foto's en video's**: zet ze in `public/assets/media/` (`hero.mp4` voor de achtergrondvideo, `projecten/` voor de galerij; de bestandsnaam wordt het bijschrift) en bouw opnieuw. Ze worden automatisch gebruikt.
 - [ ] **Foto's**: `public/assets/img/` bevat neutrale placeholder-texturen. Vervang ze door
       echte projectfoto's met dezelfde bestandsnamen (`hero.jpg`, `project-1.jpg` … `project-8.jpg`,
       `dekvloer-1.jpg`, `dekvloer-2.jpg`).

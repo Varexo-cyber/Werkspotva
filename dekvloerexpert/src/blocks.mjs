@@ -65,3 +65,91 @@ export const PROJECTS = [
 export const projectCard = p => `<figure class="proj reveal"><img src="/assets/img/${p.img}.jpg" alt="${esc(p.title)} in ${esc(p.place)}, ${p.m2} m² zandcement dekvloer" loading="lazy" width="900" height="700"><span class="ptag">${esc(p.tag)}</span><figcaption><b>${esc(p.title)}</b><span>${esc(p.place)} · ${p.m2} m²</span></figcaption></figure>`;
 
 export const featureList = items => `<div class="features">${items.map(([ic, t, d]) => `<div class="feature reveal"><span class="f-ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`).join('')}</div>`;
+
+// ───────────────────────── Nieuwe blokken
+
+// Zoekwoorden-band onder de hero (uit de klantlijst).
+const KEYWORDS = ['Zandcement dekvloer', 'Cementdekvloer', 'Zand-cementvloer', 'Vloerverwarming', 'Anhydriet', 'Egaliseren', 'Krimpnetten', 'Droogtijdversneller', 'Duremit', 'Randisolatie', 'Nieuwbouw', 'Renovatie', 'Utiliteit'];
+export const keywordBand = () => `<div class="kband" aria-hidden="true"><div class="kband-track">${[...KEYWORDS, ...KEYWORDS].map(k => `<span>${k}</span>`).join('')}</div></div>`;
+
+// Specificatiekaart naast de hero: echte vaktermen en maten.
+export const heroCard = () => `<aside class="spec-card" aria-label="Kenmerken van onze dekvloeren">
+<div class="spec-head"><span class="dot"></span>Standaard opbouw</div>
+<dl>
+<div><dt>Sterkteklasse</dt><dd>CT-C20-F4</dd></div>
+<div><dt>Laagdikte</dt><dd>5 – 8 cm</dd></div>
+<div><dt>Mengverhouding</dt><dd>1 : 4,5</dd></div>
+<div><dt>Legklaar met versneller</dt><dd>10 – 15 dagen</dd></div>
+</dl>
+<div class="spec-level" aria-hidden="true"><span></span></div>
+<p class="spec-foot">Vlak en waterpas afgereid · eigen mixer en pomp</p>
+</aside>`;
+
+// Interactieve doorsnede van een vloeropbouw.
+const LAYERS = [
+  { id: 'afwerking', name: 'Afwerkvloer', mm: '± 10 mm', h: 22, fill: 'var(--l-finish)', text: 'Tegels, pvc, laminaat, parket of een gietvloer. Hoe vlakker de dekvloer, hoe strakker dit resultaat.' },
+  { id: 'dekvloer', name: 'Zandcement dekvloer', mm: '50 – 80 mm', h: 96, fill: 'var(--l-screed)', text: 'De laag die wij leggen: zand, cement en water, gepompt, verdicht en kaarsrecht afgereid. Minimaal 3 à 4 cm boven de leidingen.', pipes: true, net: true },
+  { id: 'isolatie', name: 'Isolatie', mm: '60 – 120 mm', h: 64, fill: 'var(--l-insu)', text: 'PIR- of EPS-platen houden de warmte in de vloer en de kou van de kruipruimte weg. De dekvloer ligt hier zwevend op.' },
+  { id: 'beton', name: 'Constructievloer', mm: '± 200 mm', h: 78, fill: 'var(--l-concrete)', text: 'De dragende betonvloer of kanaalplaatvloer. Ligt de dekvloer direct hierop, dan zorgt Vlevopol voor de hechting.' },
+];
+export function buildUp() {
+  const W = 560; let y = 20;
+  const rects = LAYERS.map(l => {
+    const r = { ...l, y }; y += l.h + 6; return r;
+  });
+  const svg = `<svg class="bu-svg" viewBox="0 0 ${W} ${y + 14}" role="img" aria-label="Doorsnede van een vloer: afwerking, dekvloer met vloerverwarming, isolatie en constructievloer">
+<defs>
+<pattern id="pIns" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M0 14 14 0" stroke="rgba(0,0,0,.12)" stroke-width="2"/></pattern>
+<pattern id="pCon" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="4" cy="5" r="1.6" fill="rgba(0,0,0,.18)"/><circle cx="13" cy="12" r="2.2" fill="rgba(0,0,0,.12)"/></pattern>
+<pattern id="pScr" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".7" fill="rgba(0,0,0,.16)"/><circle cx="5" cy="4.5" r=".5" fill="rgba(255,255,255,.25)"/></pattern>
+</defs>
+<path d="M20 ${y + 6} H${W - 20}" stroke="var(--l-line)" stroke-dasharray="4 6"/>
+${rects.map(l => `<g class="bu-layer" data-layer="${l.id}" tabindex="0">
+<rect x="20" y="${l.y}" width="${W - 40}" height="${l.h}" rx="6" fill="${l.fill}"/>
+${l.id === 'isolatie' ? `<rect x="20" y="${l.y}" width="${W - 40}" height="${l.h}" rx="6" fill="url(#pIns)"/>` : ''}
+${l.id === 'beton' ? `<rect x="20" y="${l.y}" width="${W - 40}" height="${l.h}" rx="6" fill="url(#pCon)"/>` : ''}
+${l.id === 'dekvloer' ? `<rect x="20" y="${l.y}" width="${W - 40}" height="${l.h}" rx="6" fill="url(#pScr)"/>` : ''}
+${l.net ? `<path d="M28 ${l.y + l.h - 34} H${W - 28}" stroke="var(--l-net)" stroke-width="2" stroke-dasharray="2 5"/>` : ''}
+${l.pipes ? Array.from({ length: 16 }, (_, i) => `<circle cx="${44 + i * 32}" cy="${l.y + l.h - 20}" r="8" fill="${i % 2 ? 'var(--l-pipe2)' : 'var(--l-pipe)'}" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>`).join('') : ''}
+</g>`).join('')}
+</svg>`;
+  return `<div class="buildup">
+<div class="bu-list" role="tablist" aria-label="Lagen van de vloer">${LAYERS.map((l, i) => `<button type="button" role="tab" class="bu-item${i === 1 ? ' on' : ''}" data-layer="${l.id}" aria-selected="${i === 1}"><span class="bu-sw" style="background:${l.fill}"></span><span class="bu-txt"><b>${l.name}</b><small>${l.mm}</small><span class="bu-desc">${l.text}</span></span></button>`).join('')}</div>
+<div class="bu-fig">${svg}<div class="bu-tags"><span>Krimpnet</span><span>Vloerverwarming</span><span>Randisolatie langs de wand</span></div></div>
+</div>`;
+}
+
+// Live prijscalculator; de prijs komt uit src/config.mjs.
+export function calculator(place = '') {
+  const { base5cm, perExtraCm, minimumOrder } = site.price;
+  return `<div class="calc" data-base="${base5cm.join(',')}" data-extra="${perExtraCm.join(',')}" data-min="${minimumOrder}" data-place="${esc(place)}">
+<div class="calc-in">
+<div class="calc-row"><label for="calcM2">Oppervlakte</label><output id="calcM2out">60 m²</output></div>
+<input id="calcM2" type="range" min="5" max="1000" step="1" value="60" aria-describedby="calcM2out">
+<div class="calc-row" style="margin-top:26px"><span class="flabel">Dikte</span></div>
+<div class="seg-btns" role="radiogroup" aria-label="Dikte">${[5, 6, 7, 8].map(c => `<button type="button" role="radio" aria-checked="${c === 6}" data-cm="${c}"${c === 6 ? ' class="on"' : ''}>${c} cm</button>`).join('')}</div>
+<div class="calc-row" style="margin-top:26px"><span class="flabel">Opties</span></div>
+<div class="calc-opts">
+<label><input type="checkbox" id="calcVv" data-add="2,3"> Krimpnet (vloerverwarming)</label>
+<label><input type="checkbox" id="calcAcc" data-add="3,5"> Droogtijdversneller</label>
+<label><input type="checkbox" id="calcVez" data-add="1,2"> Krimpvezels</label>
+</div>
+</div>
+<div class="calc-out">
+<span class="calc-lbl">Indicatie${place ? ' voor ' + esc(place) : ''}</span>
+<div class="calc-price"><span id="calcLo">€ 1.200</span><i>–</i><span id="calcHi">€ 1.700</span></div>
+<p class="calc-per" id="calcPer">€ 20 – € 29 per m² · excl. btw</p>
+<a class="btn btn-teal" id="calcCta" href="/offerte">Vraag deze prijs vast aan ${icon('arrow')}</a>
+<p class="calc-note">Indicatie inclusief materiaal en aanbrengen. Na inmeting krijgt u een vaste prijs.</p>
+</div>
+</div>`;
+}
+
+// Galerij met lightbox (foto's en video's).
+export function gallery(items, limit = 0) {
+  const list = limit ? items.slice(0, limit) : items;
+  return `<div class="gal">${list.map((m, i) => `<button type="button" class="gal-item${i % 9 === 0 ? ' big' : ''}" data-src="${m.src}" data-video="${m.video ? 1 : 0}" data-caption="${esc(m.caption)}" aria-label="Bekijk ${esc(m.caption)}">
+${m.video ? `<video src="${m.src}#t=0.5" muted playsinline preload="metadata"${m.poster ? ` poster="${m.poster}"` : ''}></video><span class="gal-play" aria-hidden="true">▶</span>` : `<img src="${m.src}" alt="${esc(m.caption)}" loading="lazy">`}
+<span class="gal-cap">${esc(m.caption)}</span></button>`).join('')}</div>
+<dialog class="lightbox" id="lightbox" aria-label="Foto of video vergroot"><button type="button" class="lb-close" aria-label="Sluiten">×</button><button type="button" class="lb-prev" aria-label="Vorige">‹</button><div class="lb-stage"></div><button type="button" class="lb-next" aria-label="Volgende">›</button><p class="lb-cap"></p></dialog>`;
+}

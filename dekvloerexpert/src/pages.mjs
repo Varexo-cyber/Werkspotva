@@ -1,7 +1,7 @@
 // Vaste pagina's: home, diensten, opties, projecten, werkwijze, kennisbank, offerte, contact.
 import { site } from './config.mjs';
 import { page, hero, cta, icon, waIcon, wa, tel, esc, googleWord, crumbLd, faqLd, faqHtml, SERVICES } from './layout.mjs';
-import { OPTIONS, STEPS, stepsHtml, optionCards, reviewsSection, PROJECTS, projectCard, featureList } from './blocks.mjs';
+import { OPTIONS, STEPS, stepsHtml, optionCards, reviewsSection, PROJECTS, projectCard, featureList, keywordBand, heroCard, buildUp, calculator, gallery } from './blocks.mjs';
 import { euro, priceRange, rangeText } from './content.mjs';
 
 const p5 = `${euro(site.price.base5cm[0])} – ${euro(site.price.base5cm[1])}`;
@@ -11,7 +11,7 @@ export function home(ctx) {
   const stats = `<div class="stats"><div class="wrap">${site.stats.map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join('')}</div></div>`;
   const body = `
 ${hero({
-    sub: false,
+    sub: false, aside: heroCard(), video: ctx.media.heroVideo, img: ctx.media.heroPoster,
     h1: 'Zandcement dekvloeren:<br><span class="accent">De perfecte basis voor elk project</span>',
     lead: 'Een strakke, duurzame en kaarsrechte vloer begint bij de basis. Voor nieuwbouw, utiliteit en renovatie, door heel Nederland.',
     checks: ['Specialist in zandcementdekvloeren', 'Door heel Nederland', 'Gratis prijsopgave', 'Voor particulieren &amp; aannemers'],
@@ -19,6 +19,7 @@ ${hero({
     buttons: `<div class="btn-row"><a class="btn btn-teal" href="/offerte">Offerte aanvragen ${icon('arrow')}</a><a class="btn btn-wa" href="${wa()}" target="_blank" rel="noopener">${waIcon} WhatsApp</a><a class="btn btn-ghost" href="${tel}">${icon('phone')} Bel direct</a></div>`,
   })}
 ${stats}
+${keywordBand()}
 
 <section><div class="wrap split">
 <div class="reveal">
@@ -44,7 +45,7 @@ ${featureList([
 <p class="lead">Nieuwbouw, utiliteit en renovatie: wij laten de werkplek netjes achter en werken met modern materieel.</p>
 <p style="margin-top:30px"><a class="text-link" href="/projecten">Bekijk alle projectfoto's ${icon('arrow')}</a></p>
 </div></div>
-<div class="strip">${PROJECTS.slice(0, 8).map(p => `<figure><img src="/assets/img/${p.img}.jpg" alt="${esc(p.title)}, ${esc(p.place)}" loading="lazy" width="900" height="700"><figcaption>${esc(p.title)} · ${esc(p.place)}</figcaption></figure>`).join('')}</div>
+<div class="wrap" style="margin-top:56px">${gallery(ctx.media.gallery, 9)}</div>
 </section>
 
 <section class="paper"><div class="wrap split rev">
@@ -69,6 +70,20 @@ ${featureList([
 <li>${icon('check')}<div><b>Alles in één pakket</b><span>Vloerverwarming en dekvloer met één aanspreekpunt geregeld.</span></div></li>
 </ul></div>
 </div></div>
+</div></section>
+
+<section class="paper" id="opbouw"><div class="wrap">
+<div class="sec-head reveal" style="max-width:760px"><span class="eyebrow">Zo is een vloer opgebouwd</span>
+<h2>Van beton tot <span class="accent">legklare vloer</span></h2>
+<p class="lead">Elke laag heeft een taak. Klik op een laag en zie wat wij daar doen, en waarom de dekvloer het verschil maakt voor uw eindafwerking.</p></div>
+${buildUp()}
+</div></section>
+
+<section class="dark" id="prijs"><div class="wrap">
+<div class="sec-head reveal" style="max-width:760px"><span class="eyebrow">Prijscalculator</span>
+<h2>Wat kost <span class="accent">uw dekvloer?</span></h2>
+<p class="lead">Schuif de oppervlakte, kies de dikte en zie direct een indicatie. De vaste prijs volgt na een korte inmeting.</p></div>
+${calculator()}
 </div></section>
 
 <section class="dark"><div class="wrap">
@@ -134,6 +149,8 @@ ${s.link ? `<p style="margin-top:30px"><a class="text-link" href="${s.link[0]}">
 </div></section>
 ${s.features ? `<section class="paper"><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Waarom kiezen voor</span><h2>${s.featuresTitle}</h2></div>${featureList(s.features)}</div></section>` : ''}
 ${(s.sections || []).map((sec, i) => `<section class="${i % 2 ? 'paper' : ''}"><div class="wrap prose reveal" style="max-width:900px">${sec.eyebrow ? `<span class="eyebrow">${sec.eyebrow}</span>` : ''}<h2>${sec.h2}</h2>${sec.html}</div></section>`).join('')}
+${s.slug === 'zandcement' ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Opbouw</span><h2>Zo ligt uw <span class="accent">vloer opgebouwd</span></h2></div>${buildUp()}</div></section>` : ''}
+${s.kb && s.slug === 'cementdekvloer-kosten-per-m2' ? `<section class="dark"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Prijscalculator</span><h2>Reken het <span class="accent">zelf uit</span></h2></div>${calculator()}</div></section>` : ''}
 ${s.showOptions ? `<section class="dark"><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Maatwerk opties</span><h2>Extra opties <span class="accent">voor uw dekvloer</span></h2><p class="lead">Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.</p></div>${optionCards(OPTIONS)}</div></section>` : ''}
 ${s.faq ? `<section><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Veelgestelde vragen</span><h2>${s.faqTitle || 'Vragen over ' + s.crumb.toLowerCase()}</h2></div>${faqHtml(s.faq)}</div></section>` : ''}
 ${s.related ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Lees ook</span><h2>Meer over dekvloeren</h2></div><div class="cards light-cards">${s.related.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('arrow')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>` : ''}
@@ -366,12 +383,11 @@ ${cta()}`;
 // ───────────────────────── Projecten
 export function projecten(ctx) {
   const crumbs = [['/', 'Home'], ['/projecten', 'Projecten']];
-  const imgs = ['project-1', 'dekvloer-2', 'project-2', 'project-3', 'project-4', 'project-5', 'dekvloer-1', 'project-6', 'project-7', 'project-8'];
   const body = `${hero({ crumbs, h1: 'Van zandaanvoer <span class="accent">tot legklare vloer</span>', lead: 'Nieuwbouw, utiliteit en renovatie: een greep uit ons werk door heel Nederland.', img: '/assets/img/project-5.jpg' })}
 <!-- Voorbeeldprojecten: vervang titels, plaatsen en foto's door echte projecten (src/blocks.mjs). -->
 <section><div class="wrap"><div class="proj-grid">${PROJECTS.map(projectCard).join('')}</div></div></section>
 <section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Ons werk</span><h2>Meer foto's van ons werk</h2></div>
-<div class="masonry">${imgs.map((s, i) => `<img src="/assets/img/${s}.jpg" alt="Zandcement dekvloer, projectfoto ${i + 1}" loading="lazy">`).join('')}</div></div></section>
+${gallery(ctx.media.gallery)}</div></section>
 ${cta()}`;
   return page({ path: '/projecten', active: '/projecten', title: 'Projecten: zandcement dekvloeren in heel Nederland | Dekvloerexpert', description: 'Bekijk onze projecten: kantoren, woningen, bedrijfshallen en renovaties. Zandcement dekvloeren, vloerverwarming en meer.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
 }
