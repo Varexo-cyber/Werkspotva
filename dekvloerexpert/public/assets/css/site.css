@@ -658,3 +658,43 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
 .rev-grid .review{width:auto}
 @media (max-width:900px){.rev-grid{grid-template-columns:1fr}}
 .dark .card .ck,.card .ck{display:grid}
+
+/* v4: tabellen en lijsten in plaats van kaartjes */
+.specs{margin:34px 0 0;border-top:1px solid var(--line-l)}
+.specs>div{display:grid;grid-template-columns:190px 1fr;gap:18px;padding:14px 0;border-bottom:1px solid var(--line-l)}
+.specs dt{font-weight:700}
+.specs dd{margin:0;color:var(--muted)}
+.dark .specs,.dark .specs>div{border-color:var(--line-d)}
+.dark .specs dd{color:var(--muted-d)}
+.otable{width:100%;border-collapse:collapse;font-size:1rem}
+.otable th{text-align:left;font-family:var(--mono);font-weight:500;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-d);padding:0 16px 12px 0;border-bottom:1px solid var(--line-d)}
+.otable td{padding:16px 16px 16px 0;border-bottom:1px solid var(--line-d);vertical-align:top;color:var(--muted-d)}
+.otable td:first-child{color:#fff;font-weight:700;white-space:nowrap;width:240px}
+.paper .otable th,.light .otable th{color:var(--muted);border-color:var(--line-l)}
+.timeline{list-style:none;padding:0;margin:0;border-top:1px solid var(--line-l);max-width:980px}
+.timeline li{display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line-l)}
+.dark .timeline,.dark .timeline li{border-color:var(--line-d)}
+.tl-n{font-family:var(--mono);color:var(--teal-deep);font-size:.95rem}
+.dark .tl-n{color:var(--teal)}
+.timeline h3{margin:0 0 4px;font-size:1.15rem}
+.timeline p{margin:0;color:var(--muted)}
+.dark .timeline p{color:var(--muted-d)}
+.tl-when{font-family:var(--mono);font-size:.88rem;color:var(--text);background:#eef2f0;padding:4px 10px;border-radius:4px;white-space:nowrap}
+.dark .tl-when{background:#1d2422;color:#e5ece9}
+.aud{gap:48px}
+.aud h3{font-size:1.25rem;margin-bottom:10px}
+.aud p{color:var(--muted);margin:0}
+.split:has(> :only-child){grid-template-columns:minmax(0,1fr)}
+.split:has(> :only-child)>*{max-width:860px}
+@media (max-width:680px){
+  .specs>div{grid-template-columns:1fr;gap:4px}
+  .timeline li{grid-template-columns:40px 1fr;row-gap:8px}
+  .tl-when{grid-column:2;justify-self:start}
+  .otable td:first-child{white-space:normal;width:auto}
+}
+.faq{margin:0;max-width:900px}
+.cta-card{text-align:left;padding:72px 56px}
+.cta-card p{margin:0 0 30px}
+.cta-card .btn-row{justify-content:flex-start}
+.cta-card .fine{margin:26px 0 0}
+@media (max-width:680px){.cta-card{padding:44px 22px}}

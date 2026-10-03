@@ -26,9 +26,9 @@ export const STEPS = [
   ['Uitvoering volgens planning', 'Wij schakelen snel, komen afspraken na en werken met modern materieel.'],
   ['Kaarsrecht en legklaar', 'Vlak en waterpas afgewerkt, zodat de vloerenlegger direct aan de slag kan.'],
 ];
-export const stepsHtml = (steps = STEPS) => `<div class="steps">${steps.map(([t, d], i) => `<div class="step reveal"><div class="num">${String(i + 1).padStart(2, '0')}</div><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;
+export const stepsHtml = (steps = STEPS) => `<ol class="timeline">${steps.map(([t, d, when], i) => `<li class="reveal"><span class="tl-n">${String(i + 1).padStart(2, '0')}</span><div><h3>${t}</h3><p>${d}</p></div>${when ? `<span class="tl-when">${when}</span>` : ''}</li>`).join('')}</ol>`;
 
-export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="cards">${opts.map(o => `<div class="card reveal"><div><h3>${o.alt || o.title}</h3><p>${o.short}</p></div></div>`).join('')}${withLink ? `<a class="card link reveal" href="/opties"><div><h3>Alles over de opties</h3><p>Uitleg per optie en wanneer u hem kiest.</p></div><span class="arrow">${icon('arrow')}</span></a>` : ''}</div>`;
+export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="table-scroll"><table class="otable"><thead><tr><th>Optie</th><th>Wat het doet</th></tr></thead><tbody>${opts.map(o => `<tr><td>${o.alt || o.title}</td><td>${o.short}</td></tr>`).join('')}</tbody></table></div>${withLink ? `<p style="margin-top:22px"><a class="text-link" href="/opties">Uitleg per optie ${icon('arrow')}</a></p>` : ''}`;
 
 // Voorbeeldreviews, net als in de demo duidelijk gemarkeerd als voorbeeld.
 // Vervang ze door echte Google-reviews zodra het bedrijfsprofiel gekoppeld is.
@@ -41,12 +41,12 @@ const REVIEWS = [
   ['Snel geschakeld en de afspraken nagekomen, precies volgens planning.', 'Nieuwbouw'],
 ];
 const reviewCard = ([q, t]) => `<article class="review"><div class="r-top"><span class="r-av">G</span><div><b>Klant via Google</b><span class="stars" aria-label="5 sterren">★★★★★</span></div><span class="r-tag">Voorbeeld</span></div><q>${esc(q)}</q><small>${esc(t)}</small></article>`;
-export const reviewsSection = () => `<section class="dark" id="reviews"><div class="wrap">
+export const reviewsSection = () => !site.reviews?.length ? '' : `<section class="dark" id="reviews"><div class="wrap">
 <a class="gbadge" href="${site.googleReviewsUrl || '#reviews'}"${site.googleReviewsUrl ? ' target="_blank" rel="noopener"' : ''}>${googleWord}<span class="stars">★★★★★</span>Reviews</a>
 <h2>Reviews</h2>
 <p class="lead">Voorbeeldweergave: zodra uw Google Bedrijfsprofiel is gekoppeld, verschijnen hier automatisch de echte beoordelingen van uw klanten.</p>
 </div>
-<div class="wrap"><div class="rev-grid">${REVIEWS.slice(0, 3).map(reviewCard).join('')}</div></div>
+<div class="wrap"><div class="rev-grid">${site.reviews.slice(0, 3).map(reviewCard).join('')}</div></div>
 </section>`;
 
 // Voorbeeldprojecten uit de demo. Vervang foto's in public/assets/img/ en pas teksten hier aan.
@@ -63,7 +63,7 @@ export const PROJECTS = [
 ];
 export const projectCard = p => `<figure class="proj reveal"><img src="/assets/img/${p.img}.jpg" alt="${esc(p.title)} in ${esc(p.place)}, ${p.m2} m² zandcement dekvloer" loading="lazy" width="900" height="700"><span class="ptag">${esc(p.tag)}</span><figcaption><b>${esc(p.title)}</b><span>${esc(p.place)} · ${p.m2} m²</span></figcaption></figure>`;
 
-export const featureList = items => `<div class="features">${items.map(([ic, t, d]) => `<div class="feature reveal"><span class="f-ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`).join('')}</div>`;
+export const featureList = items => `<dl class="specs">${items.map(([, t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
 
 // ───────────────────────── Nieuwe blokken
 
