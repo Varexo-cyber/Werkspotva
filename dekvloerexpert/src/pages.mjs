@@ -1,7 +1,7 @@
 // Vaste pagina's: home, diensten, opties, projecten, werkwijze, kennisbank, offerte, contact.
 import { site } from './config.mjs';
 import { page, hero, cta, icon, waIcon, wa, tel, esc, googleWord, crumbLd, faqLd, faqHtml, SERVICES } from './layout.mjs';
-import { OPTIONS, STEPS, stepsHtml, optionCards, reviewsSection, PROJECTS, projectCard, featureList, keywordBand, heroCard, buildUp, calculator, gallery } from './blocks.mjs';
+import { OPTIONS, STEPS, stepsHtml, optionCards, reviewsSection, PROJECTS, projectCard, featureList, keywordBand, ruler, heroCard, buildUp, calculator, gallery } from './blocks.mjs';
 import { euro, priceRange, rangeText } from './content.mjs';
 
 const p5 = `${euro(site.price.base5cm[0])} – ${euro(site.price.base5cm[1])}`;
@@ -12,26 +12,24 @@ export function home(ctx) {
   const body = `
 ${hero({
     sub: false, aside: heroCard(), video: ctx.media.heroVideo, img: ctx.media.heroPoster,
-    h1: 'Zandcement dekvloeren:<br><span class="accent">De perfecte basis voor elk project</span>',
-    lead: 'Een strakke, duurzame en kaarsrechte vloer begint bij de basis. Voor nieuwbouw, utiliteit en renovatie, door heel Nederland.',
-    checks: ['Specialist in zandcementdekvloeren', 'Door heel Nederland', 'Gratis prijsopgave', 'Voor particulieren &amp; aannemers'],
-    extra: `<a class="gbadge" href="#reviews">${googleWord}<span class="stars">★★★★★</span>Reviews</a>`,
+    h1: 'Zandcement dekvloeren,<br><span class="accent">in één dag gelegd.</span>',
+    lead: 'Wij komen met mixer en pomp, leggen uw dekvloer op de afgesproken hoogte en laten de ruimte bezemschoon achter. Voor woningen, uitbouwen en bedrijfspanden, in heel Nederland.',
     buttons: `<div class="btn-row"><a class="btn btn-teal" href="/offerte">Offerte aanvragen ${icon('arrow')}</a><a class="btn btn-wa" href="${wa()}" target="_blank" rel="noopener">${waIcon} WhatsApp</a><a class="btn btn-ghost" href="${tel}">${icon('phone')} Bel direct</a></div>`,
   })}
 ${stats}
-${keywordBand()}
+${ruler()}
 
 <section><div class="wrap split">
 <div class="reveal">
-<span class="eyebrow">Onze hoofddienst</span>
-<h2>Zandcement dekvloeren <span class="accent">van topkwaliteit</span></h2>
-<p class="lead">Een strakke, duurzame en kaarsrechte vloer begint bij de basis. Of het nu gaat om een complete nieuwbouwwoning, een grootschalig utiliteitsproject of een kleinschalige renovatie: onze zandcement dekvloeren vormen het perfecte fundament voor elke eindafwerking, zoals tegels, pvc, gietvloeren of parket.</p>
-<p style="color:var(--muted)">Met jarenlange ervaring leveren wij topkwaliteit vloeren die voldoen aan de hoogste normen. Snel, vakkundig en met oog voor detail.</p>
+
+<h2>Wat wij doen</h2>
+<p class="lead">Een dekvloer is de laag zand-cement tussen de ruwe vloer en uw tegels, pvc of parket. Ligt die scheef of hol, dan ziet u dat later in elke voeg. Daarom meten we vooraf de hoogtes in en reien we de vloer af op vaste punten.</p>
+<p style="color:var(--muted)">Een gemiddelde woning leggen we meestal in één dag, in één keer, zonder naden.</p>
 ${featureList([
-    ['flame', 'Optimale warmtegeleiding', 'Perfect te combineren met vloerverwarming voor een maximaal rendement en een comfortabel binnenklimaat.'],
-    ['shield', 'Hoge druk- en buigtreksterkte', 'Wij stemmen de mortelsamenstelling exact af op de gebruiksintensiteit van de ruimte.'],
-    ['ruler', 'Kaarsrecht en waterpas', 'Afgereid op de juiste hoogte, zodat de vloerenlegger direct aan de slag kan.'],
-    ['drop', 'Vochtbestendig', 'Zandcement kan tegen vocht en is geschikt voor badkamers, garages en kelders.'],
+    ['flame', 'Met vloerverwarming', 'Minimaal 3 à 4 cm boven de leidingen, met krimpnet. Dan warmt de vloer gelijkmatig op.'],
+    ['shield', 'Op sterkte', 'Standaard CT-C20-F4. Voor garages en bedrijfshallen leggen we zwaarder.'],
+    ['ruler', 'Op hoogte', 'Afgereid op vaste punten, gemeten met een laser. Klaar voor de vloerenlegger.'],
+    ['drop', 'Ook in natte ruimtes', 'Zandcement kan tegen vocht. Geschikt voor badkamer, garage en kelder.'],
   ])}
 <p style="margin-top:34px"><a class="text-link" href="/zandcement">Alles over zandcement dekvloeren ${icon('arrow')}</a></p>
 </div>
@@ -40,9 +38,9 @@ ${featureList([
 
 <section class="dark" style="padding-bottom:60px"><div class="wrap">
 <div class="reveal" style="max-width:760px">
-<span class="eyebrow">Ons werk</span>
-<h2>Van zandaanvoer<br><span class="accent">tot legklare vloer.</span></h2>
-<p class="lead">Nieuwbouw, utiliteit en renovatie: wij laten de werkplek netjes achter en werken met modern materieel.</p>
+
+<h2>Recent werk</h2>
+<p class="lead">Woningen, kantoren en bedrijfshallen. Klik op een foto voor een grotere versie.</p>
 <p style="margin-top:30px"><a class="text-link" href="/projecten">Bekijk alle projectfoto's ${icon('arrow')}</a></p>
 </div></div>
 <div class="wrap" style="margin-top:56px">${gallery(ctx.media.gallery, 9)}</div>
@@ -52,18 +50,18 @@ ${featureList([
 <div class="photo reveal"><img src="/assets/img/dekvloer-1.jpg" alt="Dekvloer in een bedrijfspand, klaar voor afwerking" width="1200" height="900" loading="lazy">
 <div class="photo-badge"><span class="ic">${icon('users')}</span><div><b>Alles onder één dak</b><span>Eén aanspreekpunt van begin tot eind</span></div></div></div>
 <div class="reveal">
-<span class="eyebrow">Aannemers en particulieren</span>
-<h2>Betrouwbaar voor aannemers, <span class="accent">zorgeloos voor particulieren.</span></h2>
+
+<h2>Voor aannemers en particulieren</h2>
 <div class="aud">
 <div><div class="aud-h"><span class="f-ic">${icon('building')}</span><h3>Voor aannemers</h3></div>
-<p>In de bouw is tijd geld. Wij begrijpen de dynamiek op de bouwplaats als geen ander.</p>
+<p>U geeft de datum en het peil door, wij zorgen dat de vloer er dan ligt.</p>
 <ul class="ticks">
 <li>${icon('check')}<div><b>Flexibele planning</b><span>Wij schakelen snel en komen afspraken na.</span></div></li>
 <li>${icon('check')}<div><b>Kwaliteit conform normen</b><span>Vloeren die exact voldoen aan de gestelde sterkteklassen en vlakheidseisen.</span></div></li>
 <li>${icon('check')}<div><b>Schoon en efficiënt</b><span>Wij laten de werkplek netjes achter en werken met modern materieel.</span></div></li>
 </ul></div>
 <div><div class="aud-h"><span class="f-ic">${icon('home')}</span><h3>Voor particulieren</h3></div>
-<p>Het verbouwen of bouwen van je eigen woning is al spannend genoeg. Wij nemen de zorg voor je vloer volledig uit handen.</p>
+<p>U krijgt vooraf een vaste prijs en uitleg over dikte, droogtijd en wat u zelf moet regelen.</p>
 <ul class="ticks">
 <li>${icon('check')}<div><b>Duidelijk advies vooraf</b><span>We kijken naar jouw specifieke woonsituatie en adviseren de juiste opties (zoals vezels of versnellers).</span></div></li>
 <li>${icon('check')}<div><b>Geen verrassingen achteraf</b><span>Heldere communicatie en transparante, eerlijke prijzen.</span></div></li>
@@ -73,45 +71,44 @@ ${featureList([
 </div></section>
 
 <section class="paper" id="opbouw"><div class="wrap">
-<div class="sec-head reveal" style="max-width:760px"><span class="eyebrow">Zo is een vloer opgebouwd</span>
-<h2>Van beton tot <span class="accent">legklare vloer</span></h2>
-<p class="lead">Elke laag heeft een taak. Klik op een laag en zie wat wij daar doen, en waarom de dekvloer het verschil maakt voor uw eindafwerking.</p></div>
+<div class="sec-head reveal" style="max-width:760px">
+<h2>Hoe een vloer is opgebouwd</h2>
+<p class="lead">Klik op een laag voor uitleg. Wij leggen de zandcement dekvloer; de rest regelen we op verzoek mee.</p></div>
 ${buildUp()}
 </div></section>
 
 <section class="dark" id="prijs"><div class="wrap">
-<div class="sec-head reveal" style="max-width:760px"><span class="eyebrow">Prijscalculator</span>
-<h2>Wat kost <span class="accent">uw dekvloer?</span></h2>
-<p class="lead">Schuif de oppervlakte, kies de dikte en zie direct een indicatie. De vaste prijs volgt na een korte inmeting.</p></div>
+<div class="sec-head reveal" style="max-width:760px">
+<h2>Wat kost het?</h2>
+<p class="lead">Vul de oppervlakte en dikte in voor een indicatie. Na een inmeting krijgt u een vaste prijs.</p></div>
 ${calculator()}
 </div></section>
 
 <section class="dark"><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Maatwerk opties</span>
-<h2>Extra opties <span class="accent">voor uw dekvloer</span></h2>
-<p class="lead">Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.</p></div>
+<div class="sec-head reveal">
+<h2>Opties</h2>
+<p class="lead">Toevoegingen die u bij de dekvloer kunt meebestellen. We adviseren alleen wat voor uw vloer nodig is.</p></div>
 ${optionCards(OPTIONS)}
 </div></section>
 
 <section><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Werkwijze</span>
-<h2>Van eerste contact<br><span class="accent">tot legklare vloer</span></h2>
-<p class="lead">Heldere communicatie en transparante, eerlijke prijzen.</p></div>
+<div class="sec-head reveal">
+<h2>Hoe het gaat</h2></div>
 ${stepsHtml()}
 </div></section>
 
 ${reviewsSection()}
 
 <section class="paper"><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Werkgebied</span>
-<h2>Zandcement dekvloeren <span class="accent">in heel Nederland</span></h2>
+<div class="sec-head reveal">
+<h2>Werkgebied</h2>
 <p class="lead">Wij werken in alle twaalf provincies. Kies uw provincie of plaats voor informatie en prijzen bij u in de buurt.</p></div>
 <div class="prov-grid reveal">${ctx.provinces.map(pv => `<a class="prov" href="/werkgebied/${pv.slug}">${pv.name}<span>${pv.munis.reduce((n, m) => n + m.places.length, 0)} plaatsen</span></a>`).join('')}</div>
 <div class="center" style="margin-top:34px"><a class="text-link" href="/werkgebied">Bekijk alle ${ctx.places.length} plaatsen ${icon('arrow')}</a></div>
 </div></section>
 
 <section><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Veelgestelde vragen</span><h2>Goed om te <span class="accent">weten</span></h2></div>
+<div class="sec-head reveal"><h2>Veelgestelde vragen</h2></div>
 ${faqHtml(HOME_FAQ)}
 </div></section>
 
@@ -140,20 +137,20 @@ function servicePage(ctx, s) {
 ${hero({ crumbs, h1: s.h1, lead: s.lead, img: s.img || '/assets/img/hero.jpg' })}
 <section><div class="wrap split">
 <div class="reveal prose">
-<span class="eyebrow">${s.eyebrow}</span>
+
 <h2>${s.h2}</h2>
 ${s.intro.map(t => `<p>${t}</p>`).join('')}
 ${s.link ? `<p style="margin-top:30px"><a class="text-link" href="${s.link[0]}">${s.link[1]} ${icon('arrow')}</a></p>` : ''}
 </div>
 <div class="photo reveal"><img src="/assets/img/${s.photo || 'dekvloer-2'}.jpg" alt="${esc(s.crumb)} door ${site.name}" loading="lazy" width="1200" height="1400"></div>
 </div></section>
-${s.features ? `<section class="paper"><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Waarom kiezen voor</span><h2>${s.featuresTitle}</h2></div>${featureList(s.features)}</div></section>` : ''}
-${(s.sections || []).map((sec, i) => `<section class="${i % 2 ? 'paper' : ''}"><div class="wrap prose reveal" style="max-width:900px">${sec.eyebrow ? `<span class="eyebrow">${sec.eyebrow}</span>` : ''}<h2>${sec.h2}</h2>${sec.html}</div></section>`).join('')}
-${s.slug === 'zandcement' ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Opbouw</span><h2>Zo ligt uw <span class="accent">vloer opgebouwd</span></h2></div>${buildUp()}</div></section>` : ''}
-${s.kb && s.slug === 'cementdekvloer-kosten-per-m2' ? `<section class="dark"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Prijscalculator</span><h2>Reken het <span class="accent">zelf uit</span></h2></div>${calculator()}</div></section>` : ''}
-${s.showOptions ? `<section class="dark"><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Maatwerk opties</span><h2>Extra opties <span class="accent">voor uw dekvloer</span></h2><p class="lead">Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.</p></div>${optionCards(OPTIONS)}</div></section>` : ''}
-${s.faq ? `<section><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Veelgestelde vragen</span><h2>${s.faqTitle || 'Vragen over ' + s.crumb.toLowerCase()}</h2></div>${faqHtml(s.faq)}</div></section>` : ''}
-${s.related ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Lees ook</span><h2>Meer over dekvloeren</h2></div><div class="cards light-cards">${s.related.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('arrow')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>` : ''}
+${s.features ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>${s.featuresTitle}</h2></div>${featureList(s.features)}</div></section>` : ''}
+${(s.sections || []).map((sec, i) => `<section class="${i % 2 ? 'paper' : ''}"><div class="wrap prose reveal" style="max-width:900px">${sec.eyebrow ? `` : ''}<h2>${sec.h2}</h2>${sec.html}</div></section>`).join('')}
+${s.slug === 'zandcement' ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Zo ligt uw vloer opgebouwd</h2></div>${buildUp()}</div></section>` : ''}
+${s.kb && s.slug === 'cementdekvloer-kosten-per-m2' ? `<section class="dark"><div class="wrap"><div class="sec-head reveal"><h2>Reken het zelf uit</h2></div>${calculator()}</div></section>` : ''}
+${s.showOptions ? `<section class="dark"><div class="wrap"><div class="sec-head reveal"><h2>Extra opties voor uw dekvloer</h2><p class="lead">Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.</p></div>${optionCards(OPTIONS)}</div></section>` : ''}
+${s.faq ? `<section><div class="wrap"><div class="sec-head reveal"><h2>${s.faqTitle || 'Vragen over ' + s.crumb.toLowerCase()}</h2></div>${faqHtml(s.faq)}</div></section>` : ''}
+${s.related ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Meer over dekvloeren</h2></div><div class="cards light-cards">${s.related.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('arrow')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>` : ''}
 ${cta()}`;
   return page({
     path: `/${s.slug}`, active: s.slug === 'zandcement' ? '/zandcement' : (s.kb ? undefined : 'dienst'),
@@ -175,16 +172,16 @@ const KB_LINKS = [
 
 export const SERVICE_DEFS = [
   {
-    slug: 'zandcement', crumb: 'Zandcement dekvloeren', h1: 'Zandcement dekvloeren: <span class="accent">de perfecte basis</span>',
+    slug: 'zandcement', crumb: 'Zandcement dekvloeren', h1: 'Zandcement dekvloeren: de perfecte basis',
     title: 'Zandcement dekvloer | Prijs, dikte en droogtijd | Dekvloerexpert',
     description: `Alles over de zandcement dekvloer: opbouw, dikte, droogtijd en kosten (vanaf ca. ${euro(site.price.base5cm[0])} per m²). Kaarsrecht gelegd door heel Nederland. Vraag een vrijblijvende offerte aan.`,
     lead: 'Een strakke, duurzame en kaarsrechte vloer begint bij de basis. Wij leggen zandcement dekvloeren voor nieuwbouw, utiliteit en renovatie, door heel Nederland.',
-    eyebrow: 'Onze hoofddienst', h2: 'Zandcement dekvloeren <span class="accent">van topkwaliteit</span>',
+    eyebrow: 'Onze hoofddienst', h2: 'Zandcement dekvloeren van topkwaliteit',
     intro: [
       'Een zandcement dekvloer, ook wel cementdekvloer of zand-cementvloer genoemd, is een mengsel van zand, cement en water dat we als laag over de constructievloer aanbrengen. Hij maakt de vloer vlak en waterpas, zodat er tegels, pvc, laminaat, parket of een gietvloer op kan.',
       'We maken de mortel met een mixer, pompen hem door een slang naar de juiste ruimte en reien hem af op hoogte. Daarna wordt het oppervlak verdicht en glad afgewerkt. Het resultaat is een sterke, vochtbestendige vloer die tientallen jaren meegaat.',
     ],
-    featuresTitle: 'Waarom <span class="accent">zandcement?</span>',
+    featuresTitle: 'Waarom zandcement?',
     features: [
       ['flame', 'Ideaal met vloerverwarming', 'Zandcement geleidt warmte goed en is perfect te combineren met vloerverwarming.'],
       ['shield', 'Sterk en duurzaam', 'Hoge druk- en buigtreksterkte, afgestemd op het gebruik van de ruimte.'],
@@ -208,11 +205,11 @@ export const SERVICE_DEFS = [
     related: KB_LINKS.slice(0, 3), link: ['/offerte', 'Vraag een vrijblijvende offerte aan'],
   },
   {
-    slug: 'anhydrietvloeren', crumb: 'Anhydrietvloeren', h1: 'Anhydrietvloeren: <span class="accent">vloeibaar en vlak</span>',
+    slug: 'anhydrietvloeren', crumb: 'Anhydrietvloeren', h1: 'Anhydrietvloeren: vloeibaar en vlak',
     title: 'Anhydriet gietvloer laten leggen | Dekvloerexpert',
     description: 'Anhydriet dekvloer laten storten? Vloeibaar, zelfnivellerend en ideaal met vloerverwarming. Lees het verschil met zandcement en vraag een vrijblijvende offerte aan.',
     lead: 'Een vloeibare dekvloer die zichzelf egaliseert, dunner kan dan zandcement en vloerverwarming optimaal omsluit.',
-    eyebrow: 'Dienst', h2: 'Wat is een <span class="accent">anhydrietvloer?</span>',
+    eyebrow: 'Dienst', h2: 'Wat is een anhydrietvloer?',
     intro: [
       'Anhydriet is een dekvloer op basis van calciumsulfaat. Hij wordt vloeibaar gestort en vloeit zelf uit tot een vlakke laag. Daardoor omsluit hij leidingen van vloerverwarming helemaal, zonder luchtinsluitingen.',
       'Omdat de vloer dunner kan, blijft er meer hoogte over en reageert de vloerverwarming sneller. Anhydriet is wel gevoeliger voor vocht. In badkamers en garages kiezen we daarom meestal voor zandcement.',
@@ -222,11 +219,11 @@ export const SERVICE_DEFS = [
     link: ['/zandcement', 'Vergelijk met zandcement'],
   },
   {
-    slug: 'vloerverwarming', crumb: 'Vloerverwarming', h1: 'Vloerverwarming <span class="accent">in één pakket</span>',
+    slug: 'vloerverwarming', crumb: 'Vloerverwarming', h1: 'Vloerverwarming in één pakket',
     title: 'Vloerverwarming en dekvloer in één pakket | Dekvloerexpert',
     description: 'Vloerverwarming laten aanleggen samen met uw zandcement dekvloer: één planning, één aanspreekpunt. Inclusief krimpnetten en opstookprotocol.',
     lead: 'Uw woning verduurzamen en klaarmaken voor de toekomst is een slimme investering. Wij maken het proces zo eenvoudig mogelijk voor u.',
-    eyebrow: 'Extra service', h2: 'Vloerverwarming <span class="accent">in één pakket</span>', photo: 'project-4',
+    eyebrow: 'Extra service', h2: 'Vloerverwarming in één pakket', photo: 'project-4',
     intro: [
       'Uw woning verduurzamen en klaarmaken voor de toekomst is een slimme investering. Wij maken het proces zo eenvoudig mogelijk voor u.',
       'Als extra service regelen wij dit samen met uw dekvloer, zodat u alles in één pakket heeft, met één aanspreekpunt. De leidingen worden op isolatie of op tackerplaten gelegd, afgeperst, en daarna direct afgedekt met de dekvloer.',
@@ -236,45 +233,45 @@ export const SERVICE_DEFS = [
     faq: [['Wanneer mag de vloerverwarming aan?', 'Bij zandcement meestal na zo\'n 3 weken, en dan volgens een opstookprotocol: rustig opbouwen en weer afbouwen. Zo voorkomt u scheuren.'], ['Is zandcement geschikt voor vloerverwarming?', 'Ja, zandcement geleidt warmte goed. Met krimpnetten en de juiste dekking werkt het uitstekend.']],
   },
   {
-    slug: 'egaliseren', crumb: 'Egaliseren', h1: 'Vloer egaliseren: <span class="accent">glad en vlak</span>',
+    slug: 'egaliseren', crumb: 'Egaliseren', h1: 'Vloer egaliseren: glad en vlak',
     title: 'Vloer laten egaliseren | Dekvloerexpert',
     description: 'Vloer laten egaliseren voor pvc, laminaat of een gietvloer. Een egalisatielaag maakt een dekvloer of betonvloer glad en vlak. Vraag een prijsopgave aan.',
     lead: 'Een egalisatielaag maakt de ondergrond spiegelglad, de perfecte basis voor pvc, laminaat, linoleum of een gietvloer.',
-    eyebrow: 'Dienst', h2: 'Wanneer <span class="accent">egaliseren?</span>',
+    eyebrow: 'Dienst', h2: 'Wanneer egaliseren?',
     intro: ['Pvc en andere dunne vloeren tonen elke oneffenheid van de ondergrond. Een egalisatielaag van een paar millimeter vult kleine putjes en naden op en maakt de vloer glad.', 'We egaliseren nieuwe zandcement dekvloeren, oude betonvloeren en tegelvloeren. Waar nodig schuren en primeren we eerst, voor een goede hechting.'],
     faq: [['Hoe dik is een egalisatielaag?', 'Meestal 2 tot 10 millimeter. Voor grotere hoogteverschillen is een dekvloer de betere oplossing.'], ['Hoe snel kan ik verder na het egaliseren?', 'Lopen kan vaak na een paar uur. Voor de afwerking hangt het af van de dikte en het product; reken op een à een paar dagen.']],
   },
   {
-    slug: 'beton-en-fundering', crumb: 'Beton & Fundering', h1: 'Beton &amp; fundering: <span class="accent">een sterke basis</span>',
+    slug: 'beton-en-fundering', crumb: 'Beton & Fundering', h1: 'Beton &amp; fundering: een sterke basis',
     title: 'Beton en fundering storten | Dekvloerexpert',
     description: 'Betonvloeren en funderingen storten voor aanbouw, garage of bedrijfspand. Inclusief wapening en bekisting. Vraag een vrijblijvende offerte aan.',
     lead: 'Funderingen, betonvloeren en ondervloeren voor aanbouwen, garages en bedrijfspanden. Met wapening, bekisting en een strakke afwerking.',
-    eyebrow: 'Dienst', h2: 'Van fundering <span class="accent">tot afgewerkte vloer</span>',
+    eyebrow: 'Dienst', h2: 'Van fundering tot afgewerkte vloer',
     intro: ['Een goede vloer begint bij een goede ondergrond. Voor aanbouwen, garages en bedrijfsruimtes storten we funderingsstroken, poeren en betonvloeren volgens de constructieberekening.', 'Omdat we ook de dekvloer leggen, sluiten de stappen naadloos op elkaar aan, met één planning en één aanspreekpunt.'],
   },
   {
-    slug: 'schuimbeton', crumb: 'Schuimbeton', h1: 'Schuimbeton: <span class="accent">licht en isolerend</span>',
+    slug: 'schuimbeton', crumb: 'Schuimbeton', h1: 'Schuimbeton: licht en isolerend',
     title: 'Schuimbeton storten | Dekvloerexpert',
     description: 'Schuimbeton als lichte, isolerende ondervloer: ideaal om leidingen weg te werken en hoogte op te vullen. Snel aangebracht en direct vlak.',
     lead: 'Een lichte, vloeibare vulling die leidingen wegwerkt, hoogte opvult en tegelijk isoleert.',
-    eyebrow: 'Dienst', h2: 'Waarom <span class="accent">schuimbeton?</span>',
+    eyebrow: 'Dienst', h2: 'Waarom schuimbeton?',
     intro: ['Schuimbeton is beton met veel kleine luchtbellen. Daardoor is het licht en isolerend. Het is ideaal om leidingen weg te werken of een grote hoogte op te vullen, zonder de constructie zwaar te belasten.', 'Op de schuimbetonlaag leggen we daarna de zandcement dekvloer. Zo ontstaat een complete vloeropbouw in één traject.'],
   },
   {
-    slug: 'heipalen', crumb: 'Heipalen', h1: 'Heipalen: <span class="accent">stevig gefundeerd</span>',
+    slug: 'heipalen', crumb: 'Heipalen', h1: 'Heipalen: stevig gefundeerd',
     title: 'Heipalen voor aanbouw en nieuwbouw | Dekvloerexpert',
     description: 'Heipalen of schroefpalen voor uw aanbouw of nieuwbouw, in samenwerking met gespecialiseerde partners. Eén aanspreekpunt van fundering tot dekvloer.',
     lead: 'Op slappe grond is een paalfundering onmisbaar. Wij regelen het heiwerk samen met gespecialiseerde partners, met één aanspreekpunt.',
-    eyebrow: 'Dienst', h2: 'Fundering <span class="accent">op palen</span>',
+    eyebrow: 'Dienst', h2: 'Fundering op palen',
     intro: ['In grote delen van Nederland is de bovengrond te slap om direct op te bouwen. Dan zijn heipalen of trillingsvrije schroefpalen nodig om de belasting naar de draagkrachtige zandlaag te brengen.', 'Wij coördineren het heiwerk, de fundering en de vloer, zodat u maar één partij aan de lijn hoeft te hebben.'],
   },
   // Kennisbank (zoekwoorden uit de klantlijst)
   {
-    kb: true, slug: 'cementdekvloer-kosten-per-m2', crumb: 'Cementdekvloer kosten per m²', h1: 'Cementdekvloer <span class="accent">kosten per m²</span>',
+    kb: true, slug: 'cementdekvloer-kosten-per-m2', crumb: 'Cementdekvloer kosten per m²', h1: 'Cementdekvloer kosten per m²',
     title: 'Cementdekvloer kosten per m² (2026) | Rekenvoorbeelden',
     description: `Wat kost een cementdekvloer per m²? Gemiddeld ${p5} voor 5 cm, inclusief materiaal en aanbrengen. Rekenvoorbeelden voor uitbouw, woning en bedrijfshal.`,
     lead: 'Wat kost een zandcement dekvloer, en waar hangt de prijs van af? Met rekenvoorbeelden voor de meest voorkomende situaties.',
-    eyebrow: 'Kennisbank', h2: 'Gemiddeld <span class="accent">' + p5 + ' per m²</span>',
+    eyebrow: 'Kennisbank', h2: 'Gemiddeld ' + p5 + ' per m²',
     intro: [`Voor een standaard zandcement dekvloer van 5 cm rekent u op ongeveer ${p5} per m², inclusief materiaal en aanbrengen, exclusief btw. Elke extra centimeter kost ongeveer ${euro(site.price.perExtraCm[0])} à ${euro(site.price.perExtraCm[1])} per m² extra.`, 'Hoe groter de vloer, hoe lager de prijs per m²: de opbouw van mixer en pomp kost bij een kleine vloer naar verhouding meer tijd.'],
     sections: [
       { h2: 'Rekenvoorbeelden', html: priceTable([['Badkamer', 8, 5], ['Uitbouw', 20, 6], ['Begane grond woning', 55, 6], ['Hele woning, 2 lagen', 110, 6], ['Kantoor', 250, 6], ['Bedrijfshal', 800, 8]]) },
@@ -283,11 +280,11 @@ export const SERVICE_DEFS = [
     related: KB_LINKS.filter(l => l[0] !== '/cementdekvloer-kosten-per-m2').slice(0, 3),
   },
   {
-    kb: true, slug: 'cementdekvloer-droogtijd', crumb: 'Droogtijd cementdekvloer', h1: 'Droogtijd <span class="accent">cementdekvloer</span>',
+    kb: true, slug: 'cementdekvloer-droogtijd', crumb: 'Droogtijd cementdekvloer', h1: 'Droogtijd cementdekvloer',
     title: 'Droogtijd cementdekvloer: hoe lang moet hij drogen? | Dekvloerexpert',
     description: 'De droogtijd van een cementdekvloer: een week per cm tot 4 cm, daarna twee weken per cm. Met een droogtijdversneller in 10 tot 15 dagen legklaar.',
     lead: 'Hoe lang moet een cementdekvloer drogen voordat u kunt tegelen, pvc kunt leggen of parket kunt plaatsen?',
-    eyebrow: 'Kennisbank', h2: 'De <span class="accent">vuistregel</span>',
+    eyebrow: 'Kennisbank', h2: 'De vuistregel',
     intro: ['Een zandcement dekvloer droogt ongeveer één week per centimeter, tot een dikte van 4 cm. Daarboven gaat het drogen langzamer: reken op twee weken voor elke extra centimeter.', 'Een veelvoorkomende vloer van 6 cm heeft dus zo\'n acht weken nodig voordat hij droog genoeg is voor een vochtgevoelige afwerking.'],
     sections: [
       { h2: 'Droogtijd per dikte', html: dryTable() },
@@ -297,11 +294,11 @@ export const SERVICE_DEFS = [
     related: KB_LINKS.filter(l => l[0] !== '/cementdekvloer-droogtijd').slice(0, 3),
   },
   {
-    kb: true, slug: 'zandcement-dekvloer-zelf-maken', crumb: 'Zandcement dekvloer zelf maken', h1: 'Zandcement dekvloer <span class="accent">zelf maken?</span>',
+    kb: true, slug: 'zandcement-dekvloer-zelf-maken', crumb: 'Zandcement dekvloer zelf maken', h1: 'Zandcement dekvloer zelf maken?',
     title: 'Zandcement dekvloer zelf maken: mengverhouding en tips | Dekvloerexpert',
     description: 'Zelf een zandcement dekvloer maken? Mengverhouding 1:4 à 1:5, benodigdheden, stappenplan en de valkuilen. Plus: wanneer uitbesteden goedkoper is.',
     lead: 'Een kleine vloer zelf leggen kan. Hier leest u hoe, en waar het in de praktijk vaak misgaat.',
-    eyebrow: 'Kennisbank', h2: 'Zo pakt u het <span class="accent">aan</span>',
+    eyebrow: 'Kennisbank', h2: 'Zo pakt u het aan',
     intro: ['Voor een zandcement dekvloer heeft u scherp zand, cement (meestal CEM III of CEM I) en water nodig, in een mengverhouding van ongeveer 1 deel cement op 4 à 5 delen zand. De specie moet "aardvochtig" zijn: als u er een bal van knijpt, blijft hij heel zonder dat er water uitloopt.', 'Het lastigste is niet het mengen, maar het vlak krijgen. U werkt met afreilatten op hoogte, verdicht de specie goed en strijkt het oppervlak glad, en dat allemaal voordat de specie begint uit te harden.'],
     sections: [
       { h2: 'Stappenplan', html: '<ol><li>Ondergrond schoonmaken; bij een hechtende vloer primen.</li><li>Randisolatie langs de wanden aanbrengen.</li><li>Hoogtepunten uitzetten met een laser of waterpas.</li><li>Specie mengen in de juiste verhouding.</li><li>In vakken storten, verdichten en afreien over de latten.</li><li>Oppervlak glad schuren en de eerste dagen beschermen tegen uitdrogen.</li></ol>' },
@@ -310,20 +307,20 @@ export const SERVICE_DEFS = [
     related: KB_LINKS.filter(l => l[0] !== '/zandcement-dekvloer-zelf-maken').slice(0, 3),
   },
   {
-    kb: true, slug: 'vloeibaar-zandcement', crumb: 'Vloeibaar zandcement', h1: 'Vloeibaar <span class="accent">zandcement?</span>',
+    kb: true, slug: 'vloeibaar-zandcement', crumb: 'Vloeibaar zandcement', h1: 'Vloeibaar zandcement?',
     title: 'Vloeibaar zandcement: bestaat het? | Gietdekvloer vs zandcement',
     description: 'Vloeibaar zandcement bestaat als cementgebonden gietdekvloer. Wat is het verschil met traditioneel zandcement en anhydriet, en wanneer kiest u wat?',
     lead: 'Traditioneel zandcement is aardvochtig, maar er bestaan ook vloeibare, cementgebonden gietdekvloeren. Wat is het verschil?',
-    eyebrow: 'Kennisbank', h2: 'Aardvochtig of <span class="accent">vloeibaar</span>',
+    eyebrow: 'Kennisbank', h2: 'Aardvochtig of vloeibaar',
     intro: ['Een klassieke zandcement dekvloer is aardvochtig: hij wordt gepompt, uitgespreid en met de hand afgereid. Een vloeibare cementgebonden dekvloer (ook wel cementgebonden gietvloer genoemd) vloeit zelf uit, net als anhydriet, maar is op basis van cement en dus beter bestand tegen vocht.', 'Vloeibare varianten zijn sneller aan te brengen op grote vlakken en omsluiten vloerverwarming volledig. Ze zijn wel duurder per m². Voor de meeste woningen is traditioneel zandcement nog altijd de voordeligste en meest robuuste keuze.'],
     related: [['/anhydrietvloeren', 'Anhydrietvloeren', 'De bekendste vloeibare dekvloer.'], ['/zandcement', 'Zandcement', 'De klassieke, robuuste dekvloer.'], ['/cementdekvloer-droogtijd', 'Droogtijd', 'Hoe lang drogen de verschillende vloeren?']],
   },
   {
-    kb: true, slug: 'cement-dekvloer', crumb: 'Cementdekvloer', h1: 'Cementdekvloer: <span class="accent">wat is het precies?</span>',
+    kb: true, slug: 'cement-dekvloer', crumb: 'Cementdekvloer', h1: 'Cementdekvloer: wat is het precies?',
     title: 'Cementdekvloer, zandcement of zand-cementvloer: wat is wat?',
     description: 'Cementdekvloer, zandcement dekvloer, cement dekvloer of zand cement vloer: allemaal hetzelfde. Lees wat het is, waar het voor dient en wat het kost.',
     lead: 'Cementdekvloer, zandcement dekvloer, zand-cementvloer of cement dekvloer: verschillende woorden voor dezelfde vloer.',
-    eyebrow: 'Kennisbank', h2: 'Eén vloer, <span class="accent">veel namen</span>',
+    eyebrow: 'Kennisbank', h2: 'Eén vloer, veel namen',
     intro: ['Een cementdekvloer is een laag zand en cement die over de constructievloer wordt aangebracht. Hij maakt de ondergrond vlak en op de juiste hoogte, zodat de eindafwerking er strak op ligt. In de bouw heet hij ook wel zandcement dekvloer, zand-cementvloer of afwerkvloer.', 'De vloer is sterk, vochtbestendig en past goed bij vloerverwarming. Daardoor is hij in Nederland veruit de meest gebruikte dekvloer in woningen en bedrijfspanden.'],
     related: KB_LINKS.filter(l => l[0] !== '/cement-dekvloer').slice(0, 3),
   },
@@ -343,16 +340,16 @@ export const services = ctx => SERVICE_DEFS.map(s => [s.slug, servicePage(ctx, s
 export function dienstenOverview(ctx) {
   const crumbs = [['/', 'Home'], ['/diensten', 'Diensten']];
   const desc = Object.fromEntries(SERVICE_DEFS.map(s => [s.slug, s.lead]));
-  const body = `${hero({ crumbs, h1: 'Alle <span class="accent">diensten</span>', lead: 'Van fundering tot legklare vloer: alles onder één dak, met één aanspreekpunt.' })}
+  const body = `${hero({ crumbs, h1: 'Alle diensten', lead: 'Van fundering tot legklare vloer: alles onder één dak, met één aanspreekpunt.' })}
 <section class="paper"><div class="wrap"><div class="cards light-cards">${SERVICES.map(s => `<a class="card reveal" href="/${s.slug}"><span class="ck">${icon(s.icon)}</span><div><h3>${s.nav}</h3><p>${esc(desc[s.slug])}</p></div></a>`).join('')}</div></div></section>
-<section><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Kennisbank</span><h2>Veelgezocht</h2></div><div class="cards light-cards">${KB_LINKS.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('info')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>
+<section><div class="wrap"><div class="sec-head reveal"><h2>Veelgezocht</h2></div><div class="cards light-cards">${KB_LINKS.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('info')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>
 ${cta()}`;
   return page({ path: '/diensten', active: 'dienst', title: 'Diensten: dekvloeren, vloerverwarming en meer | Dekvloerexpert', description: 'Zandcement- en anhydrietvloeren, vloerverwarming, egaliseren, beton en fundering, schuimbeton en heipalen. Alles onder één dak.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
 }
 
 export function kennisbank(ctx) {
   const crumbs = [['/', 'Home'], ['/kennisbank', 'Kennisbank']];
-  const body = `${hero({ crumbs, h1: 'Kennis<span class="accent">bank</span>', lead: 'Antwoorden op de vragen die we het vaakst krijgen: over kosten, droogtijd, dikte en zelf doen.' })}
+  const body = `${hero({ crumbs, h1: 'Kennisbank', lead: 'Antwoorden op de vragen die we het vaakst krijgen: over kosten, droogtijd, dikte en zelf doen.' })}
 <section class="paper"><div class="wrap"><div class="cards light-cards">${KB_LINKS.map(([h, t, d]) => `<a class="card reveal" href="${h}"><span class="ck">${icon('info')}</span><div><h3>${t}</h3><p>${d}</p></div></a>`).join('')}</div></div></section>${cta()}`;
   return page({ path: '/kennisbank', title: 'Kennisbank dekvloeren: kosten, droogtijd en tips | Dekvloerexpert', description: 'Alles over de zandcement dekvloer: kosten per m², droogtijd, zelf maken, vloeibaar zandcement en meer.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
 }
@@ -360,14 +357,14 @@ export function kennisbank(ctx) {
 // ───────────────────────── Opties
 export function opties(ctx) {
   const crumbs = [['/', 'Home'], ['/opties', 'Opties']];
-  const body = `${hero({ crumbs, h1: 'Extra opties <span class="accent">voor uw dekvloer</span>', lead: 'Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.', img: '/assets/img/project-3.jpg' })}
+  const body = `${hero({ crumbs, h1: 'Extra opties voor uw dekvloer', lead: 'Elk bouwproject stelt andere eisen aan een vloer. Deze opties bestelt u direct bij ons mee.', img: '/assets/img/project-3.jpg' })}
 <section class="dark"><div class="wrap">
-<div class="sec-head reveal" style="max-width:900px"><span class="eyebrow">Maatwerk opties</span><h2>Maatwerk en extra opties voor uw dekvloer</h2>
+<div class="sec-head reveal" style="max-width:900px"><h2>Maatwerk en extra opties voor uw dekvloer</h2>
 <p class="lead">Elk bouwproject stelt andere eisen aan een vloer. Om te zorgen dat de dekvloer perfect aansluit bij de gewenste droogtijd, vloerdikte en belasting, bieden wij verschillende hoogwaardige opties en toevoegingen aan die u direct bij ons kunt meebestellen.</p></div>
 <div class="opt-cards">${OPTIONS.map(o => `<article class="opt reveal" id="${o.key}"><span class="f-ic">${icon(o.icon)}</span><h3>${o.title}</h3>${o.tag ? `<span class="tag">${o.tag}</span>` : ''}<p>${o.long}</p></article>`).join('')}
 <article class="opt reveal"><span class="f-ic">${icon('info')}</span><h3>Twijfelt u?</h3><p>Kies in het offerteformulier "Graag advies". Dan adviseren wij vooraf welke opties bij uw project zinvol zijn, en welke niet.</p><p><a class="text-link" href="/offerte">Offerte aanvragen ${icon('arrow')}</a></p></article>
 </div></div></section>
-<section><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Advies</span><h2>Welke optie <span class="accent">wanneer?</span></h2></div>
+<section><div class="wrap"><div class="sec-head reveal"><h2>Welke optie wanneer?</h2></div>
 <div class="table-scroll reveal"><table class="ptable"><thead><tr><th>Situatie</th><th>Wij adviseren</th></tr></thead><tbody>
 <tr><td>Vloerverwarming</td><td>Krimpnetten, randisolatie</td></tr>
 <tr><td>Snel opleveren</td><td>Droogtijdversneller of Duremit</td></tr>
@@ -383,10 +380,10 @@ ${cta()}`;
 // ───────────────────────── Projecten
 export function projecten(ctx) {
   const crumbs = [['/', 'Home'], ['/projecten', 'Projecten']];
-  const body = `${hero({ crumbs, h1: 'Van zandaanvoer <span class="accent">tot legklare vloer</span>', lead: 'Nieuwbouw, utiliteit en renovatie: een greep uit ons werk door heel Nederland.', img: '/assets/img/project-5.jpg' })}
+  const body = `${hero({ crumbs, h1: 'Van zandaanvoer tot legklare vloer', lead: 'Nieuwbouw, utiliteit en renovatie: een greep uit ons werk door heel Nederland.', img: '/assets/img/project-5.jpg' })}
 <!-- Voorbeeldprojecten: vervang titels, plaatsen en foto's door echte projecten (src/blocks.mjs). -->
 <section><div class="wrap"><div class="proj-grid">${PROJECTS.map(projectCard).join('')}</div></div></section>
-<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Ons werk</span><h2>Meer foto's van ons werk</h2></div>
+<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Meer foto's van ons werk</h2></div>
 ${gallery(ctx.media.gallery)}</div></section>
 ${cta()}`;
   return page({ path: '/projecten', active: '/projecten', title: 'Projecten: zandcement dekvloeren in heel Nederland | Dekvloerexpert', description: 'Bekijk onze projecten: kantoren, woningen, bedrijfshallen en renovaties. Zandcement dekvloeren, vloerverwarming en meer.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
@@ -401,9 +398,9 @@ export function werkwijze(ctx) {
     ['Uitvoering volgens planning', 'Op de afgesproken dag komen we met mixer, pomp en een vast team. We zetten de hoogtepunten uit, brengen randisolatie aan, pompen de mortel naar binnen en reien hem kaarsrecht af.'],
     ['Kaarsrecht en legklaar', 'We werken de vloer glad af en laten de werkplek netjes achter. U krijgt droog- en eventueel opstookadvies mee, zodat de vloerenlegger op het juiste moment kan beginnen.'],
   ];
-  const body = `${hero({ crumbs, h1: 'Van eerste contact <span class="accent">tot legklare vloer</span>', lead: 'Heldere communicatie en transparante, eerlijke prijzen. Zo werken wij.' })}
+  const body = `${hero({ crumbs, h1: 'Van eerste contact tot legklare vloer', lead: 'Heldere communicatie en transparante, eerlijke prijzen. Zo werken wij.' })}
 <section><div class="wrap">${stepsHtml(detail)}</div></section>
-<section class="paper"><div class="wrap split"><div class="reveal prose"><span class="eyebrow">Voorbereiding</span><h2>Wat wij van u <span class="accent">nodig hebben</span></h2>
+<section class="paper"><div class="wrap split"><div class="reveal prose"><h2>Wat wij van u nodig hebben</h2>
 <ul><li>Een lege, bezemschone ruimte</li><li>Water en stroom in de buurt</li><li>Leidingen en eventuele vloerverwarming al gelegd</li><li>Een plek voor de mixer, zo dicht mogelijk bij de woning</li></ul>
 <p>Al het andere nemen wij mee: materiaal, randisolatie, folie en gereedschap.</p></div>
 <div class="photo wide reveal"><img src="/assets/img/project-2.jpg" alt="Voorbereiding van een dekvloer met vloerverwarming" loading="lazy"></div></div></section>
@@ -414,8 +411,8 @@ ${cta()}`;
 // ───────────────────────── Over ons
 export function overOns(ctx) {
   const crumbs = [['/', 'Home'], ['/over-ons', 'Over ons']];
-  const body = `${hero({ crumbs, h1: 'Over <span class="accent">Dekvloerexpert</span>', lead: 'Specialist in zandcement dekvloeren, voor aannemers en particulieren door heel Nederland.' })}
-<section><div class="wrap split"><div class="reveal prose"><span class="eyebrow">Wie wij zijn</span><h2>Strakke vloeren, <span class="accent">sterke basis</span></h2>
+  const body = `${hero({ crumbs, h1: 'Over Dekvloerexpert', lead: 'Specialist in zandcement dekvloeren, voor aannemers en particulieren door heel Nederland.' })}
+<section><div class="wrap split"><div class="reveal prose"><h2>Strakke vloeren, sterke basis</h2>
 <p>Dekvloerexpert legt zandcement dekvloeren voor nieuwbouw, renovatie en utiliteit. We werken met eigen mixers, pompen en een vast team, zodat we de kwaliteit en de planning in eigen hand houden.</p>
 <p>Voor aannemers zijn we een betrouwbare schakel in de bouwplanning. Voor particulieren nemen we de zorg voor de vloer volledig uit handen: van advies over dikte en opties tot een vloer die kaarsrecht en legklaar wordt opgeleverd.</p></div>
 <div class="photo reveal"><img src="/assets/img/dekvloer-2.jpg" alt="Team van Dekvloerexpert aan het werk" loading="lazy"></div></div></section>
@@ -431,7 +428,7 @@ export function offerte(ctx) {
   const grp = (label, inner, req = true, name = '') => `<div class="fgroup" data-group="${name}"><span class="flabel">${label}${req ? ' <span class="req">*</span>' : ''}</span>${inner}<p class="err">Maak een keuze.</p></div>`;
   const body = `<section class="hero sub" style="padding-bottom:80px;background:radial-gradient(60% 120% at 20% 100%,rgba(20,168,138,.25),transparent 60%),#0b0e0d;min-height:0"><div class="wrap"><div class="hero-inner">
 <ol class="crumbs"><li><a href="/">Home</a></li><li aria-current="page">Offerte aanvragen</li></ol>
-<h1>Offerte <span class="accent">aanvragen</span></h1>
+<h1>Offerte aanvragen</h1>
 <p class="lead">Vraag een scherpe, vrijblijvende prijsopgave aan. Vul in wat u weet; wat nog niet bekend is, bespreken we samen.</p></div></div></section>
 <section class="paper" style="padding-top:70px"><div class="wrap offer-layout">
 <form class="form-card" id="offerForm" novalidate data-endpoint="${esc(site.formEndpoint)}" data-wa="${site.whatsapp}">
@@ -477,23 +474,23 @@ ${chips('opties', ['Droogtijdversneller', 'Verharder', 'Krimpvezels', 'Duremit',
 // ───────────────────────── Contact
 export function contact(ctx) {
   const crumbs = [['/', 'Home'], ['/contact', 'Contact']];
-  const body = `${hero({ crumbs, h1: 'Neem <span class="accent">contact</span> op', lead: 'Bel, app of mail ons. Of vraag direct een vrijblijvende offerte aan.', buttons: `<div class="btn-row"><a class="btn btn-teal" href="/offerte">Offerte aanvragen ${icon('arrow')}</a><a class="btn btn-wa" href="${wa()}" target="_blank" rel="noopener">${waIcon} WhatsApp</a></div>` })}
+  const body = `${hero({ crumbs, h1: 'Neem contact op', lead: 'Bel, app of mail ons. Of vraag direct een vrijblijvende offerte aan.', buttons: `<div class="btn-row"><a class="btn btn-teal" href="/offerte">Offerte aanvragen ${icon('arrow')}</a><a class="btn btn-wa" href="${wa()}" target="_blank" rel="noopener">${waIcon} WhatsApp</a></div>` })}
 <section class="paper"><div class="wrap split"><div class="reveal">
-<span class="eyebrow">Direct contact</span><h2>Wij denken graag <span class="accent">met u mee</span></h2>
+<h2>Wij denken graag met u mee</h2>
 <ul class="contact-list">
 <li><span class="f-ic">${icon('phone')}</span><span><a href="${tel}">${site.phoneDisplay}</a><small>Bellen of sms'en</small></span></li>
 <li><span class="f-ic">${waIcon}</span><span><a href="${wa()}" target="_blank" rel="noopener">WhatsApp</a><small>Stuur foto's of een plattegrond mee</small></span></li>
 <li><span class="f-ic">${icon('mail')}</span><span><a href="mailto:${site.email}">${site.email}</a><small>Voor tekeningen en bestekken</small></span></li>
 <li><span class="f-ic">${icon('pin')}</span><span><a href="/werkgebied">Heel Nederland</a><small>Bekijk ons werkgebied</small></span></li>
 </ul></div>
-<div class="dc reveal"><h3>Snel een prijs?</h3><p style="color:var(--muted-d)">Stuur via WhatsApp de oppervlakte, de gewenste dikte, uw postcode en een foto van de ruimte. Dan krijgt u meestal dezelfde dag een eerste indicatie.</p><a class="btn btn-wa" href="${wa('Hallo, ik wil graag een prijsindicatie voor een dekvloer. Oppervlakte: … m², dikte: … cm, postcode: …')}" target="_blank" rel="noopener">${waIcon} Start WhatsApp</a></div>
+<div class="dc reveal"><h3>Snel een prijs?</h3><p style="color:var(--muted-d)">Stuur via WhatsApp de oppervlakte, de gewenste dikte, uw postcode en een foto van de ruimte. Dan sturen we u zo snel mogelijk een eerste indicatie.</p><a class="btn btn-wa" href="${wa('Hallo, ik wil graag een prijsindicatie voor een dekvloer. Oppervlakte: … m², dikte: … cm, postcode: …')}" target="_blank" rel="noopener">${waIcon} Start WhatsApp</a></div>
 </div></section>${cta()}`;
   return page({ path: '/contact', active: '/contact', title: 'Contact | Dekvloerexpert', description: `Contact met Dekvloerexpert: bel ${site.phoneDisplay}, stuur een WhatsApp of vraag online een vrijblijvende offerte aan voor uw dekvloer.`, body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
 }
 
 export function privacy(ctx) {
   const crumbs = [['/', 'Home'], ['/privacy', 'Privacy']];
-  const body = `${hero({ crumbs, h1: 'Privacy<span class="accent">verklaring</span>', lead: 'Hoe wij omgaan met de gegevens die u ons stuurt.', buttons: '' })}
+  const body = `${hero({ crumbs, h1: 'Privacyverklaring', lead: 'Hoe wij omgaan met de gegevens die u ons stuurt.', buttons: '' })}
 <section><div class="wrap prose" style="max-width:860px">
 <p>${site.name} gebruikt de gegevens die u via het offerteformulier, WhatsApp, e-mail of telefoon doorgeeft alleen om uw aanvraag te behandelen en een offerte uit te brengen. We delen ze niet met derden, behalve als dat nodig is voor de uitvoering van de opdracht (bijvoorbeeld met een leverancier) of wettelijk verplicht is.</p>
 <p>We bewaren offerteaanvragen niet langer dan nodig, en facturen zo lang als de wet voorschrijft. U kunt altijd vragen welke gegevens wij van u hebben, en vragen om ze aan te passen of te verwijderen: mail naar <a href="mailto:${site.email}">${site.email}</a>.</p>
@@ -503,6 +500,6 @@ export function privacy(ctx) {
 }
 
 export function notFound(ctx) {
-  const body = `${hero({ h1: 'Pagina <span class="accent">niet gevonden</span>', lead: 'Deze pagina bestaat niet (meer). Zoekt u een plaats? Bekijk dan ons werkgebied.', buttons: `<div class="btn-row"><a class="btn btn-teal" href="/werkgebied">Naar werkgebied ${icon('arrow')}</a><a class="btn btn-ghost" href="/">Naar home</a></div>` })}`;
+  const body = `${hero({ h1: 'Pagina niet gevonden', lead: 'Deze pagina bestaat niet (meer). Zoekt u een plaats? Bekijk dan ons werkgebied.', buttons: `<div class="btn-row"><a class="btn btn-teal" href="/werkgebied">Naar werkgebied ${icon('arrow')}</a><a class="btn btn-ghost" href="/">Naar home</a></div>` })}`;
   return page({ path: '/404', title: 'Pagina niet gevonden | Dekvloerexpert', description: 'Deze pagina bestaat niet.', body, noindex: true, footerPlaces: ctx.footerPlaces });
 }
