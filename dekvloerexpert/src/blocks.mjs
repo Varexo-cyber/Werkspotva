@@ -28,7 +28,7 @@ export const STEPS = [
 ];
 export const stepsHtml = (steps = STEPS) => `<div class="steps">${steps.map(([t, d], i) => `<div class="step reveal"><div class="num">${String(i + 1).padStart(2, '0')}</div><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;
 
-export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="cards">${opts.map(o => `<div class="card reveal"><span class="ck">${icon('check')}</span><div><h3>${o.alt || o.title}</h3><p>${o.short}</p></div></div>`).join('')}${withLink ? `<a class="card link reveal" href="/opties"><div><h3>Alles over de opties</h3><p>Uitleg per optie en wanneer u hem kiest.</p></div><span class="arrow">${icon('arrow')}</span></a>` : ''}</div>`;
+export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="cards">${opts.map(o => `<div class="card reveal"><div><h3>${o.alt || o.title}</h3><p>${o.short}</p></div></div>`).join('')}${withLink ? `<a class="card link reveal" href="/opties"><div><h3>Alles over de opties</h3><p>Uitleg per optie en wanneer u hem kiest.</p></div><span class="arrow">${icon('arrow')}</span></a>` : ''}</div>`;
 
 // Voorbeeldreviews, net als in de demo duidelijk gemarkeerd als voorbeeld.
 // Vervang ze door echte Google-reviews zodra het bedrijfsprofiel gekoppeld is.
@@ -41,13 +41,12 @@ const REVIEWS = [
   ['Snel geschakeld en de afspraken nagekomen, precies volgens planning.', 'Nieuwbouw'],
 ];
 const reviewCard = ([q, t]) => `<article class="review"><div class="r-top"><span class="r-av">G</span><div><b>Klant via Google</b><span class="stars" aria-label="5 sterren">★★★★★</span></div><span class="r-tag">Voorbeeld</span></div><q>${esc(q)}</q><small>${esc(t)}</small></article>`;
-export const reviewsSection = () => `<section class="dark" id="reviews"><div class="wrap center">
+export const reviewsSection = () => `<section class="dark" id="reviews"><div class="wrap">
 <a class="gbadge" href="${site.googleReviewsUrl || '#reviews'}"${site.googleReviewsUrl ? ' target="_blank" rel="noopener"' : ''}>${googleWord}<span class="stars">★★★★★</span>Reviews</a>
-<h2>Wat onze klanten <span class="accent">zeggen</span></h2>
+<h2>Reviews</h2>
 <p class="lead">Voorbeeldweergave: zodra uw Google Bedrijfsprofiel is gekoppeld, verschijnen hier automatisch de echte beoordelingen van uw klanten.</p>
 </div>
-<div class="marquee"><div class="track">${[...REVIEWS, ...REVIEWS].map(reviewCard).join('')}</div></div>
-<div class="marquee" style="margin-top:0"><div class="track rev">${[...REVIEWS.slice(3), ...REVIEWS.slice(0, 3), ...REVIEWS.slice(3), ...REVIEWS.slice(0, 3)].map(reviewCard).join('')}</div></div>
+<div class="wrap"><div class="rev-grid">${REVIEWS.slice(0, 3).map(reviewCard).join('')}</div></div>
 </section>`;
 
 // Voorbeeldprojecten uit de demo. Vervang foto's in public/assets/img/ en pas teksten hier aan.
@@ -70,6 +69,7 @@ export const featureList = items => `<div class="features">${items.map(([ic, t, 
 
 // Zoekwoorden-band onder de hero (uit de klantlijst).
 const KEYWORDS = ['Zandcement dekvloer', 'Cementdekvloer', 'Zand-cementvloer', 'Vloerverwarming', 'Anhydriet', 'Egaliseren', 'Krimpnetten', 'Droogtijdversneller', 'Duremit', 'Randisolatie', 'Nieuwbouw', 'Renovatie', 'Utiliteit'];
+export const ruler = () => `<div class="ruler" aria-hidden="true">${Array.from({ length: 40 }, (_, i) => `<span style="left:${(i + 1) * 100}px">${(i + 1) * 10}</span>`).join('')}</div>`;
 export const keywordBand = () => `<div class="kband" aria-hidden="true"><div class="kband-track">${[...KEYWORDS, ...KEYWORDS].map(k => `<span>${k}</span>`).join('')}</div></div>`;
 
 // Specificatiekaart naast de hero: echte vaktermen en maten.

@@ -603,3 +603,58 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
 @media (prefers-reduced-motion:reduce){
   .hero-bg,.hero-inner>*,.spec-card,.hero-sweep,.kband-track,.spec-level span,.spec-head .dot,.hero h1 .accent{animation:none!important}
 }
+
+/* ═════════════════════ v3: vakmansstijl, geen effectbejag ═════════════════════
+   Vlak, strak, haarlijnen, kleine radii. Geen gloed, glas, ruis of glimmende tekst. */
+:root{--radius:10px}
+.dark::before,.site-footer::before,.cta-card::before,.hero::before{display:none}
+.hero-sweep{display:none}
+.hero-bg{animation:none;transform:none;opacity:.55}
+.hero::after{background:linear-gradient(90deg,rgba(13,16,15,.96) 0%,rgba(13,16,15,.86) 45%,rgba(13,16,15,.45) 100%),linear-gradient(0deg,rgba(13,16,15,.9),transparent 35%)}
+.hero h1 .accent{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--teal);animation:none}
+.hero-inner>*{animation-duration:.6s}
+.btn{border-radius:8px;box-shadow:none!important}
+.btn-teal{background:var(--teal-btn)}
+.btn-teal:hover{background:#0b7f68}
+.btn:hover{transform:none}
+.nav{border-radius:12px}
+.icon-btn{border-radius:8px}
+.pill{border-radius:4px;background:transparent;border:1px solid rgba(255,255,255,.18);color:#d7dfdc;font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px}
+.pill::before{width:6px;height:6px;box-shadow:none;border-radius:0}
+.gbadge{border-radius:8px;box-shadow:none}
+.spec-card{background:#121615;border:1px solid rgba(255,255,255,.14);border-radius:10px;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;animation:none}
+.spec-head .dot{animation:none;border-radius:0}
+.spec-level{border-radius:4px;background:#0b0e0d}
+.spec-level span{box-shadow:none;background:var(--teal);animation-duration:9s}
+.card,.opt,.review,.muni,.prov,.fact,.form-card,.why,.dc,.bu-item,.bu-fig,.calc,.ptable,.svc-box,.cta-card,.photo,.proj,.gal-item,.strip figure{border-radius:var(--radius)}
+.card::after,.opt::after{display:none}
+.card:hover,.opt:hover{transform:none}
+.card .ck,.f-ic,.photo-badge .ic,.dc .ic,.svc-head .ic,.fstep span{border-radius:6px}
+.calc{background:#121615;box-shadow:none}
+.calc-out{background:#161b1a}
+.bu-item.on{box-shadow:none;transform:none}
+.bu-fig{box-shadow:none}
+.photo{box-shadow:none}
+.cta-card{background:#121615}
+.wordmark{display:none}
+.kband{display:none}
+.wa-fab{box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.mbar{border-radius:12px}
+.review{width:360px}
+.step::before{height:2px}
+.step .num{font-family:var(--mono);font-weight:500;font-size:1rem;color:var(--teal-deep);margin-bottom:14px}
+.dark .step .num{color:var(--teal)}
+.chipset label,.seg label,.chips a{border-radius:6px}
+.gal-item .gal-cap{transform:none}
+
+/* Duimstok-maatlat als scheiding (echte cm-verdeling) */
+.ruler{height:34px;background:#e8c25a;border-block:1px solid #c9a23f;position:relative;overflow:hidden}
+.ruler::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,#1b1b1b 0 1px,transparent 1px 10px) left top/100% 7px no-repeat,
+  repeating-linear-gradient(90deg,#1b1b1b 0 1.5px,transparent 1.5px 50px) left top/100% 12px no-repeat,
+  repeating-linear-gradient(90deg,#1b1b1b 0 2px,transparent 2px 100px) left top/100% 18px no-repeat}
+.ruler span{position:absolute;top:15px;font-family:var(--mono);font-size:11px;color:#1b1b1b;transform:translateX(4px)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.rev-grid .review{width:auto}
+@media (max-width:900px){.rev-grid{grid-template-columns:1fr}}
+.dark .card .ck,.card .ck{display:grid}

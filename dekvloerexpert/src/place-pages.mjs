@@ -76,7 +76,7 @@ export function placePage(p, ctx) {
 ${hero({
     crumbs,
     pill: `Zandcement dekvloeren · ${esc(p.isMain ? pv.name : m.name)}`,
-    h1: `Zandcement dekvloer in ${esc(p.name)}<br><span class="accent">${sub}</span>`,
+    h1: `Zandcement dekvloer in ${esc(p.name)}<br>${sub}`,
     lead: esc(lead),
     checks: C.pickN(['Gratis prijsopgave', 'Voor particulieren &amp; aannemers', 'Ook met vloerverwarming', 'Eigen mixer en pomp', 'Kaarsrecht afgewerkt', 'Advies over dikte en opties'], 3, p.slug, 'chk'),
     img: `/assets/img/${C.pick(['hero', 'project-1', 'project-3', 'project-5', 'project-6'], p.slug, 'img')}.jpg`,
@@ -84,8 +84,8 @@ ${hero({
 
 <section><div class="wrap split">
 <div class="reveal prose">
-<span class="eyebrow">Dekvloer in ${esc(p.name)}</span>
-<h2>Een vlakke basis voor <span class="accent">${esc(typeLabel.split(',')[0])}</span></h2>
+
+<h2>Een vlakke basis voor ${esc(typeLabel.split(',')[0])}</h2>
 <p>${esc(paras[0])}</p>
 <p>${esc(paras[1])}</p>
 <p>${esc(areaPara)} ${siblingSentence}</p>
@@ -96,8 +96,8 @@ ${hero({
 </div></section>
 
 <section class="paper"><div class="wrap">
-<div class="sec-head reveal" style="max-width:820px"><span class="eyebrow">Prijsindicatie</span>
-<h2>Wat kost een dekvloer <span class="accent">in ${esc(p.name)}?</span></h2>
+<div class="sec-head reveal" style="max-width:820px">
+<h2>Wat kost een dekvloer in ${esc(p.name)}?</h2>
 <p class="lead">${esc(priceIntro)}</p></div>
 <div class="table-scroll reveal"><table class="ptable"><thead><tr><th>Voorbeeld</th><th>Oppervlakte</th><th>Dikte</th><th>Indicatie (excl. btw)</th></tr></thead><tbody>
 ${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.m2} m²</td><td>${e.cm} cm</td><td>${C.rangeText([e.lo, e.hi])}</td></tr>`).join('')}
@@ -107,32 +107,32 @@ ${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.m2} m²</td><td>${e.cm} cm</t
 </div></section>
 
 <section class="dark"><div class="wrap">
-<div class="sec-head reveal" style="max-width:820px"><span class="eyebrow">Aanbevolen opties</span>
-<h2>Veel gekozen <span class="accent">in ${esc(p.name)}</span></h2>
+<div class="sec-head reveal" style="max-width:820px">
+<h2>Veel gekozen in ${esc(p.name)}</h2>
 <p class="lead">Bij ${esc(typeLabel)} kiezen opdrachtgevers vaak voor deze opties.</p></div>
 <div class="cards">${opts.map(o => `<div class="card reveal"><span class="ck">${icon(o.icon)}</span><div><h3>${o.title}</h3><p>${esc(o.why)}</p></div></div>`).join('')}</div>
 <p style="margin-top:30px"><a class="text-link" href="/opties">Alle opties bekijken ${icon('arrow')}</a></p>
 </div></section>
 
 <section><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Werkwijze</span><h2>Zo werken we <span class="accent">in ${esc(p.name)}</span></h2></div>
+<div class="sec-head reveal"><h2>Zo werken we in ${esc(p.name)}</h2></div>
 ${stepsHtml(C.STEP_VARIANTS.map(([t, vs], i) => [t, fill(C.pick(vs, p.slug, 'st' + i), v)]))}
 </div></section>
 
 <section class="paper"><div class="wrap">
-<div class="center sec-head reveal"><span class="eyebrow">Veelgestelde vragen</span><h2>Vragen over een dekvloer <span class="accent">in ${esc(p.name)}</span></h2></div>
+<div class="sec-head reveal"><h2>Vragen over een dekvloer in ${esc(p.name)}</h2></div>
 ${faqHtml(faq)}
 </div></section>
 
 <section><div class="wrap">
-<div class="sec-head reveal"><span class="eyebrow">Werkgebied</span><h2>${esc(nbTitle)}</h2></div>
+<div class="sec-head reveal"><h2>${esc(nbTitle)}</h2></div>
 ${siblings.length ? `<h3 style="margin:0 0 14px">${p.isMain ? 'Wijken en kernen in ' + esc(m.name) : 'Gemeente ' + esc(m.name)}</h3>
 <ul class="chips" style="margin-bottom:30px">${!p.isMain ? `<li><a href="/${m.slug}"><b>${esc(m.name)}</b></a></li>` : ''}${siblings.map(s => `<li><a href="/${s.slug}">${esc(s.name)}</a></li>`).join('')}</ul>` : ''}
 <h3 style="margin:0 0 14px">Elders in ${esc(pv.name)}</h3>
 <ul class="chips">${others.map(o => `<li><a href="/${o.slug}">${esc(o.name)}</a></li>`).join('')}<li><a href="/werkgebied/${pv.slug}"><b>Alle plaatsen in ${esc(pv.name)}</b></a></li></ul>
 </div></section>
 
-${cta(`Vraag een scherpe, vrijblijvende prijsopgave aan voor uw dekvloer in ${esc(p.name)}, of stel eerst uw vraag. Wij denken graag met u mee.`)}`;
+${cta(`Stuur ons de oppervlakte, de dikte en een foto van de ruimte in ${esc(p.name)}. Dan krijgt u snel een prijs.`)}`;
 
   return page({
     path: `/${p.slug}`, title, description, body, footerPlaces: ctx.footerPlaces,
@@ -158,18 +158,18 @@ export function muniHub(m, ctx) {
   const provPara = C.pick(C.PROVINCE_PARAS[pv.name], m.slug, 'prov');
   const faq = faqFor({ slug: m.slug }, { ...C.vars({ name: m.name, label: m.name, inLabel: m.name, muni: m.name, province: pv.name }) });
   const body = `
-${hero({ crumbs, pill: `Zandcement dekvloeren · ${esc(pv.name)}`, h1: `Zandcement dekvloer gemeente ${esc(m.name)}<br><span class="accent">${C.pick(C.H1_SUB, m.slug, 'h1')}</span>`,
+${hero({ crumbs, pill: `Zandcement dekvloeren · ${esc(pv.name)}`, h1: `Zandcement dekvloer gemeente ${esc(m.name)}<br>${C.pick(C.H1_SUB, m.slug, 'h1')}`,
     lead: esc(fill(C.pick(C.LEADS, m.slug, 'lead'), v)), checks: ['Alle kernen van de gemeente', 'Gratis prijsopgave', 'Ook met vloerverwarming'] })}
 <section><div class="wrap split"><div class="reveal prose">
-<span class="eyebrow">Gemeente ${esc(m.name)}</span>
-<h2>Dekvloeren in <span class="accent">${m.places.length} kernen</span></h2>
+
+<h2>Dekvloeren in ${m.places.length} kernen</h2>
 <p>De gemeente ${esc(m.name)} bestaat uit meerdere kernen: ${esc(C.listNl(kernen))}. Wij leggen in al deze plaatsen zandcement dekvloeren, voor woningen, aanbouwen en bedrijfspanden.</p>
 <p>${esc(provPara)}</p>
 <p>${esc(fill(C.pick(C.TYPE_PARAS[tk], m.slug, 'type'), { name: m.name }))}</p>
 </div><div class="photo reveal"><img src="/assets/img/${C.pick(['dekvloer-1', 'dekvloer-2', 'project-4'], m.slug, 'ph')}.jpg" alt="Zandcement dekvloer in de gemeente ${esc(m.name)}" loading="lazy"></div></div></section>
-<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Kies uw plaats</span><h2>Plaatsen in ${esc(m.name)}</h2></div>
+<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Plaatsen in ${esc(m.name)}</h2></div>
 <div class="cards light-cards">${m.places.map(p => `<a class="card reveal" href="/${p.slug}"><span class="ck">${icon('pin')}</span><div><h3>${esc(p.name)}</h3><p>Zandcement dekvloer in ${esc(p.name)}: prijzen, opties en advies.</p></div></a>`).join('')}</div></div></section>
-<section><div class="wrap"><div class="center sec-head reveal"><span class="eyebrow">Veelgestelde vragen</span><h2>Vragen over dekvloeren in <span class="accent">${esc(m.name)}</span></h2></div>${faqHtml(faq)}</div></section>
+<section><div class="wrap"><div class="sec-head reveal"><h2>Vragen over dekvloeren in ${esc(m.name)}</h2></div>${faqHtml(faq)}</div></section>
 ${cta()}`;
   return page({
     path: `/${m.slug}`, title: `Zandcement dekvloer gemeente ${m.name} | Alle kernen`,
@@ -182,13 +182,13 @@ export function provincePage(pv, ctx) {
   const crumbs = [['/', 'Home'], ['/werkgebied', 'Werkgebied'], [`/werkgebied/${pv.slug}`, pv.name]];
   const n = pv.munis.reduce((a, m) => a + m.places.length, 0);
   const body = `
-${hero({ crumbs, pill: 'Zandcement dekvloeren · Werkgebied', h1: `Zandcement dekvloer <span class="accent">provincie ${esc(pv.name)}</span>`,
+${hero({ crumbs, pill: 'Zandcement dekvloeren · Werkgebied', h1: `Zandcement dekvloer provincie ${esc(pv.name)}`,
     lead: `Wij leggen zandcement dekvloeren in heel ${esc(pv.name)}: in ${pv.munis.length} gemeenten en ${n} plaatsen en wijken.` })}
 <section><div class="wrap prose reveal" style="max-width:900px">
-<span class="eyebrow">${esc(pv.name)}</span><h2>Dekvloeren in <span class="accent">${esc(pv.name)}</span></h2>
+<h2>Dekvloeren in ${esc(pv.name)}</h2>
 ${C.PROVINCE_PARAS[pv.name].map(t => `<p>${esc(t)}</p>`).join('')}
 </div></section>
-<section class="paper"><div class="wrap"><div class="sec-head reveal"><span class="eyebrow">Gemeenten</span><h2>Alle plaatsen in ${esc(pv.name)}</h2></div>
+<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Alle plaatsen in ${esc(pv.name)}</h2></div>
 <div class="muni-grid">${pv.munis.map(m => `<div class="muni"><h3><a href="/${m.slug}">${esc(m.name)}</a></h3><ul>${m.places.filter(p => p.slug !== m.slug).map(p => `<li><a href="/${p.slug}">${esc(p.name)}</a></li>`).join('')}</ul></div>`).join('')}</div></div></section>
 ${cta()}`;
   return page({ path: `/werkgebied/${pv.slug}`, title: `Zandcement dekvloer provincie ${pv.name} | ${n} plaatsen | Dekvloerexpert`, description: `Zandcement dekvloer laten leggen in de provincie ${pv.name}? Wij werken in ${pv.munis.length} gemeenten, waaronder ${C.listNl(pv.munis.slice(0, 3).map(m => m.name))}. Vraag een vrijblijvende offerte aan.`, body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
@@ -197,7 +197,7 @@ ${cta()}`;
 export function werkgebied(ctx) {
   const crumbs = [['/', 'Home'], ['/werkgebied', 'Werkgebied']];
   const body = `
-${hero({ crumbs, h1: 'Ons <span class="accent">werkgebied</span>', lead: `Landelijk actief: wij leggen zandcement dekvloeren in alle twaalf provincies, in ${ctx.places.length} plaatsen en wijken.` })}
+${hero({ crumbs, h1: 'Ons werkgebied', lead: `Landelijk actief: wij leggen zandcement dekvloeren in alle twaalf provincies, in ${ctx.places.length} plaatsen en wijken.` })}
 <section class="paper"><div class="wrap">
 <div class="prov-grid reveal" style="margin-bottom:60px">${ctx.provinces.map(pv => `<a class="prov" href="/werkgebied/${pv.slug}">${pv.name}<span>${pv.munis.length} gemeenten</span></a>`).join('')}</div>
 ${ctx.provinces.map(pv => `<h2 style="margin:50px 0 24px;font-size:1.8rem"><a href="/werkgebied/${pv.slug}" style="text-decoration:none">${esc(pv.name)}</a></h2>
