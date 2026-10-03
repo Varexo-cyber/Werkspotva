@@ -1,0 +1,10 @@
+{
+  "name": "dekvloerexpert",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs --serve",
+    "check": "node tools/uniqueness.mjs"
+  }
+}

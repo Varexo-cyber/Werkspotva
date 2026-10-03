@@ -1,0 +1,14 @@
+{
+  "buildCommand": "node build.mjs",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/:slug(zandcement-dekvloer-[a-z0-9-]+?)-zone-:n(\\d+)", "destination": "/:slug", "permanent": true },
+    { "source": "/zandcement-dekvloer-sittard-geleen-m%C3%BCnstergeleen", "destination": "/zandcement-dekvloer-sittard-geleen-munstergeleen", "permanent": true },
+    { "source": "/index", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }] }
+  ]
+}
