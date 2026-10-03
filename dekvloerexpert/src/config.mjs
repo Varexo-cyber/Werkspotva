@@ -13,6 +13,8 @@ export const site = {
   formEndpoint: '',
   // Link naar het Google Bedrijfsprofiel (voor de reviewbadge). Leeg = badge linkt naar de reviewsectie.
   googleReviewsUrl: '',
+  // Echte Google-reviews: [['tekst', 'soort project'], …]. Leeg = geen reviewsectie.
+  reviews: [],
   socials: {
     instagram: '',
     tiktok: '',

@@ -26,7 +26,15 @@ mkdirSync(out, { recursive: true });
 cpSync(join(root, 'public'), out, { recursive: true });
 
 const urls = [];
+let photoIdx = 0;
+const finish = html => {
+  if (!media.real) return html.replace(/<!--(photo|media)-->[\s\S]*?<!--\/\1-->/g, '');
+  // Echte foto's op de plekken van de placeholders
+  const imgs = media.gallery.filter(m => !m.video);
+  return html.replace(/<!--\/?(photo|media)-->/g, '').replace(/\/assets\/img\/(?:dekvloer|project)-\d\.jpg/g, () => imgs.length ? imgs[photoIdx++ % imgs.length].src : '');
+};
 const write = (path, html, priority = 0.6) => {
+  html = finish(html);
   const file = path === '/' ? 'index.html' : path.slice(1) + '.html';
   const full = join(out, file);
   mkdirSync(dirname(full), { recursive: true });

@@ -42,7 +42,6 @@ export function placePage(p, ctx) {
   const m = p.muniRef, pv = m.provinceRef;
   const crumbs = crumbsFor(p);
   const tk = C.typeKey(p.cityType);
-  const sub = C.pick(C.H1_SUB, p.slug, 'h1');
   const lead = fill(C.pick(C.LEADS, p.slug, 'lead'), v);
   const typePara = fill(C.pick(C.TYPE_PARAS[tk] || C.TYPE_PARAS.nieuwbouwwijken, p.slug, 'type'), v);
   const provPara = C.pick(C.PROVINCE_PARAS[p.province], p.slug, 'prov');
@@ -76,7 +75,7 @@ export function placePage(p, ctx) {
 ${hero({
     crumbs,
     pill: `Zandcement dekvloeren · ${esc(p.isMain ? pv.name : m.name)}`,
-    h1: `Zandcement dekvloer in ${esc(p.name)}<br>${sub}`,
+    h1: `Zandcement dekvloer in ${esc(p.name)}`,
     lead: esc(lead),
     checks: C.pickN(['Gratis prijsopgave', 'Voor particulieren &amp; aannemers', 'Ook met vloerverwarming', 'Eigen mixer en pomp', 'Kaarsrecht afgewerkt', 'Advies over dikte en opties'], 3, p.slug, 'chk'),
     img: `/assets/img/${C.pick(['hero', 'project-1', 'project-3', 'project-5', 'project-6'], p.slug, 'img')}.jpg`,
@@ -92,7 +91,7 @@ ${hero({
 <p><strong>${esc(adviceIntro)}</strong> ${esc(p.advice)}</p>
 <p style="margin-top:26px"><a class="text-link" href="/offerte">Offerte aanvragen voor ${esc(p.name)} ${icon('arrow')}</a></p>
 </div>
-<div class="photo reveal"><img src="/assets/img/${C.pick(['dekvloer-2', 'dekvloer-1', 'project-2', 'project-4', 'project-7', 'project-8'], p.slug, 'ph')}.jpg" alt="Zandcement dekvloer gelegd in ${esc(p.inLabel)}" loading="lazy" width="1200" height="1400"></div>
+<!--photo--><div class="photo reveal"><img src="/assets/img/${C.pick(['dekvloer-2', 'dekvloer-1', 'project-2', 'project-4', 'project-7', 'project-8'], p.slug, 'ph')}.jpg" alt="Zandcement dekvloer gelegd in ${esc(p.inLabel)}" loading="lazy" width="1200" height="1400"></div><!--/photo-->
 </div></section>
 
 <section class="paper"><div class="wrap">
@@ -110,7 +109,7 @@ ${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.m2} m²</td><td>${e.cm} cm</t
 <div class="sec-head reveal" style="max-width:820px">
 <h2>Veel gekozen in ${esc(p.name)}</h2>
 <p class="lead">Bij ${esc(typeLabel)} kiezen opdrachtgevers vaak voor deze opties.</p></div>
-<div class="cards">${opts.map(o => `<div class="card reveal"><span class="ck">${icon(o.icon)}</span><div><h3>${o.title}</h3><p>${esc(o.why)}</p></div></div>`).join('')}</div>
+<dl class="specs">${opts.map(o => `<div><dt>${o.title}</dt><dd>${esc(o.why)}</dd></div>`).join('')}</dl>
 <p style="margin-top:30px"><a class="text-link" href="/opties">Alle opties bekijken ${icon('arrow')}</a></p>
 </div></section>
 
@@ -158,7 +157,7 @@ export function muniHub(m, ctx) {
   const provPara = C.pick(C.PROVINCE_PARAS[pv.name], m.slug, 'prov');
   const faq = faqFor({ slug: m.slug }, { ...C.vars({ name: m.name, label: m.name, inLabel: m.name, muni: m.name, province: pv.name }) });
   const body = `
-${hero({ crumbs, pill: `Zandcement dekvloeren · ${esc(pv.name)}`, h1: `Zandcement dekvloer gemeente ${esc(m.name)}<br>${C.pick(C.H1_SUB, m.slug, 'h1')}`,
+${hero({ crumbs, pill: `Zandcement dekvloeren · ${esc(pv.name)}`, h1: `Zandcement dekvloer gemeente ${esc(m.name)}`,
     lead: esc(fill(C.pick(C.LEADS, m.slug, 'lead'), v)), checks: ['Alle kernen van de gemeente', 'Gratis prijsopgave', 'Ook met vloerverwarming'] })}
 <section><div class="wrap split"><div class="reveal prose">
 
@@ -166,7 +165,7 @@ ${hero({ crumbs, pill: `Zandcement dekvloeren · ${esc(pv.name)}`, h1: `Zandceme
 <p>De gemeente ${esc(m.name)} bestaat uit meerdere kernen: ${esc(C.listNl(kernen))}. Wij leggen in al deze plaatsen zandcement dekvloeren, voor woningen, aanbouwen en bedrijfspanden.</p>
 <p>${esc(provPara)}</p>
 <p>${esc(fill(C.pick(C.TYPE_PARAS[tk], m.slug, 'type'), { name: m.name }))}</p>
-</div><div class="photo reveal"><img src="/assets/img/${C.pick(['dekvloer-1', 'dekvloer-2', 'project-4'], m.slug, 'ph')}.jpg" alt="Zandcement dekvloer in de gemeente ${esc(m.name)}" loading="lazy"></div></div></section>
+</div><!--photo--><div class="photo reveal"><img src="/assets/img/${C.pick(['dekvloer-1', 'dekvloer-2', 'project-4'], m.slug, 'ph')}.jpg" alt="Zandcement dekvloer in de gemeente ${esc(m.name)}" loading="lazy"></div><!--/photo--></div></section>
 <section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Plaatsen in ${esc(m.name)}</h2></div>
 <div class="cards light-cards">${m.places.map(p => `<a class="card reveal" href="/${p.slug}"><span class="ck">${icon('pin')}</span><div><h3>${esc(p.name)}</h3><p>Zandcement dekvloer in ${esc(p.name)}: prijzen, opties en advies.</p></div></a>`).join('')}</div></div></section>
 <section><div class="wrap"><div class="sec-head reveal"><h2>Vragen over dekvloeren in ${esc(m.name)}</h2></div>${faqHtml(faq)}</div></section>
