@@ -74,14 +74,13 @@ export const keywordBand = () => `<div class="kband" aria-hidden="true"><div cla
 
 // Specificatiekaart naast de hero: echte vaktermen en maten.
 export const heroCard = () => `<aside class="spec-card" aria-label="Kenmerken van onze dekvloeren">
-<div class="spec-head"><span class="dot"></span>Standaard opbouw</div>
+<div class="spec-head">Standaard opbouw</div>
 <dl>
 <div><dt>Sterkteklasse</dt><dd>CT-C20-F4</dd></div>
 <div><dt>Laagdikte</dt><dd>5 – 8 cm</dd></div>
 <div><dt>Mengverhouding</dt><dd>1 : 4,5</dd></div>
 <div><dt>Legklaar met versneller</dt><dd>10 – 15 dagen</dd></div>
 </dl>
-<div class="spec-level" aria-hidden="true"><span></span></div>
 <p class="spec-foot">Vlak en waterpas afgereid · eigen mixer en pomp</p>
 </aside>`;
 

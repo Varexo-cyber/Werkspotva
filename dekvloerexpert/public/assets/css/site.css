@@ -702,3 +702,7 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
 .gal-note{font-size:.88rem;color:var(--muted-d);margin:16px 0 0}
 .gal-note a{color:inherit}
 .paper .gal-note{color:var(--muted)}
+.pill::before{display:none}
+.pill{padding:0;border:0;color:#a9b6b1;letter-spacing:.1em}
+.spec-head{color:#a9b6b1}
+.spec-foot{margin-top:18px}
