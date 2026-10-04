@@ -148,8 +148,9 @@ export function calculator(place = '') {
 // Galerij met lightbox (foto's en video's).
 export function gallery(items, limit = 0) {
   const list = limit ? items.slice(0, limit) : items;
-  return `<div class="gal">${list.map((m, i) => `<button type="button" class="gal-item${i % 9 === 0 ? ' big' : ''}" data-src="${m.src}" data-video="${m.video ? 1 : 0}" data-caption="${esc(m.caption)}" aria-label="Bekijk ${esc(m.caption)}">
+  return `<div class="gal">${list.map((m, i) => `<button type="button" class="gal-item${i % 9 === 0 ? ' big' : ''}" data-src="${m.src}" data-video="${m.video ? 1 : 0}" data-caption="${esc(m.caption)}${m.credit ? ' · Foto: ' + esc(m.credit.creator) + ' (' + m.credit.license + ')' : ''}" aria-label="Bekijk ${esc(m.caption)}">
 ${m.video ? `<video src="${m.src}#t=0.5" muted playsinline preload="metadata"${m.poster ? ` poster="${m.poster}"` : ''}></video><span class="gal-play" aria-hidden="true">▶</span>` : `<img src="${m.src}" alt="${esc(m.caption)}" loading="lazy">`}
-<span class="gal-cap">${esc(m.caption)}</span></button>`).join('')}</div>
+<span class="gal-cap">${esc(m.caption)}${m.credit ? `<small>Foto: ${esc(m.credit.creator)} · ${m.credit.license}</small>` : ''}</span></button>`).join('')}</div>
+${list.some(m => m.credit) ? '<p class="gal-note">Licentievrije beelden met naamsvermelding. <a href="/fotoverantwoording">Fotoverantwoording</a></p>' : ''}
 <dialog class="lightbox" id="lightbox" aria-label="Foto of video vergroot"><button type="button" class="lb-close" aria-label="Sluiten">×</button><button type="button" class="lb-prev" aria-label="Vorige">‹</button><div class="lb-stage"></div><button type="button" class="lb-next" aria-label="Volgende">›</button><p class="lb-cap"></p></dialog>`;
 }

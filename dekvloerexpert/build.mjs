@@ -31,6 +31,7 @@ const finish = html => {
   if (!media.real) return html.replace(/<!--(photo|media)-->[\s\S]*?<!--\/\1-->/g, '');
   // Echte foto's op de plekken van de placeholders
   const imgs = media.gallery.filter(m => !m.video);
+  if (media.heroPoster.startsWith('/assets/media/')) html = html.replace(/\/assets\/img\/hero\.jpg/g, media.heroPoster);
   return html.replace(/<!--\/?(photo|media)-->/g, '').replace(/\/assets\/img\/(?:dekvloer|project)-\d\.jpg/g, () => imgs.length ? imgs[photoIdx++ % imgs.length].src : '');
 };
 const write = (path, html, priority = 0.6) => {
@@ -53,6 +54,7 @@ write('/over-ons', P.overOns(ctx), 0.5);
 write('/offerte', P.offerte(ctx), 0.8);
 write('/contact', P.contact(ctx), 0.7);
 write('/privacy', P.privacy(ctx), 0.2);
+if (media.credits.length) write('/fotoverantwoording', P.fotoverantwoording(ctx), 0.1);
 write('/werkgebied', werkgebied(ctx), 0.8);
 write('/404', P.notFound(ctx));
 
@@ -78,7 +80,7 @@ if (data.legacySlugs.length > 1) console.warn('Let op: nieuwe afwijkende slugs i
 
 console.log(`✓ ${urls.length} pagina's gebouwd in dist/`);
 console.log(`  ${data.places.length} plaatspagina's, ${data.munis.filter(m => m.hubOnly).length} gemeentepagina's, ${data.provinces.length} provinciepagina's`);
-console.log(`  media: ${media.real ? media.gallery.length + ' eigen foto\'s/video\'s' : 'nog geen eigen foto\'s (placeholders)'}${media.heroVideo ? ', herovideo' : ''}`);
+console.log(`  media: ${media.real ? media.gallery.length + ' foto\'s/video\'s uit assets/media' : 'nog geen eigen foto\'s (placeholders)'}${media.heroVideo ? ', herovideo' : ''}`);
 console.log(`  ${data.zoneCount} "Zone"-regels uit de CSV → 301 naar de echte plaatspagina`);
 
 if (process.argv.includes('--serve')) {

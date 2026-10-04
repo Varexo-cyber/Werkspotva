@@ -37,9 +37,8 @@ ${featureList([
 <!--media--><section class="dark" style="padding-bottom:60px"><div class="wrap">
 <div class="reveal" style="max-width:760px">
 
-<h2>Recent werk</h2>
-<p class="lead">Woningen, kantoren en bedrijfshallen. Klik op een foto voor een grotere versie.</p>
-<p style="margin-top:30px"><a class="text-link" href="/projecten">Bekijk alle projectfoto's ${icon('arrow')}</a></p>
+${site.ownMedia ? '<h2>Recent werk</h2>\n<p class="lead">Woningen, kantoren en bedrijfshallen. Klik op een foto voor een grotere versie.</p>' : '<h2>Zo ziet het werk eruit</h2>\n<p class="lead">Zandcement over vloerverwarming, leidingen op isolatie en de pomp die de mortel naar binnen brengt. Klik op een foto voor een grotere versie.</p>'}
+<p style="margin-top:30px"><a class="text-link" href="/projecten">Alle foto's ${icon('arrow')}</a></p>
 </div></div>
 <div class="wrap" style="margin-top:56px">${gallery(ctx.media.gallery, 9)}</div>
 </section><!--/media-->
@@ -372,7 +371,7 @@ ${cta()}`;
 export function projecten(ctx) {
   const crumbs = [['/', 'Home'], ['/projecten', 'Projecten']];
   const body = `${hero({ crumbs, h1: 'Van zandaanvoer tot legklare vloer', lead: 'Nieuwbouw, utiliteit en renovatie: een greep uit ons werk door heel Nederland.', img: '/assets/img/project-5.jpg' })}
-${ctx.media.real ? '' : `<section><div class="wrap prose" style="max-width:820px"><h2>Projectfoto's</h2><p>Hier komen foto's en filmpjes van recente vloeren. Wilt u eerder gelegde vloeren zien of een referentie spreken? Vraag het ons via WhatsApp, dan sturen we voorbeelden uit uw buurt.</p><p><a class="btn btn-wa" href="${wa('Hallo, kunnen jullie foto\'s sturen van eerder gelegde dekvloeren?')}" target="_blank" rel="noopener">${waIcon} Vraag foto's op via WhatsApp</a></p></div></section>`}
+${site.ownMedia ? '' : `<section><div class="wrap prose" style="max-width:820px"><h2>Projectfoto's</h2><p>${ctx.media.real ? 'Hieronder ziet u hoe een zandcement dekvloer wordt opgebouwd. Foto\'s van onze eigen recente vloeren volgen.' : 'Hier komen foto\'s en filmpjes van recente vloeren.'} Wilt u eerder gelegde vloeren zien of een referentie spreken? Vraag het ons via WhatsApp, dan sturen we voorbeelden uit uw buurt.</p><p><a class="btn btn-wa" href="${wa('Hallo, kunnen jullie foto\'s sturen van eerder gelegde dekvloeren?')}" target="_blank" rel="noopener">${waIcon} Vraag foto's op via WhatsApp</a></p></div></section>`}
 ${ctx.media.real ? `<section class="paper"><div class="wrap"><div class="sec-head reveal"><h2>Foto\'s en video\'s</h2></div>${gallery(ctx.media.gallery)}</div></section>` : ''}
 ${cta()}`;
   return page({ path: '/projecten', active: '/projecten', title: 'Projecten: zandcement dekvloeren in heel Nederland | Dekvloerexpert', description: 'Bekijk onze projecten: kantoren, woningen, bedrijfshallen en renovaties. Zandcement dekvloeren, vloerverwarming en meer.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
@@ -491,4 +490,13 @@ export function privacy(ctx) {
 export function notFound(ctx) {
   const body = `${hero({ h1: 'Pagina niet gevonden', lead: 'Deze pagina bestaat niet (meer). Zoekt u een plaats? Bekijk dan ons werkgebied.', buttons: `<div class="btn-row"><a class="btn btn-teal" href="/werkgebied">Naar werkgebied ${icon('arrow')}</a><a class="btn btn-ghost" href="/">Naar home</a></div>` })}`;
   return page({ path: '/404', title: 'Pagina niet gevonden | Dekvloerexpert', description: 'Deze pagina bestaat niet.', body, noindex: true, footerPlaces: ctx.footerPlaces });
+}
+
+export function fotoverantwoording(ctx) {
+  const crumbs = [['/', 'Home'], ['/fotoverantwoording', 'Fotoverantwoording']];
+  const rows = ctx.media.credits.map(c => `<tr><td><img src="/assets/media/${c.file}" alt="" loading="lazy" style="width:120px;height:80px;object-fit:cover;border-radius:6px"></td><td>${esc(c.title)}</td><td>${esc(c.creator)}</td><td><a href="${c.licenseUrl}" target="_blank" rel="noopener">${c.license}</a></td><td><a href="${c.source}" target="_blank" rel="noopener">Bron</a></td></tr>`).join('');
+  const body = `${hero({ crumbs, h1: 'Fotoverantwoording', lead: 'Een deel van de foto\'s op deze site is gemaakt door anderen en gedeeld onder een Creative Commons-licentie. Hieronder staat per foto wie hem maakte en onder welke licentie.', buttons: '' })}
+<section><div class="wrap"><div class="table-scroll"><table class="ptable"><thead><tr><th>Foto</th><th>Titel</th><th>Maker</th><th>Licentie</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="5">Alle foto\'s op deze site zijn eigen werk.</td></tr>'}</tbody></table></div>
+<p class="note">De foto's zijn niet bewerkt, alleen verkleind voor het web.</p></div></section>`;
+  return page({ path: '/fotoverantwoording', title: 'Fotoverantwoording | Dekvloerexpert', description: 'Makers en licenties van de foto\'s op deze website.', body, footerPlaces: ctx.footerPlaces, ld: [crumbLd(crumbs)] });
 }

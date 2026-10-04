@@ -75,6 +75,7 @@ Alles staat in `src/config.mjs`, tenzij anders vermeld.
 - [ ] **Domein** (`url`): nodig voor de canonical-URL's en de sitemap.
 - [ ] **Prijzen** (`price`): nu € 18–26 per m² voor 5 cm, € 750 minimum. Laat de klant dit bevestigen.
 - [ ] **Cijfers** (`stats`): 15+ jaar, 2500+ projecten. Komen uit de demo; laat bevestigen.
+- [ ] **Foto's**: nu staan er 10 foto's onder een Creative Commons-licentie (Flickr/Wikimedia via Openverse) in `public/assets/media/`, met naamsvermelding op `/fotoverantwoording` (gegevens in `credits.json`). Vervang ze liefst door eigen foto's van de klant, zet dan `ownMedia: true` in de config en haal de regels uit `credits.json` weg.
 - [ ] **Eigen foto's en video's**: zet ze in `public/assets/media/` (`hero.mp4` voor de achtergrondvideo, `projecten/` voor de galerij; de bestandsnaam wordt het bijschrift) en bouw opnieuw. Ze worden automatisch gebruikt.
 - [ ] **Foto's**: `public/assets/img/` bevat neutrale placeholder-texturen. Vervang ze door
       echte projectfoto's met dezelfde bestandsnamen (`hero.jpg`, `project-1.jpg` … `project-8.jpg`,
