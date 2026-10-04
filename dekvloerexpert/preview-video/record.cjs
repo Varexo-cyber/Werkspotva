@@ -254,13 +254,14 @@ async function main() {
 
   // 11 — Mobiel
   await capOff(); await cursorOut();
-  await page.goto('about:blank');
+  await page.goto(BASE + '/privacy', { waitUntil: 'networkidle' });
   await page.setContent(`<!doctype html><html><head><link rel="stylesheet" href="${BASE}/assets/fonts/fonts.css"></head><body style="margin:0;background:#0d100f;width:${W}px;height:${H}px;overflow:hidden;display:flex;align-items:center;gap:120px;padding:0 160px;box-sizing:border-box;font-family:Inter,sans-serif">
     <div style="width:390px;height:844px;border-radius:52px;padding:14px;background:#1b201f;box-shadow:0 40px 90px -30px #000, inset 0 0 0 2px #2c3331;flex:none"><iframe id="ph" src="${BASE}/" style="width:390px;height:844px;border:0;border-radius:40px;display:block;background:#fff"></iframe></div>
     <div style="color:#fff;max-width:760px"><div style="font:500 20px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#22d1ad;margin-bottom:26px">Mobiel</div>
     <div style="font:800 78px/1.02 'Inter Tight',Inter,sans-serif;letter-spacing:-.035em;margin-bottom:28px">Werkt net zo goed op de telefoon.</div>
     <div style="font:400 30px/1.45 Inter,sans-serif;color:#b9c4c0">Onderin staan vaste knoppen voor bellen, WhatsApp en offerte. De meeste aanvragen komen via de telefoon binnen.</div></div></body></html>`, { waitUntil: 'networkidle' });
-  const fr = page.frames().find(f => f.url().startsWith(BASE));
+  await page.waitForFunction(() => { const d = document.getElementById('ph')?.contentDocument; return d && d.readyState === 'complete' && d.querySelector('.site-header'); }, null, { timeout: 30000 });
+  const fr = page.frames().find(f => f !== page.mainFrame());
   await fr.addStyleTag({ content: OVERLAY_CSS });
   await fr.evaluate(async () => { document.querySelectorAll('img[loading]').forEach(i => i.loading = 'eager'); await document.fonts.ready; });
   await page.waitForTimeout(800);
