@@ -15,6 +15,8 @@ export const site = {
   googleReviewsUrl: '',
   // Echte Google-reviews: [['tekst', 'soort project'], …]. Leeg = geen reviewsectie.
   reviews: [],
+  // true zodra de foto's in assets/media/projecten/ van de klant zelf zijn. Dan heten ze "Recent werk".
+  ownMedia: false,
   socials: {
     instagram: '',
     tiktok: '',

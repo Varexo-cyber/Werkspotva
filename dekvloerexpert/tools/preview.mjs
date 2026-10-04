@@ -15,7 +15,7 @@ const set = new Set(all.map(f => f.replace(/\.html$/, '')));
 
 rmSync(out, { recursive: true, force: true }); mkdirSync(join(out, 'werkgebied'), { recursive: true });
 cpSync(join(dist, 'assets'), join(out, 'assets'), { recursive: true });
-for (const d of ['media']) rmSync(join(out, 'assets', d), { recursive: true, force: true });
+rmSync(join(out, 'assets/media/credits.json'), { force: true });
 
 const notice = `<div id="pvToast" style="position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:#111514;color:#fff;border:1px solid rgba(34,209,173,.4);padding:12px 18px;border-radius:12px;font:500 15px Inter,system-ui,sans-serif;z-index:99;display:none;max-width:90vw;text-align:center">Deze pagina zit niet in de preview. Op de echte site heeft elke plaats een eigen pagina.</div>
 <script>document.addEventListener('click',function(e){var a=e.target.closest('a[data-pv]');if(!a)return;e.preventDefault();var t=document.getElementById('pvToast');t.style.display='block';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none'},2600)})</script>`;

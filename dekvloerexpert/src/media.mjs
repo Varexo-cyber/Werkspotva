@@ -5,7 +5,7 @@
 //   projecten/*.jpg|.jpeg|.webp|.png|.mp4                  → galerij op home en /projecten
 // Bestandsnaam = bijschrift: "kantoorpand-utrecht-800m2.jpg" → "Kantoorpand utrecht 800m2".
 // Zolang er niets staat, vallen de pagina's terug op de placeholders in assets/img/.
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 
 const IMG = new Set(['.jpg', '.jpeg', '.webp', '.png', '.avif']);
@@ -14,6 +14,9 @@ const VID = new Set(['.mp4', '.webm']);
 export function loadMedia(publicDir) {
   const dir = join(publicDir, 'assets/media');
   const has = f => existsSync(join(dir, f));
+  // Naamsvermelding voor foto's onder een Creative Commons-licentie (credits.json).
+  const credits = has('credits.json') ? JSON.parse(readFileSync(join(dir, 'credits.json'), 'utf8')) : [];
+  const creditFor = f => credits.find(c => c.file === f) || null;
   const heroVideo = has('hero.mp4') ? '/assets/media/hero.mp4' : '';
   const heroPoster = has('hero.jpg') ? '/assets/media/hero.jpg' : '/assets/img/hero.jpg';
 
@@ -24,7 +27,7 @@ export function loadMedia(publicDir) {
     const stem = basename(f, extname(f));
     const caption = stem.replace(/[-_]+/g, ' ').replace(/^\d+\s*/, '').replace(/^\w/, c => c.toUpperCase());
     const poster = VID.has(ext) && existsSync(join(pdir, stem + '.jpg')) ? `/assets/media/projecten/${stem}.jpg` : '';
-    return { src: `/assets/media/projecten/${f}`, video: VID.has(ext), caption, poster };
+    return { src: `/assets/media/projecten/${f}`, video: VID.has(ext), caption, poster, credit: creditFor('projecten/' + f) };
   }).filter(Boolean) : [];
   // Een .jpg die alleen als poster van een video dient, niet dubbel tonen.
   const videoStems = new Set(items.filter(i => i.video).map(i => basename(i.src, extname(i.src))));
@@ -33,5 +36,5 @@ export function loadMedia(publicDir) {
   const fallback = ['project-1', 'dekvloer-2', 'project-2', 'project-3', 'project-4', 'project-5', 'dekvloer-1', 'project-6', 'project-7', 'project-8']
     .map((n, i) => ({ src: `/assets/img/${n}.jpg`, video: false, caption: ['Kantoorpand', 'Afgereide dekvloer', 'Renovatie woonhuis', 'Bedrijfshal', 'Vloerverwarming', 'Kantoorruimte', 'Utiliteitsbouw', 'Appartementen', 'Herenhuis', 'Showroom'][i], poster: '' }));
 
-  return { heroVideo, heroPoster, gallery: gallery.length ? gallery : fallback, real: gallery.length > 0 };
+  return { heroVideo, heroPoster, heroCredit: creditFor('hero.jpg'), credits, gallery: gallery.length ? gallery : fallback, real: gallery.length > 0 };
 }

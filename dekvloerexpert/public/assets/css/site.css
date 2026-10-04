@@ -698,3 +698,7 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
 .cta-card .btn-row{justify-content:flex-start}
 .cta-card .fine{margin:26px 0 0}
 @media (max-width:680px){.cta-card{padding:44px 22px}}
+.gal-cap small{display:block;font-weight:400;font-size:.76rem;opacity:.75;margin-top:2px}
+.gal-note{font-size:.88rem;color:var(--muted-d);margin:16px 0 0}
+.gal-note a{color:inherit}
+.paper .gal-note{color:var(--muted)}

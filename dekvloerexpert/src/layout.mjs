@@ -105,7 +105,7 @@ export function footer(footerPlaces = []) {
 </div>
 ${footerPlaces.length ? `<div class="f-places"><h4>Zandcement dekvloer in onder meer</h4><ul>${footerPlaces.map(p => `<li><a href="/${p.slug}">${esc(p.name)}</a></li>`).join('')}<li><a class="strong" href="/werkgebied">Alle plaatsen</a></li></ul></div>` : ''}
 <div class="wordmark" aria-hidden="true">DEKVLOER<span>EXPERT</span></div>
-<div class="f-bottom"><span>© ${new Date().getFullYear()} ${site.name}. Alle rechten voorbehouden.${site.kvk ? ` KvK ${site.kvk}.` : ''} <a href="/privacy">Privacy</a></span><span>Website door <b><a href="${site.builtBy.url}" target="_blank" rel="noopener">${site.builtBy.name}</a></b></span></div>
+<div class="f-bottom"><span>© ${new Date().getFullYear()} ${site.name}. Alle rechten voorbehouden.${site.kvk ? ` KvK ${site.kvk}.` : ''} <a href="/privacy">Privacy</a> · <a href="/fotoverantwoording">Fotoverantwoording</a></span><span>Website door <b><a href="${site.builtBy.url}" target="_blank" rel="noopener">${site.builtBy.name}</a></b></span></div>
 </div></footer>
 <a class="wa-fab" href="${wa()}" target="_blank" rel="noopener" aria-label="Stuur een WhatsApp-bericht">${waIcon}</a>
 <nav class="mbar" aria-label="Snel contact"><a href="${tel}">${icon('phone')}<span>Bellen</span></a><a href="${wa()}" target="_blank" rel="noopener">${waIcon}<span>WhatsApp</span></a><a class="go" href="/offerte">${icon('arrow')}<span>Offerte</span></a></nav>`;
