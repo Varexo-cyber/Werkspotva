@@ -17,11 +17,7 @@ function crumbsFor(p) {
 // Rekenvoorbeelden met eigen getallen per plaats.
 function examples(p) {
   const pool = C.EXAMPLES[C.typeKey(p.cityType)] || C.EXAMPLES.nieuwbouwwijken;
-  return C.pickN(pool, 3, p.slug, 'ex').map(([label, min, max, cm], i) => {
-    const m2 = min + (C.hash(p.slug + 'm2' + i) % (max - min + 1));
-    const [lo, hi] = C.priceRange(m2, cm);
-    return { label, m2, cm, lo, hi };
-  }).sort((a, b) => a.m2 - b.m2);
+  return C.pickN(pool, 3, p.slug, 'ex').map(([label, min, max, cm]) => ({ label, min, max, cm })).sort((a, b) => a.min - b.min);
 }
 
 function faqFor(p, v) {
@@ -66,7 +62,7 @@ export function placePage(p, ctx) {
 
   const title = `Zandcement dekvloer ${p.label} | ${C.pick(['Prijs & offerte', 'Vakkundig gelegd', 'Kaarsrecht & legklaar'], p.slug, 'tt')}`;
   const description = `Zandcement dekvloer laten leggen in ${p.inLabel}? ${C.pick([
-    `Vanaf ca. ${C.euro(site.price.base5cm[0])} per m², kaarsrecht en legklaar.`,
+    'Offerte op maat, direct via WhatsApp.',
     'Voor nieuwbouw, renovatie en utiliteit, ook met vloerverwarming.',
     'Scherpe prijs vooraf, ervaren team en eigen materieel.',
   ], p.slug, 'md')} Vraag een vrijblijvende offerte aan.`;
@@ -96,12 +92,13 @@ ${hero({
 
 <section class="paper"><div class="wrap">
 <div class="sec-head reveal" style="max-width:820px">
-<h2>Wat kost een dekvloer in ${esc(p.name)}?</h2>
+<span class="eyebrow">Offerte op maat</span>
+<h2>Offerte voor uw vloer <span class="accent">in ${esc(p.name)}</span></h2>
 <p class="lead">${esc(priceIntro)}</p></div>
-<div class="table-scroll reveal"><table class="ptable"><thead><tr><th>Voorbeeld</th><th>Oppervlakte</th><th>Dikte</th><th>Indicatie (excl. btw)</th></tr></thead><tbody>
-${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.m2} m²</td><td>${e.cm} cm</td><td>${C.rangeText([e.lo, e.hi])}</td></tr>`).join('')}
+<div class="table-scroll reveal"><table class="ptable"><thead><tr><th>Soort vloer</th><th>Gebruikelijke oppervlakte</th><th>Gebruikelijke dikte</th></tr></thead><tbody>
+${ex.map(e => `<tr><td>${esc(e.label)}</td><td>${e.min} – ${e.max} m²</td><td>${e.cm} cm</td></tr>`).join('')}
 </tbody></table></div>
-<p class="note">Indicatie inclusief materiaal en aanbrengen, exclusief btw en opties. U ontvangt altijd een vaste prijs na inmeting. <a href="/cementdekvloer-kosten-per-m2">Meer over de kosten per m²</a>.</p>
+<p class="note">Richtwaarden. Op isolatie, vloerverwarming of bij grote hoogteverschillen kan een vloer dikker worden, tot wel 30 cm.</p>
 <div style="margin-top:40px" class="reveal">${calculator(p.name)}</div>
 </div></section>
 
@@ -131,7 +128,7 @@ ${siblings.length ? `<h3 style="margin:0 0 14px">${p.isMain ? 'Wijken en kernen 
 <ul class="chips">${others.map(o => `<li><a href="/${o.slug}">${esc(o.name)}</a></li>`).join('')}<li><a href="/werkgebied/${pv.slug}"><b>Alle plaatsen in ${esc(pv.name)}</b></a></li></ul>
 </div></section>
 
-${cta(`Stuur ons de oppervlakte, de dikte en een foto van de ruimte in ${esc(p.name)}. Dan krijgt u snel een prijs.`)}`;
+${cta(`Vraag een offerte aan voor uw dekvloer in ${esc(p.name)}, of stel eerst uw vraag. De offerte komt direct op uw WhatsApp.`)}`;
 
   return page({
     path: `/${p.slug}`, title, description, body, footerPlaces: ctx.footerPlaces,
@@ -142,7 +139,6 @@ ${cta(`Stuur ons de oppervlakte, de dikte en een foto van de ruimte in ${esc(p.n
       provider: { '@id': site.url + '/#bedrijf' },
       areaServed: { '@type': 'City', name: p.name, containedInPlace: { '@type': 'AdministrativeArea', name: `Gemeente ${m.name}`, containedInPlace: { '@type': 'AdministrativeArea', name: pv.name } } },
       url: abs(`/${p.slug}`),
-      offers: { '@type': 'AggregateOffer', priceCurrency: 'EUR', lowPrice: site.price.base5cm[0], highPrice: site.price.base5cm[1], unitText: 'm²' },
     }],
   });
 }

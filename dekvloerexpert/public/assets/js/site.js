@@ -37,6 +37,10 @@
   if (pre) form.querySelectorAll('input[name=dienst]').forEach(function (r) { if (r.value === pre) r.checked = true; });
   var plaats = params.get('plaats');
   if (plaats) form.plaats.value = plaats;
+  if (form.dikte_zelf) form.dikte_zelf.addEventListener('input', function () {
+    form.querySelectorAll('input[name=laagdikte]').forEach(function (r) { if (r.value.indexOf('zelf') > -1) r.checked = true; });
+    var g = form.dikte_zelf.closest('.fgroup'); if (g) g.classList.remove('invalid');
+  });
   var svcName = document.getElementById('svcName');
   function syncSvc() { var c = form.querySelector('input[name=dienst]:checked'); if (c) svcName.textContent = c.value; }
   form.addEventListener('change', function (e) {
@@ -67,7 +71,7 @@
 
     var fields = [
       ['Dienst', val('dienst')], ['Ruimte', val('ruimte')], ['Verdieping', val('verdieping')],
-      ['Oppervlakte', val('oppervlakte') + ' m²'], ['Laagdikte', val('laagdikte')], ['Vloerverwarming', val('vloerverwarming')],
+      ['Oppervlakte', val('oppervlakte') + ' m²'], ['Laagdikte', val('dikte_zelf') ? val('dikte_zelf') + ' cm' : val('laagdikte')], ['Vloerverwarming', val('vloerverwarming')],
       ['Type project', val('type')], ['Uitvoerperiode', val('periode')], ['Opties', val('opties')],
       ['Naam', val('naam')], ['Telefoon', val('telefoon')], ['E-mail', val('email')], ['Plaats', val('plaats')], ['Toelichting', val('toelichting')]
     ].filter(function (f) { return f[1] && f[1] !== ' m²'; });
@@ -140,34 +144,30 @@
     set('dekvloer');
   });
 
-  // Prijscalculator
-  document.querySelectorAll('.calc').forEach(function (c) {
-    var base = c.dataset.base.split(',').map(Number), extra = c.dataset.extra.split(',').map(Number), min = +c.dataset.min;
-    var range = c.querySelector('input[type=range]'), out = c.querySelector('output'), cm = 6;
-    var lo = c.querySelector('#calcLo'), hi = c.querySelector('#calcHi'), per = c.querySelector('#calcPer'), cta = c.querySelector('#calcCta');
-    var calc = function () {
-      var m2 = +range.value, add = [0, 0];
-      c.querySelectorAll('.calc-opts input:checked').forEach(function (o) { var a = o.dataset.add.split(',').map(Number); add[0] += a[0]; add[1] += a[1]; });
-      var pl = base[0] + Math.max(0, cm - 5) * extra[0] + add[0], ph = base[1] + Math.max(0, cm - 5) * extra[1] + add[1];
-      var l = Math.max(min, pl * m2), h = Math.max(min, ph * m2);
-      out.textContent = m2 + ' m²';
-      range.style.setProperty('--fill', ((m2 - range.min) / (range.max - range.min) * 100) + '%');
-      lo.textContent = euro(Math.round(l / 10) * 10); hi.textContent = euro(Math.round(h / 10) * 10);
-      hi.parentElement.querySelector('i').hidden = hi.hidden = l === h;
-      per.textContent = l === h ? 'Minimumbedrag · excl. btw' : euro(pl) + ' – ' + euro(ph) + ' per m² · excl. btw';
-      var opts = Array.prototype.map.call(c.querySelectorAll('.calc-opts input:checked'), function (o) { return o.parentElement.textContent.trim(); });
-      cta.href = '/offerte?m2=' + m2 + '&cm=' + cm + (c.dataset.place ? '&plaats=' + encodeURIComponent(c.dataset.place) : '') + (opts.length ? '&opties=' + encodeURIComponent(opts.join('|')) : '');
+  // Offerte samenstellen → kant-en-klaar WhatsApp-bericht
+  document.querySelectorAll('.otool').forEach(function (f) {
+    var m2 = f.querySelector('#otM2'), m2r = f.querySelector('#otM2r'), cm = f.querySelector('#otCm'), pl = f.querySelector('#otPlace');
+    var send = f.querySelector('.ot-send'), form = f.querySelector('.ot-form');
+    var sum = function (k) { return f.querySelector('.ot-sum [data-k="' + k + '"]'); };
+    var update = function () {
+      var a = Math.max(1, Math.round(+m2.value || 0)), d = Math.min(30, Math.max(2, +String(cm.value).replace(',', '.') || 0));
+      var x = Array.prototype.map.call(f.querySelectorAll('.ot-extras input:checked'), function (i) { return i.value; });
+      var place = f.dataset.place || (pl && pl.value.trim()) || '';
+      sum('m2').textContent = a + ' m²'; sum('cm').textContent = String(d).replace('.', ',') + ' cm'; sum('x').textContent = x.length ? x.join(', ') : 'Geen';
+      m2r.style.setProperty('--fill', ((Math.min(1000, a) - 5) / 995 * 100) + '%');
+      f.querySelectorAll('.ot-cm button').forEach(function (b) { b.classList.toggle('on', +b.dataset.cm === d); });
+      var msg = 'Hallo Dekvloerexpert, ik wil graag een offerte voor een zandcement dekvloer.\n\nOppervlakte: ' + a + ' m²\nDikte: ' + String(d).replace('.', ',') + ' cm\nExtra\'s: ' + (x.length ? x.join(', ') : 'geen') + (place ? '\nPlaats: ' + place : '');
+      send.href = 'https://wa.me/' + f.dataset.wa + '?text=' + encodeURIComponent(msg);
+      form.href = '/offerte?m2=' + a + '&cm=' + d + (place ? '&plaats=' + encodeURIComponent(place) : '') + (x.length ? '&opties=' + encodeURIComponent(x.join('|')) : '');
     };
-    range.addEventListener('input', calc);
-    c.addEventListener('change', calc);
-    c.querySelectorAll('.seg-btns button').forEach(function (b) {
-      b.addEventListener('click', function () {
-        cm = +b.dataset.cm;
-        c.querySelectorAll('.seg-btns button').forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
-        calc();
-      });
-    });
-    calc();
+    m2r.addEventListener('input', function () { m2.value = m2r.value; update(); });
+    m2.addEventListener('input', function () { if (+m2.value >= 5 && +m2.value <= 1000) m2r.value = m2.value; update(); });
+    cm.addEventListener('input', update);
+    cm.addEventListener('change', function () { cm.value = Math.min(30, Math.max(2, +String(cm.value).replace(',', '.') || 6)); update(); });
+    f.querySelectorAll('.ot-cm button').forEach(function (b) { b.addEventListener('click', function () { cm.value = b.dataset.cm; update(); }); });
+    f.addEventListener('change', update);
+    if (pl) pl.addEventListener('input', update);
+    update();
   });
 
   // Offerteformulier vooraf invullen vanuit de calculator
@@ -175,10 +175,14 @@
   if (form) {
     var q = new URLSearchParams(location.search);
     if (q.get('m2')) form.oppervlakte.value = q.get('m2');
-    if (q.get('cm')) form.querySelectorAll('input[name=laagdikte]').forEach(function (r) { if (r.value === q.get('cm') + ' cm') r.checked = true; });
+    if (q.get('cm')) {
+      var hit = false;
+      form.querySelectorAll('input[name=laagdikte]').forEach(function (r) { if (r.value === q.get('cm') + ' cm') { r.checked = true; hit = true; } });
+      if (!hit) { form.querySelectorAll('input[name=laagdikte]').forEach(function (r) { if (r.value.indexOf('zelf') > -1) r.checked = true; }); form.dikte_zelf.value = q.get('cm'); }
+    }
     if (q.get('opties')) {
       var want = q.get('opties').toLowerCase();
-      form.querySelectorAll('input[name=opties]').forEach(function (o) { var v = o.value.toLowerCase(); if (want.indexOf(v) > -1 || (v === 'krimpnetten' && want.indexOf('krimpnet') > -1)) o.checked = true; });
+      form.querySelectorAll('input[name=opties]').forEach(function (o) { if (want.indexOf(o.value.toLowerCase()) > -1) o.checked = true; });
     }
   }
 

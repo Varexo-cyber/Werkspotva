@@ -91,7 +91,7 @@ export function footer(footerPlaces = []) {
   return `<footer class="site-footer"><div class="wrap">
 <div class="f-grid">
 <div><a class="logo" href="/"><b>DEKVLOER<span>EXPERT</span></b><small>ZANDCEMENT DEKVLOEREN</small></a>
-<p class="f-about">Zandcement dekvloeren voor woningen, uitbouwen en bedrijfspanden. Door heel Nederland, voor aannemers en particulieren.</p>
+<p class="f-about">Zandcement dekvloeren · Landelijk actief. Voor aannemers en particulieren. Strakke vloeren, sterke basis!</p>
 <div class="socials">${soc}</div></div>
 <div><h4>Diensten</h4><ul>${SERVICES.map(s => `<li><a href="/${s.slug}">${s.nav}</a></li>`).join('')}<li><a class="strong" href="/diensten">Alle diensten</a></li></ul></div>
 <div><h4>Informatie</h4><ul>
@@ -120,7 +120,6 @@ export const businessLd = () => ({
   email: site.email,
   image: site.url + '/assets/img/hero.jpg',
   areaServed: { '@type': 'Country', name: 'Nederland' },
-  priceRange: '€€',
   slogan: 'Strakke vloeren, sterke basis!',
 });
 
@@ -165,7 +164,7 @@ ${footer(footerPlaces)}
 }
 
 // ───────────────────────── Herbruikbare blokken
-export function hero({ crumbs, pill = 'Zandcement dekvloeren', h1, lead, img = '/assets/img/hero.jpg', video = '', checks, buttons, sub = true, extra = '', aside = '' }) {
+export function hero({ crumbs, pill = 'Zandcement dekvloeren · Landelijk actief', h1, lead, img = '/assets/img/hero.jpg', video = '', checks, buttons, sub = true, extra = '', aside = '' }) {
   return `<section class="hero${sub ? ' sub' : ''}${aside ? ' has-aside' : ''}">
 <div class="hero-bg" style="background-image:url('${img}')">${video ? `<video autoplay muted loop playsinline preload="metadata" poster="${img}"><source src="${video}" type="video/mp4"></video>` : ''}</div>
 <div class="hero-sweep" aria-hidden="true"></div>
@@ -193,12 +192,13 @@ export const faqLd = qa => ({
 });
 export const faqHtml = qa => `<div class="faq">${qa.map(([q, a], i) => `<details${i === 0 ? ' open' : ''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>`;
 
-export function cta(lead = 'Stuur ons de oppervlakte, de gewenste dikte en een foto van de ruimte. Dan krijgt u snel een prijs.', title = 'Prijs nodig voor uw vloer?') {
+export function cta(lead = 'Vraag een offerte aan, of stel eerst uw vraag. Wij denken graag met u mee. De offerte komt direct op uw WhatsApp.', title = 'Klaar voor een <span class="accent">kaarsrechte basis?</span>') {
   return `<section><div class="wrap"><div class="cta-card reveal">
+<span class="eyebrow">Vrijblijvende offerte</span>
 
 <h2>${title}</h2>
 <p>${lead}</p>
 <div class="btn-row"><a class="btn btn-teal" href="/offerte">Offerte aanvragen ${icon('arrow')}</a><a class="btn btn-wa" href="${wa()}" target="_blank" rel="noopener">${waIcon} WhatsApp</a><a class="btn btn-ghost" href="${tel}">${icon('phone')} Bel ${site.phoneDisplay}</a></div>
-<p class="fine">Bel of app ${site.phoneDisplay}</p>
+<p class="fine">Zandcement dekvloeren · Landelijk actief · Strakke vloeren, sterke basis!</p>
 </div></div></section>`;
 }

@@ -1,5 +1,5 @@
 // Gedeelde inhoud: opties, werkwijze, reviews, projecten.
-import { icon, esc, googleWord } from './layout.mjs';
+import { icon, esc, googleWord, waIcon } from './layout.mjs';
 import { site } from './config.mjs';
 
 export const OPTIONS = [
@@ -26,9 +26,9 @@ export const STEPS = [
   ['Uitvoering volgens planning', 'Wij schakelen snel, komen afspraken na en werken met modern materieel.'],
   ['Kaarsrecht en legklaar', 'Vlak en waterpas afgewerkt, zodat de vloerenlegger direct aan de slag kan.'],
 ];
-export const stepsHtml = (steps = STEPS) => `<ol class="timeline">${steps.map(([t, d, when], i) => `<li class="reveal"><span class="tl-n">${String(i + 1).padStart(2, '0')}</span><div><h3>${t}</h3><p>${d}</p></div>${when ? `<span class="tl-when">${when}</span>` : ''}</li>`).join('')}</ol>`;
+export const stepsHtml = (steps = STEPS) => `<div class="steps">${steps.map(([t, d], i) => `<div class="step reveal"><div class="num">${String(i + 1).padStart(2, '0')}</div><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>`;
 
-export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="table-scroll"><table class="otable"><thead><tr><th>Optie</th><th>Wat het doet</th></tr></thead><tbody>${opts.map(o => `<tr><td>${o.alt || o.title}</td><td>${o.short}</td></tr>`).join('')}</tbody></table></div>${withLink ? `<p style="margin-top:22px"><a class="text-link" href="/opties">Uitleg per optie ${icon('arrow')}</a></p>` : ''}`;
+export const optionCards = (opts = OPTIONS, withLink = true) => `<div class="cards">${opts.map(o => `<div class="card reveal"><span class="ck">${icon('check')}</span><div><h3>${o.alt || o.title}</h3><p>${o.short}</p></div></div>`).join('')}${withLink ? `<a class="card link reveal" href="/opties"><div><h3>Alles over de opties</h3><p>Uitleg per optie en wanneer u hem kiest.</p></div><span class="arrow">${icon('arrow')}</span></a>` : ''}</div>`;
 
 // Voorbeeldreviews, net als in de demo duidelijk gemarkeerd als voorbeeld.
 // Vervang ze door echte Google-reviews zodra het bedrijfsprofiel gekoppeld is.
@@ -40,13 +40,13 @@ const REVIEWS = [
   ['Vloerverwarming en dekvloer in één keer geregeld, met één aanspreekpunt.', 'Vloerverwarming en dekvloer'],
   ['Snel geschakeld en de afspraken nagekomen, precies volgens planning.', 'Nieuwbouw'],
 ];
-const reviewCard = ([q, t]) => `<article class="review"><div class="r-top"><span class="r-av">G</span><div><b>Klant via Google</b><span class="stars" aria-label="5 sterren">★★★★★</span></div><span class="r-tag">Voorbeeld</span></div><q>${esc(q)}</q><small>${esc(t)}</small></article>`;
-export const reviewsSection = () => !site.reviews?.length ? '' : `<section class="dark" id="reviews"><div class="wrap">
+const reviewCard = ([q, t]) => !site.reviews?.length ? `<article class="review"><div class="r-top"><span class="r-av">G</span><div><b>Klant via Google</b><span class="stars" aria-label="5 sterren">★★★★★</span></div><span class="r-tag">Voorbeeld</span></div><q>${esc(q)}</q><small>${esc(t)}</small></article>` : `<article class="review"><div class="r-top"><span class="r-av">G</span><div><b>Klant via Google</b><span class="stars" aria-label="5 sterren">★★★★★</span></div></div><q>${esc(q)}</q><small>${esc(t)}</small></article>`;
+export const reviewsSection = () => `<section class="dark" id="reviews"><div class="wrap center">
 <a class="gbadge" href="${site.googleReviewsUrl || '#reviews'}"${site.googleReviewsUrl ? ' target="_blank" rel="noopener"' : ''}>${googleWord}<span class="stars">★★★★★</span>Reviews</a>
-<h2>Reviews</h2>
-<p class="lead">Voorbeeldweergave: zodra uw Google Bedrijfsprofiel is gekoppeld, verschijnen hier automatisch de echte beoordelingen van uw klanten.</p>
+<h2>Wat onze klanten <span class="accent">zeggen</span></h2>
+${site.reviews?.length ? '' : '<p class="lead">Voorbeeldweergave: zodra uw Google Bedrijfsprofiel is gekoppeld, verschijnen hier de echte beoordelingen van uw klanten.</p>'}
 </div>
-<div class="wrap"><div class="rev-grid">${site.reviews.slice(0, 3).map(reviewCard).join('')}</div></div>
+<div class="wrap"><div class="rev-grid">${(site.reviews?.length ? site.reviews : REVIEWS).slice(0, 3).map(reviewCard).join('')}</div></div>
 </section>`;
 
 // Voorbeeldprojecten uit de demo. Vervang foto's in public/assets/img/ en pas teksten hier aan.
@@ -63,7 +63,7 @@ export const PROJECTS = [
 ];
 export const projectCard = p => `<figure class="proj reveal"><img src="/assets/img/${p.img}.jpg" alt="${esc(p.title)} in ${esc(p.place)}, ${p.m2} m² zandcement dekvloer" loading="lazy" width="900" height="700"><span class="ptag">${esc(p.tag)}</span><figcaption><b>${esc(p.title)}</b><span>${esc(p.place)} · ${p.m2} m²</span></figcaption></figure>`;
 
-export const featureList = items => `<dl class="specs">${items.map(([, t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
+export const featureList = items => `<div class="features">${items.map(([ic, t, d]) => `<div class="feature reveal"><span class="f-ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`).join('')}</div>`;
 
 // ───────────────────────── Nieuwe blokken
 
@@ -118,31 +118,29 @@ ${l.pipes ? Array.from({ length: 16 }, (_, i) => `<circle cx="${44 + i * 32}" cy
 </div>`;
 }
 
-// Live prijscalculator; de prijs komt uit src/config.mjs.
-export function calculator(place = '') {
-  const { base5cm, perExtraCm, minimumOrder } = site.price;
-  return `<div class="calc" data-base="${base5cm.join(',')}" data-extra="${perExtraCm.join(',')}" data-min="${minimumOrder}" data-place="${esc(place)}">
+// Offerte samenstellen: geen prijs, de aanvraag gaat als kant-en-klaar bericht naar WhatsApp.
+export const EXTRAS = ['Versneller', 'Verharder', 'Vezels', 'Duremit', 'Krimpnetten', 'Randisolatie'];
+export function offerteTool(place = '') {
+  return `<form class="calc otool" data-wa="${site.whatsapp}" data-place="${esc(place)}" onsubmit="return false">
 <div class="calc-in">
-<div class="calc-row"><label for="calcM2">Oppervlakte</label><output id="calcM2out">60 m²</output></div>
-<input id="calcM2" type="range" min="5" max="1000" step="1" value="60" aria-describedby="calcM2out">
-<div class="calc-row" style="margin-top:26px"><span class="flabel">Dikte</span></div>
-<div class="seg-btns" role="radiogroup" aria-label="Dikte">${[5, 6, 7, 8].map(c => `<button type="button" role="radio" aria-checked="${c === 6}" data-cm="${c}"${c === 6 ? ' class="on"' : ''}>${c} cm</button>`).join('')}</div>
-<div class="calc-row" style="margin-top:26px"><span class="flabel">Opties</span></div>
-<div class="calc-opts">
-<label><input type="checkbox" id="calcVv" data-add="2,3"> Krimpnet (vloerverwarming)</label>
-<label><input type="checkbox" id="calcAcc" data-add="3,5"> Droogtijdversneller</label>
-<label><input type="checkbox" id="calcVez" data-add="1,2"> Krimpvezels</label>
-</div>
+<div class="calc-row"><label for="otM2">Oppervlakte</label><span class="ot-num"><input id="otM2" type="number" min="1" max="20000" value="60" inputmode="numeric"> m²</span></div>
+<input id="otM2r" type="range" min="5" max="1000" step="1" value="60" aria-label="Oppervlakte in m²">
+<div class="calc-row" style="margin-top:26px"><label for="otCm">Dikte</label><span class="ot-num"><input id="otCm" type="number" min="2" max="30" step="0.5" value="6" inputmode="decimal"> cm</span></div>
+<div class="seg-btns ot-cm" role="group" aria-label="Snelkeuze dikte">${[5, 6, 7, 8, 10, 15, 20, 30].map(c => `<button type="button" data-cm="${c}"${c === 6 ? ' class="on"' : ''}>${c}</button>`).join('')}</div>
+<p class="ot-hint">Vloeren kunnen tot wel 30 cm dik zijn. Vul gerust zelf in.</p>
+<div class="calc-row" style="margin-top:22px"><span class="flabel">Extra's</span></div>
+<div class="calc-opts ot-extras">${EXTRAS.map(x => `<label><input type="checkbox" value="${x}"> ${x}</label>`).join('')}</div>
+${place ? '' : '<div class="calc-row" style="margin-top:22px"><label for="otPlace">Plaats of postcode</label></div><input id="otPlace" class="ot-text" type="text" autocomplete="address-level2" placeholder="Bijvoorbeeld Alkmaar">'}
 </div>
 <div class="calc-out">
-<span class="calc-lbl">Indicatie${place ? ' voor ' + esc(place) : ''}</span>
-<div class="calc-price"><span id="calcLo">€ 1.200</span><i>–</i><span id="calcHi">€ 1.700</span></div>
-<p class="calc-per" id="calcPer">€ 20 – € 29 per m² · excl. btw</p>
-<a class="btn btn-teal" id="calcCta" href="/offerte">Vraag deze prijs vast aan ${icon('arrow')}</a>
-<p class="calc-note">Indicatie inclusief materiaal en aanbrengen. Na inmeting krijgt u een vaste prijs.</p>
+<span class="calc-lbl">Uw aanvraag${place ? ' in ' + esc(place) : ''}</span>
+<ul class="ot-sum" aria-live="polite"><li><span>Oppervlakte</span><b data-k="m2">60 m²</b></li><li><span>Dikte</span><b data-k="cm">6 cm</b></li><li><span>Extra's</span><b data-k="x">Geen</b></li></ul>
+<a class="btn btn-wa ot-send" href="#" target="_blank" rel="noopener">${waIcon} Offerte aanvragen via WhatsApp</a>
+<p class="calc-note">Wij sturen u een passende offerte, direct op uw WhatsApp. Liever een formulier? <a class="ot-form" href="/offerte">Vul het offerteformulier in</a>.</p>
 </div>
-</div>`;
+</form>`;
 }
+export const calculator = offerteTool;
 
 // Galerij met lightbox (foto's en video's).
 export function gallery(items, limit = 0) {
@@ -153,3 +151,9 @@ ${m.video ? `<video src="${m.src}#t=0.5" muted playsinline preload="metadata"${m
 ${list.some(m => m.credit) ? '<p class="gal-note">Licentievrije beelden met naamsvermelding. <a href="/fotoverantwoording">Fotoverantwoording</a></p>' : ''}
 <dialog class="lightbox" id="lightbox" aria-label="Foto of video vergroot"><button type="button" class="lb-close" aria-label="Sluiten">×</button><button type="button" class="lb-prev" aria-label="Vorige">‹</button><div class="lb-stage"></div><button type="button" class="lb-next" aria-label="Volgende">›</button><p class="lb-cap"></p></dialog>`;
 }
+
+// Staande filmpjes van de klant, naast elkaar als telefoonbeeld. Klik opent ze groot, met geluid.
+export const videoSection = (videos, { title = 'Van zandaanvoer tot legklare vloer', lead = 'Zo gaat het op de bouw: het zand komt binnen, de mixer maakt de mortel en de pomp brengt hem naar binnen.' } = {}) => !videos.length ? '' : `<section class="dark vids"><div class="wrap vids-grid">
+<div class="vids-text reveal"><h2>${title}</h2><p class="lead">${lead}</p><p class="vids-note">Klik op een filmpje om het met geluid te bekijken.</p></div>
+<div class="vids-row">${videos.map(v => `<button type="button" class="gal-item vid-tile" data-src="${v.src}" data-video="1" data-caption="${esc(v.caption)}" aria-label="Bekijk filmpje: ${esc(v.caption)}"><video src="${v.src}" ${v.poster ? `poster="${v.poster}" ` : ''}autoplay muted loop playsinline preload="metadata"></video><span class="gal-cap">${esc(v.caption)}</span></button>`).join('')}</div>
+</div></section>`;
