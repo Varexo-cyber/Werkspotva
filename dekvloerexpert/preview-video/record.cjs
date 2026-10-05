@@ -50,11 +50,12 @@ async function main() {
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-r', String(FPS), '-movflags', '+faststart', OUT], { stdio: ['pipe', 'inherit', 'inherit'] });
 
-  let frameNo = 0;
+  let frameNo = 0, frameDt = 0.1, lastT = Date.now();
   const shot = async () => {
     const buf = await page.screenshot({ type: 'jpeg', quality: 93 });
     if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
     frameNo++;
+    const now = Date.now(); frameDt = frameDt * 0.85 + ((now - lastT) / 1000) * 0.15; lastT = now;
     if (frameNo % 300 === 0) console.log(`  ${frameNo} frames (${(frameNo / FPS).toFixed(0)} s)`);
   };
 
@@ -71,17 +72,15 @@ async function main() {
     p.style.opacity = s.capA; p.style.transform = `translateY(${(1 - s.capA) * 16}px)`;
     if (k.dataset.h !== s.cardHtml) { k.innerHTML = s.cardHtml; k.dataset.h = s.cardHtml; }
     k.style.opacity = s.card; f.style.opacity = s.fade;
-    // Video's lopen niet vrij mee (dan spelen ze versneld af), maar worden per frame op tijd gezet.
-    const vids = [...document.querySelectorAll('video')].filter(v => v.readyState >= 1 && v.duration);
-    await Promise.all(vids.map(v => new Promise(res => {
-      if (!v.paused) v.pause();
-      const t0 = +(v.dataset.t0 ?? (v.dataset.t0 = s.t));
-      const target = ((s.t - t0) % v.duration + v.duration) % v.duration;
-      if (Math.abs(v.currentTime - target) < 0.004) return res();
-      const done = () => { v.removeEventListener('seeked', done); requestAnimationFrame(() => res()); };
-      v.addEventListener('seeked', done); v.currentTime = target; setTimeout(done, 400);
-    })));
-  }, { ...st, t: frameNo / FPS });
+    // Video's spelen echt af, maar op een snelheid die het rendertempo volgt:
+    // elke 1/60 s video per gerenderd frame, zodat ze in de opname op normale snelheid lopen.
+    const rate = Math.min(4, Math.max(0.0625, (1 / 60) / Math.max(0.001, s.dt)));
+    for (const v of document.querySelectorAll('video')) {
+      v.muted = true;
+      if (Math.abs(v.playbackRate - rate) > 0.01) v.playbackRate = rate;
+      if (v.paused && v.readyState >= 2) v.play().catch(() => {});
+    }
+  }, { ...st, dt: frameDt });
   const frame = async () => { await apply(); await shot(); };
 
   const prepare = async () => {
