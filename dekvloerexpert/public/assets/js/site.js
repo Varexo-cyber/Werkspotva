@@ -193,7 +193,7 @@
     var stage = lb.querySelector('.lb-stage'), cap = lb.querySelector('.lb-cap');
     var show = function (i) {
       idx = (i + items.length) % items.length; var it = items[idx];
-      stage.innerHTML = it.dataset.video === '1' ? '<video src="' + it.dataset.src + '" controls autoplay playsinline></video>' : '<img src="' + it.dataset.src + '" alt="">';
+      stage.innerHTML = it.dataset.video === '1' ? '<video controls autoplay playsinline><source src="' + it.dataset.src + '" type="video/mp4">' + (it.dataset.webm ? '<source src="' + it.dataset.webm + '" type="video/webm">' : '') + '</video>' : '<img src="' + it.dataset.src + '" alt="">';
       stage.firstChild.alt = it.dataset.caption; cap.textContent = it.dataset.caption;
     };
     items.forEach(function (it, i) { it.addEventListener('click', function () { show(i); lb.showModal(); }); });

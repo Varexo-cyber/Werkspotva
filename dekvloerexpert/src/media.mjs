@@ -39,9 +39,10 @@ export function loadMedia(publicDir) {
 
   // Staande filmpjes (telefoon) voor de videosectie: video/*.mp4 met een .jpg als stilstaand beeld.
   const vdir = join(dir, 'video');
-  const videos = existsSync(vdir) ? readdirSync(vdir).filter(f => VID.has(extname(f).toLowerCase())).sort().map(f => {
+  const videos = existsSync(vdir) ? readdirSync(vdir).filter(f => extname(f).toLowerCase() === '.mp4').sort().map(f => {
     const stem = basename(f, extname(f));
-    return { src: `/assets/media/video/${f}`, video: true, poster: existsSync(join(vdir, stem + '.jpg')) ? `/assets/media/video/${stem}.jpg` : '', caption: stem.replace(/[-_]+/g, ' ').replace(/^\d+\s*/, '').replace(/^\w/, c => c.toUpperCase()), credit: null };
+    const webm = existsSync(join(vdir, stem + '.webm')) ? `/assets/media/video/${stem}.webm` : '';
+    return { src: `/assets/media/video/${f}`, webm, video: true, poster: existsSync(join(vdir, stem + '.jpg')) ? `/assets/media/video/${stem}.jpg` : '', caption: stem.replace(/[-_]+/g, ' ').replace(/^\d+\s*/, '').replace(/^\w/, c => c.toUpperCase()), credit: null };
   }) : [];
 
   return { heroVideo, heroPoster, heroCredit: creditFor('hero.jpg'), credits, videos, gallery: gallery.length ? gallery : fallback, real: gallery.length > 0 };
