@@ -60,7 +60,7 @@ async function main() {
 
   // Staat van de overlay, per frame naar de pagina gestuurd.
   const st = { cx: W * .62, cy: H * .55, cur: 0, ring: -1, cap: '', capK: '', capA: 0, card: 0, cardHtml: '', fade: 0 };
-  const apply = () => page.evaluate(s => {
+  const apply = () => page.evaluate(async s => {
     const c = document.getElementById('v-cur'), r = document.getElementById('v-ring'), p = document.getElementById('v-cap'), k = document.getElementById('v-card'), f = document.getElementById('v-fade');
     // Een open <dialog> ligt boven alles; cursor en ondertitel moeten daarin mee.
     const host = document.querySelector('dialog[open]') || document.body;
@@ -71,7 +71,17 @@ async function main() {
     p.style.opacity = s.capA; p.style.transform = `translateY(${(1 - s.capA) * 16}px)`;
     if (k.dataset.h !== s.cardHtml) { k.innerHTML = s.cardHtml; k.dataset.h = s.cardHtml; }
     k.style.opacity = s.card; f.style.opacity = s.fade;
-  }, st);
+    // Video's lopen niet vrij mee (dan spelen ze versneld af), maar worden per frame op tijd gezet.
+    const vids = [...document.querySelectorAll('video')].filter(v => v.readyState >= 1 && v.duration);
+    await Promise.all(vids.map(v => new Promise(res => {
+      if (!v.paused) v.pause();
+      const t0 = +(v.dataset.t0 ?? (v.dataset.t0 = s.t));
+      const target = ((s.t - t0) % v.duration + v.duration) % v.duration;
+      if (Math.abs(v.currentTime - target) < 0.004) return res();
+      const done = () => { v.removeEventListener('seeked', done); requestAnimationFrame(() => res()); };
+      v.addEventListener('seeked', done); v.currentTime = target; setTimeout(done, 400);
+    })));
+  }, { ...st, t: frameNo / FPS });
   const frame = async () => { await apply(); await shot(); };
 
   const prepare = async () => {
@@ -133,7 +143,7 @@ async function main() {
 
   // 1 — Titelkaart
   await goto('/', { crossfade: false });
-  await card(`<div class="k">Preview · ${new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })}</div><h1>Dekvloer<span>expert</span></h1><p>Uw nieuwe website, in anderhalve minuut. Van de homepage tot de pagina's per stad.</p>${ruler}`, 2.6);
+  await card(`<div class="k">Preview · ${new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })}</div><h1>Dekvloer<span>expert</span></h1><p>Uw nieuwe website, in twee minuten. Van de homepage tot de pagina's per stad.</p>${ruler}`, 2.6);
   await cardOff();
 
   // 2 — Hero
@@ -142,67 +152,74 @@ async function main() {
   await moveToEl('.hero .btn-teal', 1);
   await hold(.5);
   await moveToEl('.hero .btn-wa', .6); await hold(.3);
-  await moveToEl('.hero .btn-ghost', .6); await hold(.5);
-  await moveToEl('.spec-card', .9, 0, -40);
-  await caption('Homepage', 'Rechts de vakgegevens waar aannemers naar zoeken: sterkteklasse, dikte, droogtijd.', 2.2);
+  await moveToEl('.hero .btn-ghost', .6); await hold(.8);
 
-  // 3 — Wat wij doen
+  // 3 — Hoofddienst
   await capOff();
   await scrollToEl('main section:nth-of-type(2)', 60, 1.6);
-  await moveTo(W * .3, H * .55, .6);
-  await caption('Uitleg', 'Uitleg in gewone taal, met de specificaties overzichtelijk eronder.', 2.4);
+  await moveTo(W * .3, H * .6, .6);
+  await caption('Onze hoofddienst', 'Zandcement dekvloeren, met de voordelen in één oogopslag.', 2.2);
 
-  // 4 — Galerij + lightbox
+  // 4 — Eigen filmpjes
   await capOff();
-  await scrollToEl('.gal', 230, 1.6);
-  await caption('Foto’s', 'Foto’s van het werk. Klik erop voor een grote weergave.', .8);
-  await moveToEl('.gal-item:nth-child(4)', .8);
-  await click('.gal-item:nth-child(4)');
+  await scrollToEl('.vids', 40, 1.6);
+  await caption('Eigen beeld', 'Uw eigen filmpjes: van zandaanvoer en mixer tot de vloer die erin gaat.', 3.6);
+  await moveToEl('.vid-tile:nth-child(2)', .8);
+  await click('.vid-tile:nth-child(2)');
+  await hold(3.2);
+  await moveToEl('.lb-close', .6); await click('.lb-close'); await hold(.3);
+
+  // 5 — Recent werk
+  await capOff();
+  await scrollToEl('.gal', 230, 1.4);
+  await caption('Recent werk', 'Foto’s van uw eigen projecten. Klik erop voor een grote weergave.', .6);
+  await moveToEl('.gal .gal-item:nth-child(3)', .8);
+  await click('.gal .gal-item:nth-child(3)');
   await hold(1.4);
   await moveToEl('.lb-next', .6); await click('.lb-next'); await hold(1.1);
   await moveToEl('.lb-close', .6); await click('.lb-close'); await hold(.3);
 
-  // 5 — Opbouw
+  // 6 — Opties
   await capOff();
-  await scrollToEl('#opbouw', 90, 1.6);
-  await caption('Interactief', 'Een doorsnede van de vloer. Klanten zien precies wat een dekvloer is.', .6);
-  for (const id of ['isolatie', 'beton', 'dekvloer']) {
-    await moveToEl(`.bu-item[data-layer="${id}"]`, .7, -120);
-    await click(`.bu-item[data-layer="${id}"]`);
-    await hold(.9);
+  await scrollToEl('.cards', 330, 1.6);
+  await caption('Opties', 'De extra opties die u meelevert, met korte uitleg.', 1.8);
+
+  // 7 — Offerte samenstellen
+  await capOff();
+  await scrollToEl('#offerte-tool', 40, 1.5);
+  await caption('Offerte op maat', 'De klant stelt zijn vloer samen: oppervlakte, dikte en extra’s.', .4);
+  const typeInto = async (sel, text) => {
+    await moveToEl(sel, .6);
+    await click(sel, () => page.evaluate(q => { const i = document.querySelector(q); i.focus(); i.select(); }, sel));
+    await page.evaluate(q => { const i = document.querySelector(q); i.value = ''; }, sel);
+    for (const ch of text) { await page.keyboard.type(ch); await hold(.12); }
+  };
+  await typeInto('#otM2', '140');
+  await hold(.3);
+  await moveToEl('.ot-cm button[data-cm="20"]', .6); await click('.ot-cm button[data-cm="20"]'); await hold(.5);
+  for (const x of ['Versneller', 'Krimpnetten', 'Randisolatie']) {
+    const sel = `.ot-extras input[value="${x}"]`;
+    await moveToEl(sel, .45);
+    await click(sel, () => page.evaluate(q => { const i = document.querySelector(q); i.checked = true; i.dispatchEvent(new Event('change', { bubbles: true })); }, sel));
+    await hold(.15);
   }
+  await typeInto('#otPlace', 'Alkmaar');
+  await hold(.3);
+  await moveToEl('.ot-send', .8);
+  await caption('Offerte op maat', 'Eén tik en de aanvraag staat in uw WhatsApp. U stuurt een passende offerte terug.', 2.6);
 
-  // 6 — Prijscalculator
+  // 8 — Werkwijze en werkgebied
   await capOff();
-  await scrollToEl('#prijs', 90, 1.6);
-  await caption('Prijscalculator', 'Schuif de oppervlakte en zie direct een prijsindicatie.', .4);
-  const rb = await page.evaluate(() => { const r = document.querySelector('#calcM2').getBoundingClientRect(); return { x: r.left, w: r.width, y: r.top + r.height / 2 }; });
-  const pos = v => rb.x + 14 + (rb.w - 28) * (v - 5) / (1000 - 5);
-  await moveTo(pos(60), rb.y, .8);
-  await click(null, async () => {});
-  await runAsync(sec(1.8), async t => {
-    const v = Math.round(lerp(60, 140, ease(t)));
-    st.cx = pos(v);
-    await page.evaluate(v => { const r = document.querySelector('#calcM2'); r.value = v; r.dispatchEvent(new Event('input', { bubbles: true })); }, v);
-  });
-  await hold(.4);
-  await moveToEl('.seg-btns button[data-cm="7"]', .6); await click('.seg-btns button[data-cm="7"]'); await hold(.6);
-  await moveToEl('#calcVv', .6); await click('#calcVv', () => page.evaluate(() => { const c = document.querySelector('#calcVv'); c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true })); })); await hold(.5);
-  await moveToEl('#calcCta', .8);
-  await caption('Prijscalculator', 'Met één klik vraagt de klant deze prijs aan. Het formulier staat dan al ingevuld.', 2.2);
-
-  // 7 — Werkwijze en werkgebied
+  await scrollToEl('.steps', 300, 1.6);
+  await caption('Werkwijze', 'Van eerste contact tot legklare vloer, in vier stappen.', 1.8);
   await capOff();
-  await scrollToEl('.timeline', 200, 1.6);
-  await caption('Werkwijze', 'Hoe het gaat, met echte doorlooptijden. Van inmeting tot legklaar.', 2.2);
-  await capOff();
-  await scrollToEl('.prov-grid', 260, 1.5);
+  await scrollToEl('.prov-grid', 300, 1.6);
   await caption('Werkgebied', 'Heel Nederland: twaalf provincies, 87 gemeenten, 574 plaatsen en wijken.', 1.2);
   await moveToEl('.prov-grid a:first-child', .8);
   await click('.prov-grid a:first-child', async () => {});
   await hold(.3);
 
-  // 8 — Provinciepagina
+  // 9 — Provinciepagina
   await capOff();
   await goto('/werkgebied/noord-holland');
   st.cx = W * .5; st.cy = H * .5;
@@ -212,7 +229,7 @@ async function main() {
   await click('.muni a[href="/zandcement-dekvloer-alkmaar"]', async () => {});
   await hold(.2);
 
-  // 9 — Plaatspagina Alkmaar
+  // 10 — Plaatspagina Alkmaar
   await capOff();
   await goto('/zandcement-dekvloer-alkmaar');
   await caption('Pagina per stad', 'Zoekt iemand “zandcement dekvloer Alkmaar”, dan komt hij hier uit.', 2.2);
@@ -221,12 +238,12 @@ async function main() {
   await caption('Pagina per stad', 'Eigen tekst per plaats, over het soort bebouwing en de buurt. Geen kopie van een andere pagina.', 2.6);
   await capOff();
   await scrollToEl('.ptable', 300, 1.6);
-  await caption('Pagina per stad', 'Prijsvoorbeelden en een calculator voor Alkmaar.', 2);
+  await caption('Pagina per stad', 'Een offerte aanvragen voor Alkmaar kan direct vanaf deze pagina.', 2);
   await capOff();
   await scrollToEl('.faq', 250, 1.6);
   await caption('Pagina per stad', 'Veelgestelde vragen per stad, zo opgemaakt dat Google ze in de zoekresultaten kan tonen.', 2.4);
 
-  // 10 — Offerte
+  // 11 — Offerteformulier
   await capOff();
   await goto('/offerte');
   await caption('Offerte', 'Het offerteformulier: in een paar klikken ingevuld.', .4);
@@ -250,9 +267,9 @@ async function main() {
     await click(sel, () => page.evaluate(q => { const i = document.querySelector(q); i.checked = true; i.dispatchEvent(new Event('change', { bubbles: true })); }, sel));
     await hold(.2);
   }
-  await caption('Offerte', 'De aanvraag komt direct bij u binnen op WhatsApp, met alle gegevens erin.', 2.4);
+  await caption('Offerte', 'Ook het uitgebreide formulier komt direct bij u binnen op WhatsApp.', 2.4);
 
-  // 11 — Mobiel
+  // 12 — Mobiel
   await capOff(); await cursorOut();
   await page.goto(BASE + '/privacy', { waitUntil: 'networkidle' });
   await page.setContent(`<!doctype html><html><head><link rel="stylesheet" href="${BASE}/assets/fonts/fonts.css"></head><body style="margin:0;background:#0d100f;width:${W}px;height:${H}px;overflow:hidden;display:flex;align-items:center;gap:120px;padding:0 160px;box-sizing:border-box;font-family:Inter,sans-serif">
@@ -263,7 +280,7 @@ async function main() {
   await page.waitForFunction(() => { const d = document.getElementById('ph')?.contentDocument; return d && d.readyState === 'complete' && d.querySelector('.site-header'); }, null, { timeout: 30000 });
   const fr = page.frames().find(f => f !== page.mainFrame());
   await fr.addStyleTag({ content: OVERLAY_CSS });
-  await fr.evaluate(async () => { document.querySelectorAll('img[loading]').forEach(i => i.loading = 'eager'); await document.fonts.ready; });
+  await fr.evaluate(async () => { document.querySelectorAll('img[loading]').forEach(i => i.loading = 'eager'); document.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 4; }); await document.fonts.ready; });
   await page.waitForTimeout(800);
   const plain = async () => { await shot(); };
   for (let i = 0; i < sec(.8); i++) await plain();
@@ -275,11 +292,11 @@ async function main() {
     for (let i = 0; i < sec(.7); i++) await plain();
   }
 
-  // 12 — Slotkaart
+  // 13 — Slotkaart
   await page.goto(BASE + '/', { waitUntil: 'networkidle' });
   await prepare();
   st.cur = 0; st.capA = 0;
-  await card(`<div class="k">Preview</div><h1>Klaar voor <span>livegang</span></h1><p>574 plaatspagina's, prijscalculator, offerteformulier en een werkgebied door heel Nederland. Na uw akkoord, uw eigen foto's en de domeinnaam zetten we hem online.</p>${ruler}`, 3.6);
+  await card(`<div class="k">Preview</div><h1>Klaar voor <span>livegang</span></h1><p>Uw eigen foto's en filmpjes, 574 plaatspagina's, offerte-aanvragen direct op WhatsApp en een werkgebied door heel Nederland. Na uw akkoord en de domeinnaam zetten we hem online.</p>${ruler}`, 3.6);
 
   ff.stdin.end();
   await new Promise(r => ff.on('close', r));
