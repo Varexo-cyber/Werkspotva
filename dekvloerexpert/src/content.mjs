@@ -176,11 +176,11 @@ export const ADVICE_INTRO = [
 
 // ───────────────────────── Prijs
 export const PRICE_INTROS = [
-  'Wat een zandcement dekvloer in {name} kost, hangt vooral af van de oppervlakte, de dikte en eventuele opties zoals vezels of een versneller. Om u een idee te geven, staan hieronder drie rekenvoorbeelden.',
-  'De prijs per m² wordt lager naarmate de vloer groter is, en hoger naarmate hij dikker moet. Hieronder ziet u drie voorbeelden van vloeren zoals wij ze in en rond {name} leggen.',
-  'Wilt u alvast weten waar u ongeveer op uitkomt? Deze voorbeelden geven een indicatie voor een zandcement dekvloer in {name}. Na een korte inmeting krijgt u een vaste prijs.',
-  'Wat de prijs van een dekvloer in {name} bepaalt, ziet u het best aan een paar voorbeelden. Daarna komen we graag langs voor een inmeting en een vaste prijs.',
-];
+  'Wat een zandcement dekvloer in {name} kost, hangt af van de oppervlakte, de dikte en de extra\'s. Vul ze hieronder in, dan sturen wij u een passende offerte, direct op uw WhatsApp.',
+  'Geen vaste prijslijst, maar een offerte die past bij uw vloer in {name}. Geef de oppervlakte, dikte en extra\'s door en u krijgt hem op uw WhatsApp.',
+  'Een badkamer van zes vierkante meter is iets anders dan een bedrijfsvloer van twintig centimeter dik. Daarom maken we voor elke vloer in {name} een offerte op maat.',
+  'Hieronder ziet u welke maten we in en rond {name} vaak tegenkomen. Stel daarna uw eigen vloer samen; de offerte komt direct op uw WhatsApp.',
+]
 
 // Rekenvoorbeelden per bebouwingstype: [omschrijving, min m², max m², dikte cm]
 export const EXAMPLES = {
@@ -247,9 +247,9 @@ export const OPTION_WHY = {
 // ───────────────────────── FAQ (vraag + 2 antwoordvarianten)
 export const FAQ_POOL = [
   ['Wat kost een zandcement dekvloer in {name}?', [
-    'Een zandcement dekvloer van 5 cm kost gemiddeld {p5} per m², materiaal en aanbrengen inbegrepen. Voor uw project in {name} rekenen we de exacte prijs uit op basis van oppervlakte, dikte en bereikbaarheid.',
-    'Voor een vloer van 5 cm rekenen we gemiddeld {p5} per m², inclusief materiaal en aanbrengen. Dikkere vloeren en extra opties maken het iets duurder; grote oppervlaktes juist goedkoper per m². Na een inmeting krijgt u een vaste prijs.',
-    'Reken voor een standaard dekvloer van 5 cm op ongeveer {p5} per m² (excl. btw). De precieze prijs hangt af van oppervlakte, dikte, bereikbaarheid en opties. U krijgt hem vooraf, zwart op wit.']],
+    'Dat hangt af van de oppervlakte, de dikte en de extra\'s die u kiest, zoals een versneller of krimpnetten. Geef die door en u ontvangt een passende offerte voor {name}, direct op uw WhatsApp.',
+    'We werken niet met een vaste prijslijst, want geen vloer is hetzelfde. Stuur ons de m², de dikte en de gewenste extra\'s, dan krijgt u een offerte op maat via WhatsApp.',
+    'Oppervlakte, dikte (van een paar centimeter tot wel 30 cm), bereikbaarheid en extra\'s bepalen de prijs. Daarom sturen wij voor uw vloer in {name} een passende offerte, direct op WhatsApp.']],
   ['Hoe lang moet een dekvloer drogen?', [
     'Reken voor zandcement op ongeveer een week per centimeter tot 4 cm dik, en twee weken per centimeter daarboven. In {name} geldt dezelfde regel, al droogt een vloer in de winter of in een slecht geventileerde ruimte langzamer. Een versneller brengt het terug naar 10 à 15 dagen.',
     'Als vuistregel droogt een cementdekvloer ongeveer een week per centimeter, tot 4 cm. Daarboven gaat het langzamer, zo\'n twee weken per extra centimeter. Een vloer van 6 cm heeft dus al snel acht weken nodig. Met een droogtijdversneller kan dat terug naar 10 à 15 dagen.',
@@ -261,7 +261,7 @@ export const FAQ_POOL = [
     'Zandcement wordt aangebracht en met de hand afgereid. Het is sterk, vochtbestendig en geschikt voor bijna elke ruimte, ook badkamers en garages. Anhydriet is vloeibaar, egaliseert zichzelf en kan dunner, maar is gevoelig voor vocht en moet vaak geschuurd worden. Wij leggen allebei en adviseren per ruimte.',
     'Een anhydrietvloer is vloeibaar en kan dunner, wat bij vloerverwarming prettig is. Zandcement is robuuster, kan tegen vocht en is in de meeste woningen de voordeligste keuze. Twijfelt u? Wij adviseren eerlijk wat bij uw situatie past.']],
   ['Hoe dik moet een zandcement dekvloer zijn?', [
-    'Een zwevende dekvloer op isolatie moet minimaal 5 cm zijn. Ligt er vloerverwarming, dan houden we minimaal 3 à 4 cm dekking boven de leidingen aan. Een hechtende vloer direct op beton kan dunner. Bij de inmeting bepalen we de juiste dikte.',
+    'Een zwevende dekvloer op isolatie moet minimaal 5 cm zijn. Ligt er vloerverwarming, dan houden we minimaal 3 à 4 cm dekking boven de leidingen aan. Bij grote hoogteverschillen kan een vloer tot wel 30 cm dik worden. Bij de inmeting bepalen we de juiste dikte.',
     'Dat hangt af van de ondergrond. Op isolatie of vloerverwarming is ongeveer 5 à 7 cm gebruikelijk, op een vlakke betonvloer kan het minder. Belangrijker dan de dikte zelf is dat hij overal gelijk is, en dat meten we vooraf uit.']],
   ['Kan ik een zandcement dekvloer ook zelf maken?', [
     'Voor een klein stukje kan dat, maar voor een hele ruimte is het zwaar werk. U moet de juiste mengverhouding aanhouden (ongeveer 1 deel cement op 4 à 5 delen zand), de vloer snel en vlak afreien en voorkomen dat hij te snel uitdroogt. Wij doen een gemiddelde woonkamer in een paar uur, met een gegarandeerd vlak resultaat.',

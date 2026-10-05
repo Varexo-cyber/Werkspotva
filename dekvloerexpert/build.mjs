@@ -28,6 +28,7 @@ cpSync(join(root, 'public'), out, { recursive: true });
 const urls = [];
 let photoIdx = 0;
 const finish = html => {
+  if (!media.credits.length) html = html.replace(' · <a href="/fotoverantwoording">Fotoverantwoording</a>', '');
   if (!media.real) return html.replace(/<!--(photo|media)-->[\s\S]*?<!--\/\1-->/g, '');
   // Echte foto's op de plekken van de placeholders
   const imgs = media.gallery.filter(m => !m.video);

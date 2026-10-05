@@ -604,49 +604,6 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
   .hero-bg,.hero-inner>*,.spec-card,.hero-sweep,.kband-track,.spec-level span,.spec-head .dot,.hero h1 .accent{animation:none!important}
 }
 
-/* ═════════════════════ v3: vakmansstijl, geen effectbejag ═════════════════════
-   Vlak, strak, haarlijnen, kleine radii. Geen gloed, glas, ruis of glimmende tekst. */
-:root{--radius:10px}
-.dark::before,.site-footer::before,.cta-card::before,.hero::before{display:none}
-.hero-sweep{display:none}
-.hero-bg{animation:none;transform:none;opacity:.55}
-.hero::after{background:linear-gradient(90deg,rgba(13,16,15,.96) 0%,rgba(13,16,15,.86) 45%,rgba(13,16,15,.45) 100%),linear-gradient(0deg,rgba(13,16,15,.9),transparent 35%)}
-.hero h1 .accent{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--teal);animation:none}
-.hero-inner>*{animation-duration:.6s}
-.btn{border-radius:8px;box-shadow:none!important}
-.btn-teal{background:var(--teal-btn)}
-.btn-teal:hover{background:#0b7f68}
-.btn:hover{transform:none}
-.nav{border-radius:12px}
-.icon-btn{border-radius:8px}
-.pill{border-radius:4px;background:transparent;border:1px solid rgba(255,255,255,.18);color:#d7dfdc;font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px}
-.pill::before{width:6px;height:6px;box-shadow:none;border-radius:0}
-.gbadge{border-radius:8px;box-shadow:none}
-.spec-card{background:#121615;border:1px solid rgba(255,255,255,.14);border-radius:10px;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;animation:none}
-.spec-head .dot{animation:none;border-radius:0}
-.spec-level{border-radius:4px;background:#0b0e0d}
-.spec-level span{box-shadow:none;background:var(--teal);animation-duration:9s}
-.card,.opt,.review,.muni,.prov,.fact,.form-card,.why,.dc,.bu-item,.bu-fig,.calc,.ptable,.svc-box,.cta-card,.photo,.proj,.gal-item,.strip figure{border-radius:var(--radius)}
-.card::after,.opt::after{display:none}
-.card:hover,.opt:hover{transform:none}
-.card .ck,.f-ic,.photo-badge .ic,.dc .ic,.svc-head .ic,.fstep span{border-radius:6px}
-.calc{background:#121615;box-shadow:none}
-.calc-out{background:#161b1a}
-.bu-item.on{box-shadow:none;transform:none}
-.bu-fig{box-shadow:none}
-.photo{box-shadow:none}
-.cta-card{background:#121615}
-.wordmark{display:none}
-.kband{display:none}
-.wa-fab{box-shadow:0 6px 16px rgba(0,0,0,.3)}
-.mbar{border-radius:12px}
-.review{width:360px}
-.step::before{height:2px}
-.step .num{font-family:var(--mono);font-weight:500;font-size:1rem;color:var(--teal-deep);margin-bottom:14px}
-.dark .step .num{color:var(--teal)}
-.chipset label,.seg label,.chips a{border-radius:6px}
-.gal-item .gal-cap{transform:none}
-
 /* Duimstok-maatlat als scheiding (echte cm-verdeling) */
 .ruler{height:34px;background:#e8c25a;border-block:1px solid #c9a23f;position:relative;overflow:hidden}
 .ruler::before{content:"";position:absolute;inset:0;background:
@@ -692,17 +649,44 @@ h2{font-size:clamp(2rem,4.2vw,3.5rem);line-height:1.02}
   .tl-when{grid-column:2;justify-self:start}
   .otable td:first-child{white-space:normal;width:auto}
 }
-.faq{margin:0;max-width:900px}
-.cta-card{text-align:left;padding:72px 56px}
-.cta-card p{margin:0 0 30px}
-.cta-card .btn-row{justify-content:flex-start}
-.cta-card .fine{margin:26px 0 0}
-@media (max-width:680px){.cta-card{padding:44px 22px}}
 .gal-cap small{display:block;font-weight:400;font-size:.76rem;opacity:.75;margin-top:2px}
 .gal-note{font-size:.88rem;color:var(--muted-d);margin:16px 0 0}
 .gal-note a{color:inherit}
 .paper .gal-note{color:var(--muted)}
-.pill::before{display:none}
-.pill{padding:0;border:0;color:#a9b6b1;letter-spacing:.1em}
-.spec-head{color:#a9b6b1}
-.spec-foot{margin-top:18px}
+
+/* Videosectie: staande filmpjes van de klant */
+.vids-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:64px;align-items:center}
+.vids-row{display:flex;gap:22px}
+.vid-tile{width:270px;aspect-ratio:9/16;grid-row:auto!important;grid-column:auto!important;border-radius:16px;cursor:pointer}
+.vid-tile video{width:100%;height:100%;object-fit:cover;display:block}
+.vid-tile .gal-cap{font-size:1rem}
+.vids-note{color:var(--muted-d);font-size:.95rem;margin-top:18px}
+@media (max-width:1020px){.vids-grid{grid-template-columns:1fr}.vids-row{justify-content:flex-start}}
+@media (max-width:680px){.vids-row{gap:12px}.vid-tile{width:calc(50vw - 22px)}}
+
+/* v5: terug naar de demo-look, zonder eigen effecten die daar niet in zaten */
+.dark::before,.site-footer::before,.cta-card::before,.hero::before{display:none}
+.hero-sweep,.kband,.wordmark,.progress{display:none}
+.hero h1 .accent{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--teal);animation:none}
+.card::after,.opt::after{display:none}
+.card:hover,.opt:hover{transform:none}
+.hero-bg{animation:none;transform:none}
+
+/* Offerte samenstellen */
+.ot-num{display:inline-flex;align-items:baseline;gap:8px;font-family:var(--mono);color:var(--teal);font-size:1.2rem}
+.ot-num input{width:110px;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font:500 1.2rem var(--mono);text-align:right}
+.ot-num input:focus{outline:2px solid rgba(34,209,173,.5);background:rgba(255,255,255,.1)}
+.otool input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--teal) var(--fill,6%),rgba(255,255,255,.12) var(--fill,6%));border:0;padding:0;margin-top:16px}
+.otool input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:6px solid var(--teal-2);cursor:grab}
+.ot-cm{grid-template-columns:repeat(8,1fr)}
+.ot-hint{color:#8d9b96;font-size:.9rem;margin:10px 0 0}
+.ot-extras{grid-template-columns:1fr 1fr;display:grid}
+.ot-text{margin-top:10px;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:#fff}
+.ot-text::placeholder{color:#7f8c88}
+.ot-sum{list-style:none;padding:0;margin:16px 0 26px;display:grid;gap:0}
+.ot-sum li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+.ot-sum span{color:#a9b6b1}
+.ot-sum b{font-family:var(--mono);font-weight:500;text-align:right}
+.otool .calc-note a{color:var(--teal)}
+.ot-send{width:100%;justify-content:center}
+@media (max-width:680px){.ot-cm{grid-template-columns:repeat(4,1fr)}.ot-extras{grid-template-columns:1fr}}
