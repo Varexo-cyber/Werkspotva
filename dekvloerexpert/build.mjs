@@ -85,7 +85,7 @@ console.log(`  media: ${media.real ? media.gallery.length + ' foto\'s/video\'s u
 console.log(`  ${data.zoneCount} "Zone"-regels uit de CSV → 301 naar de echte plaatspagina`);
 
 if (process.argv.includes('--serve')) {
-  const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.xml': 'application/xml', '.txt': 'text/plain', '.json': 'application/json' };
+  const types = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.xml': 'application/xml', '.txt': 'text/plain', '.json': 'application/json', '.mp4': 'video/mp4', '.webm': 'video/webm', '.woff2': 'font/woff2' };
   createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     const zone = p.match(/^\/(zandcement-dekvloer-.+)-zone-\d+$/);
