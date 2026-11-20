@@ -3,7 +3,7 @@
 const { chromium } = require('playwright');
 
 const BASE = 'http://127.0.0.1:8080/';
-const OUT  = '/tmp/claude-0/-home-user-Werkspotva/d2accbec-9921-5b96-baa6-55ec06fad992/scratchpad/video';
+const OUT  = require('path').join(__dirname, 'video');
 
 /* Wordt na elke navigatie opnieuw uitgevoerd; is bewust idempotent. */
 function OVERLAY() {
